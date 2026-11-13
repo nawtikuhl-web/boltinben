@@ -1,0 +1,21 @@
+/* Shared Boltin Ben look for the free tools. Loaded after each tool's own styles:
+   it swaps their colours and type for the brand's and adds the site bar on top. */
+html.tool body,html.tool body *:not(svg):not(svg *){font-family:'Barlow',system-ui,-apple-system,'Segoe UI',sans-serif!important;letter-spacing:.01em}
+html.tool h1,html.tool h2,html.tool h3,html.tool .display,html.tool button,html.tool .btn,html.tool .cta{text-transform:uppercase}
+html.tool h1,html.tool h2,html.tool .display{font-weight:600!important;letter-spacing:-.01em!important;line-height:.96!important}
+html.tool h1 em,html.tool h1 span,html.tool h2 em{font-style:normal}
+html.tool body{background:#000!important;background-image:none!important;margin-top:62px!important}
+html.tool input,html.tool select,html.tool textarea,html.tool button{border-radius:8px}
+.bb-bar{position:fixed;top:0;left:0;right:0;z-index:1000;height:62px;display:flex;align-items:center;gap:10px;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));background:rgba(0,0,0,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #1c1c1c}
+.bb-bar img{height:24px;width:auto;display:block}
+.bb-bar a{text-decoration:none;font-weight:600;font-size:13.5px;text-transform:uppercase;letter-spacing:.06em;color:#fff;padding:9px 13px;border-radius:8px;white-space:nowrap}
+.bb-bar a.bb-logo{padding:0;margin-right:auto}
+.bb-bar a.bb-alt{box-shadow:inset 0 0 0 1.5px #343434}
+.bb-bar a.bb-cta{background:#F5E215;color:#000}
+@media (max-width:480px){.bb-bar a.bb-alt{display:none}}
+:root.tool-bolt{--bg:#000;--s:#1e1e1e;--s2:#262626;--s3:#2b2b2b;--b:#343434;--y:#F5E215;--yd:rgba(245,226,21,.12);--w:#fff;--m:#a8a8a8;--m2:#444;--easy:#8BFBB4;--hard:#A78BFA;--z1:#8BFBB4;--z3:#F5E215}
+:root.tool-zone2{--black:#000;--dark:#0d0d0d;--card:#1e1e1e;--card-2:#262626;--border:#343434;--white:#fff;--dim:#a8a8a8;--accent:#F5E215;--accent-dim:#d6c50f}
+:root.tool-scorecard{--bg:#000;--bg-elev:#141414;--bg-card:#1e1e1e;--line:#343434;--line-bright:#444;--text:#fff;--text-dim:#a8a8a8;--text-mute:#777;--accent:#F5E215;--accent-dim:#d6c50f;--green:#8BFBB4}
+:root.tool-recovery{--bg:#000;--ink:#fff;--yellow:#F5E215;--muted:#a8a8a8;--surface:#1e1e1e;--surface-hover:#2b2b2b;--line:#343434}
+:root.tool-macro{--ink:#000;--surface:#1e1e1e;--raised:#2b2b2b;--line:#343434;--yellow:#F5E215;--bone:#fff;--ash:#a8a8a8;--ember:#A78BFA}
+.tool-bolt .brand-row,.tool-bolt .logo-row,.tool-recovery .brand-logo,.tool-scorecard .header .brand{display:none!important}

@@ -1,0 +1,9 @@
+# Plain static site: no build step, the repo root is the site.
+[build]
+  publish = "."
+
+# Images and fonts rarely change; pages and scripts always revalidate.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

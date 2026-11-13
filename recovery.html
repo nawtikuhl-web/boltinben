@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en" class="tool tool-recovery">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recovery Scorecard | Boltin Ben</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     CONFIG: change this one line to point the button where you want
+     (your Stan join page / Sparkies link)
+     ============================================================ */
+
+  :root{
+    --bg:#0a0a0a;
+    --ink:#ffffff;
+    --yellow:#f5df00;
+    --muted:#8a8a8a;
+    --surface:#161616;
+    --surface-hover:#1f1f1f;
+    --line:#2a2a2a;
+    --maxw:560px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    line-height:1.55;
+    min-height:100vh;
+    min-height:100dvh;
+    display:flex;
+    justify-content:center;
+    padding:24px 20px 40px;
+  }
+  .app{width:100%;max-width:var(--maxw);display:flex;flex-direction:column}
+
+  /* shared display type */
+  .display{
+    font-family:'Anton',Impact,sans-serif;
+    text-transform:uppercase;
+    line-height:0.96;
+    letter-spacing:0.01em;
+    font-weight:400;
+  }
+  .pop{color:var(--yellow)}
+
+  /* ---------- screens ---------- */
+  .screen{display:none;animation:fade .35s ease both}
+  .screen.is-active{display:flex;flex-direction:column;flex:1}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* ---------- intro ---------- */
+  .brand{
+    display:flex;align-items:center;gap:12px;margin-bottom:auto;
+  }
+  .brand-logo{height:30px;width:auto;display:block}
+  .brand-tag{
+    font-family:'Inter';font-weight:700;font-size:12px;letter-spacing:0.16em;
+    text-transform:uppercase;color:var(--muted);
+    padding-left:12px;border-left:1px solid var(--line);
+  }
+  .intro-head{font-size:clamp(40px,12vw,64px);margin:28px 0 20px}
+  .intro-sub{font-size:16px;color:#d6d6d6;max-width:42ch}
+  .intro-sub strong{color:var(--ink);font-weight:600}
+  .nowatch{
+    display:inline-block;margin-top:22px;font-size:12px;letter-spacing:0.14em;
+    text-transform:uppercase;color:var(--muted);border:1px solid var(--line);
+    padding:7px 12px;border-radius:100px;
+  }
+
+  /* ---------- buttons ---------- */
+  .btn{
+    font-family:'Inter';font-weight:700;font-size:16px;
+    background:var(--yellow);color:#0a0a0a;border:none;border-radius:14px;
+    padding:17px 24px;cursor:pointer;width:100%;
+    transition:transform .12s ease, filter .12s ease;
+  }
+  .btn:hover{filter:brightness(1.06)}
+  .btn:active{transform:scale(0.985)}
+  .btn-ghost{
+    background:transparent;color:var(--muted);font-weight:500;font-size:14px;
+    border:none;padding:14px;cursor:pointer;width:100%;
+  }
+  .btn-ghost:hover{color:var(--ink)}
+
+  .intro-cta{margin-top:auto;padding-top:32px}
+
+  /* ---------- question ---------- */
+  .q-top{display:flex;align-items:center;gap:14px;margin-bottom:30px}
+  .q-count{font-family:'Anton';font-size:15px;color:var(--muted);letter-spacing:0.04em;white-space:nowrap}
+  .q-count span{color:var(--ink)}
+  .bar{flex:1;height:4px;background:var(--line);border-radius:100px;overflow:hidden}
+  .bar-fill{height:100%;background:var(--yellow);border-radius:100px;width:0;transition:width .4s cubic-bezier(.4,0,.2,1)}
+
+  .q-text{font-size:clamp(24px,6.5vw,32px);font-weight:700;line-height:1.18;margin-bottom:30px;letter-spacing:-0.01em}
+
+  .opts{display:flex;flex-direction:column;gap:12px}
+  .opt{
+    font-family:'Inter';font-size:16px;font-weight:500;text-align:left;
+    background:var(--surface);color:var(--ink);border:1px solid var(--line);
+    border-radius:14px;padding:18px 20px;cursor:pointer;width:100%;
+    display:flex;align-items:center;gap:14px;
+    transition:background .14s ease, border-color .14s ease, transform .1s ease;
+  }
+  .opt:hover{background:var(--surface-hover);border-color:#3a3a3a}
+  .opt:active{transform:scale(0.99)}
+  .opt .dot{
+    width:18px;height:18px;border-radius:50%;border:2px solid var(--muted);flex:none;
+    transition:border-color .14s ease, background .14s ease;
+  }
+  .opt.sel{border-color:var(--yellow)}
+  .opt.sel .dot{border-color:var(--yellow);background:var(--yellow)}
+
+  .q-back{margin-top:24px}
+  .q-back button{
+    background:none;border:none;color:var(--muted);font-family:'Inter';font-size:14px;
+    cursor:pointer;padding:6px 0;
+  }
+  .q-back button:hover{color:var(--ink)}
+  .q-back button[disabled]{opacity:0;pointer-events:none}
+
+  /* ---------- result ---------- */
+  .res-band{font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+  .res-head{font-size:clamp(38px,11vw,60px);margin-bottom:8px}
+  .res-line{font-size:18px;font-weight:600;color:#d6d6d6;margin-bottom:28px}
+
+  /* bucket signature */
+  .bucket-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;margin:6px 0 30px}
+  .bucket{
+    position:relative;width:118px;height:138px;
+    border:3px solid #3a3a3a;border-top:none;
+    border-radius:6px 6px 22px 22px;overflow:hidden;background:#111;
+  }
+  .bucket::before{
+    content:"";position:absolute;top:-3px;left:-12px;right:-12px;height:3px;background:#3a3a3a;border-radius:2px;
+  }
+  .fill{
+    position:absolute;left:0;right:0;bottom:0;height:0;
+    background:var(--yellow);
+    transition:height 1s cubic-bezier(.34,.01,.2,1);
+  }
+  .fill::before{
+    content:"";position:absolute;top:-7px;left:0;right:0;height:12px;
+    background:var(--yellow);border-radius:50%;
+  }
+  .bucket.over .fill{box-shadow:0 0 24px rgba(245,223,0,.45)}
+  .bucket-val{font-family:'Anton';font-size:38px;color:var(--ink);line-height:1}
+  .bucket-max{color:var(--muted);font-size:22px;margin-left:1px}
+
+  .res-body{font-size:16px;color:#d2d2d2;margin-bottom:18px}
+  .res-body strong{color:var(--ink);font-weight:600}
+
+  .caveat{
+    font-size:14px;color:#bdbdbd;background:var(--surface);border:1px solid var(--line);
+    border-left:3px solid var(--yellow);border-radius:10px;padding:15px 16px;margin-bottom:22px;
+  }
+  .caveat b{color:var(--ink)}
+
+  .watch{
+    font-size:14px;color:#cfcfcf;background:var(--surface);border:1px solid var(--line);
+    border-radius:10px;padding:14px 16px;margin-bottom:22px;
+  }
+  .watch-ey{
+    display:block;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--yellow);font-weight:700;margin-bottom:7px;
+  }
+
+  .bridge{
+    font-size:15px;color:#d2d2d2;font-style:italic;
+    padding:18px 0 24px;border-top:1px solid var(--line);margin-top:6px;
+  }
+  .res-cta{margin-top:4px}
+  .retake{margin-top:6px}
+
+  /* footer mark */
+  .mark{margin-top:34px;text-align:center}
+  .mark-logo{height:26px;width:auto;opacity:.75;display:inline-block}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+  }
+  :focus-visible{outline:2px solid var(--yellow);outline-offset:2px}
+</style>
+<script src="analytics.js" defer></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="tool.css">
+</head>
+<body>
+<nav class="bb-bar" aria-label="Boltin Ben"><a class="bb-logo" href="index.html"><img src="assets/logo.svg" alt="Boltin Ben"></a><a class="bb-alt" href="free.html">All free tools</a><a class="bb-cta" href="plans.html" data-track="Tool Bar" data-what="Get a plan">Get a plan →</a></nav>
+<div class="app" id="app">
+
+  <!-- INTRO -->
+  <section class="screen is-active" id="intro">
+    <div class="brand">
+      <img class="brand-logo" src="assets/logo.svg" alt="Boltin Ben">
+      <span class="brand-tag">Recovery Check</span>
+    </div>
+    <h1 class="display intro-head">ARE YOU<br>RECOVERED?<br>OR JUST <span class="pop">COOKED</span>?</h1>
+    <p class="intro-sub">Most under-recovered runners have no idea they are. They blame motivation, discipline, the plan. <strong>It's usually none of those.</strong> Answer honestly and find out where you really are.</p>
+    <span class="nowatch">9 questions · 2 minutes · no watch required</span>
+    <div class="intro-cta">
+      <button class="btn" id="start">Start the check</button>
+    </div>
+  </section>
+
+  <!-- QUESTION -->
+  <section class="screen" id="question">
+    <div class="q-top">
+      <div class="q-count"><span id="qnow">1</span>/10</div>
+      <div class="bar"><div class="bar-fill" id="bar"></div></div>
+    </div>
+    <h2 class="q-text" id="qtext"></h2>
+    <div class="opts" id="opts"></div>
+    <div class="q-back"><button id="back" disabled>← Back</button></div>
+  </section>
+
+  <!-- RESULT -->
+  <section class="screen" id="result">
+    <div class="res-band" id="resband"></div>
+    <h2 class="display res-head" id="reshead"></h2>
+    <p class="res-line" id="resline"></p>
+    <div class="bucket-wrap">
+      <div class="bucket" id="bucket">
+        <div class="fill" id="fill"></div>
+      </div>
+      <div class="bucket-val"><span id="bscore"></span><span class="bucket-max">/18</span></div>
+    </div>
+    <div class="res-body" id="resbody"></div>
+    <div id="reswatch"></div>
+    <div id="rescaveat"></div>
+    <p class="bridge" id="resbridge"></p>
+    <div class="res-cta"><button class="btn" id="cta"></button></div>
+    <div class="retake"><button class="btn-ghost" id="retake">Retake the check</button></div>
+    <div class="mark"><img class="mark-logo" src="assets/logo.svg" alt="Boltin Ben"></div>
+  </section>
+
+</div>
+
+<script>
+  /* =====================================================================
+     ONE THING TO EDIT: where the result button sends people.
+     Put your Stan / Sparkies join link in here.
+     ===================================================================== */
+  const SPARKIES_URL = "plans.html";
+
+  const QUESTIONS = [
+    "You wake up tired even after a full night's sleep.",
+    "Easy runs feel harder than they should.",
+    "You need caffeine to get going or function.",
+    "You can't remember the last time you felt genuinely fresh.",
+    "You've been getting sick more often, or niggles are hanging around longer than usual.",
+    "You're more irritable or short-tempered than usual.",
+    "Small things feel overwhelming.",
+    "Outside of training, your life stress is high right now (work, money, relationships, family).",
+    "Your sleep is being cut into by things that have nothing to do with running."
+  ];
+
+  const OPTIONS = [
+    {label:"No / rarely", val:0},
+    {label:"Sometimes", val:1},
+    {label:"Yes / most days", val:2}
+  ];
+
+  // The watch question, asked last, does NOT affect the score.
+  // It only personalises the result so the watch corroborates the bucket, never overrules it.
+  const WATCH_Q = {
+    text:"Last one. If you wear a watch, is it flagging poor recovery lately? (low HRV, resting heart rate creeping up)",
+    opts:[
+      {label:"Yeah, it's been off", val:'flag'},
+      {label:"No, it says I'm fine", val:'fine'},
+      {label:"I don't track this", val:'none'}
+    ]
+  };
+
+  const RESULTS = {
+    recovered:{
+      band:"Score 0–5",
+      head:'YOU\'RE <span class="pop">RECOVERED</span>.',
+      line:"Your bucket's got room.",
+      body:"Right now your body's keeping up with everything you're throwing at it, training and life combined. That's rarer than people think.<br><br>Don't go looking for a problem. Keep doing the boring stuff that got you here: <strong>sleep, easy days that are actually easy, eat enough.</strong> The fastest way to end up cooked is deciding you're bulletproof and stacking more on.",
+      caveat:"",
+      bridge:"Want to keep it this way as your training ramps up? A plan with easy days built in does most of the work.",
+      cta:"See the plans →"
+    },
+    topping:{
+      band:"Score 6–11",
+      head:'YOU\'RE <span class="pop">TOPPING UP</span>.',
+      line:"Your bucket's filling faster than it's draining.",
+      body:"You're not cooked. But you're trending the wrong way, and most people only notice once they've already tipped over. <strong>This is the window where backing off costs you nothing and pushing through costs you weeks.</strong><br><br>Easiest win this week: make your easy days genuinely easy, protect your sleep like it's a session, and look hard at what's filling the bucket outside of running. Sometimes the run isn't the problem. The deadline is.",
+      caveat:"",
+      bridge:"Knowing when to ease off is a skill, not a guess. A plan with recovery built in takes the guessing out.",
+      cta:"See the plans →"
+    },
+    cooked:{
+      band:"Score 12–18",
+      head:'YOU\'RE <span class="pop">COOKED</span>.',
+      line:"Your bucket's overflowing.",
+      body:"Your body isn't asking you to push harder. It's telling you it can't keep up. More motivation, a better plan, more discipline: none of it fixes this, because the problem was never effort. <strong>Stress is arriving faster than you're recovering.</strong><br><br>Right now the highest-leverage thing you can do is the thing that feels most wrong: back right off. Sleep is the priority, not the next session. This is your body in the exhaustion phase. You don't train your way out of it, you rest your way out.",
+      caveat:"<b>One honest note:</b> a lot of these signs (constant fatigue, getting sick, gut stuff, low mood) also overlap with things that aren't just overtraining. If they don't lift after a proper deload, get it checked by a GP. Your body's worth more than a PB.",
+      bridge:"The reason you got here is structural, not a willpower problem. A plan built around easy running fixes the structure.",
+      cta:"See the plans →"
+    }
+  };
+
+  // Watch line by band + watch answer. Carries the "you'd blame training, it's not the training" reframe.
+  const WATCH_LINES = {
+    recovered:{
+      flag:"If your watch is flagging something, it's likely a blip: a rough night, a big day. The fuller picture says you've got room. One number was never the verdict.",
+      fine:"Watch agrees, body agrees. Good place to be. Keep it boring.",
+      none:"No watch, no problem. You read the room yourself. That's the whole skill."
+    },
+    topping:{
+      flag:"Your watch is starting to twitch too, and your first instinct will be to blame the training. Check the rest of the bucket first. The answers above say it's bigger than your run.",
+      fine:"Your watch still says you're fine. It's a lagging signal. By the time it flags this, you're already deeper in than it knows.",
+      none:"You felt this before any watch would've caught it. That's the signal worth trusting."
+    },
+    cooked:{
+      flag:"Your watch caught it, but here's the trap nearly everyone falls into: they see low HRV and a creeping resting HR and go <strong>\"I overtrained.\"</strong> It's not just the training. It's everything you ticked above, all landing in the same bucket. Fix the run and miss the rest, and you'll be right back here.",
+      fine:"Your watch says you're fine. It's reading your heart, not your life. It can't see the boss, the broken sleep, or the rest of what you just told me. Don't let one number talk you out of what your body's saying.",
+      none:"You didn't need a watch to know. Your body got there first. Now listen to it."
+    }
+  };
+
+  // state
+  let current = 0;
+  let watchAns = null;
+  const answers = new Array(QUESTIONS.length).fill(null);
+  const STEPS = QUESTIONS.length + 1; // 9 scored + 1 watch question
+
+  // elements
+  const screens = {intro:byId('intro'), question:byId('question'), result:byId('result')};
+  const qtext = byId('qtext'), opts = byId('opts'), qnow = byId('qnow'), bar = byId('bar'), back = byId('back');
+
+  function byId(id){return document.getElementById(id)}
+  function show(name){
+    Object.values(screens).forEach(s=>s.classList.remove('is-active'));
+    screens[name].classList.add('is-active');
+    window.scrollTo({top:0,behavior:'instant'});
+  }
+
+  byId('start').addEventListener('click',()=>{current=0;renderQ();show('question')});
+  byId('retake').addEventListener('click',()=>{
+    current=0;answers.fill(null);watchAns=null;show('intro');
+  });
+  back.addEventListener('click',()=>{if(current>0){current--;renderQ()}});
+
+  function renderQ(){
+    const isWatch = current === QUESTIONS.length;
+    qnow.textContent = current+1;
+    bar.style.width = (current/STEPS*100)+'%';
+    back.disabled = current===0;
+    opts.innerHTML='';
+
+    if(isWatch){
+      qtext.textContent = WATCH_Q.text;
+      WATCH_Q.opts.forEach(o=>{
+        const b=document.createElement('button');
+        b.className='opt'+(watchAns===o.val?' sel':'');
+        b.innerHTML='<span class="dot"></span>'+o.label;
+        b.addEventListener('click',()=>{
+          watchAns=o.val;
+          bar.style.width='100%';
+          setTimeout(renderResult,180);
+        });
+        opts.appendChild(b);
+      });
+      return;
+    }
+
+    qtext.textContent = QUESTIONS[current];
+    OPTIONS.forEach(o=>{
+      const b=document.createElement('button');
+      b.className='opt'+(answers[current]===o.val?' sel':'');
+      b.innerHTML='<span class="dot"></span>'+o.label;
+      b.addEventListener('click',()=>{
+        answers[current]=o.val;
+        bar.style.width=((current+1)/STEPS*100)+'%';
+        setTimeout(()=>{ current++; renderQ(); },180);
+      });
+      opts.appendChild(b);
+    });
+  }
+
+  function renderResult(){
+    const score = answers.reduce((a,b)=>a+(b||0),0);
+    let key='recovered';
+    if(score>=12) key='cooked';
+    else if(score>=6) key='topping';
+    const r = RESULTS[key];
+
+    byId('resband').textContent = r.band;
+    byId('reshead').innerHTML = r.head;
+    byId('resline').textContent = r.line;
+    byId('resbody').innerHTML = r.body;
+    byId('bscore').textContent = score;
+
+    const cav = byId('rescaveat');
+    cav.innerHTML = r.caveat ? '<div class="caveat">'+r.caveat+'</div>' : '';
+
+    const w = byId('reswatch');
+    const wl = WATCH_LINES[key][watchAns];
+    w.innerHTML = wl ? '<div class="watch"><span class="watch-ey">What your watch says</span>'+wl+'</div>' : '';
+
+    byId('resbridge').textContent = r.bridge;
+    const cta = byId('cta');
+    cta.textContent = r.cta;
+    cta.onclick = ()=>{ window.location.href = SPARKIES_URL; };
+
+    const bucket = byId('bucket');
+    bucket.classList.toggle('over', key==='cooked');
+    show('result');
+    // animate fill after paint
+    const pct = Math.round(score/18*100);
+    requestAnimationFrame(()=>{ setTimeout(()=>{ byId('fill').style.height = pct+'%'; },120); });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en" class="tool tool-bolt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Bolt Test + Zone 2 Foundations · @BoltinBen</title>
+<meta name="description" content="Run one mile, get your VDOT, paces and race times. Then learn why Zone 2 is the base under every fast runner, find your zones, and see what a real periodised plan looks like. By Boltin Ben.">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0c0d;
+    --s: #141415;
+    --s2: #1a1a1c;
+    --s3: #222225;
+    --b: #2a2a2d;
+    --y: #F5E215;
+    --yd: rgba(245,226,21,0.10);
+    --w: #f0f0f0;
+    --m: #8e8e93;
+    --m2: #3a3a3d;
+    --race: #d44848;
+    --z1: #5cd393;
+    --z2: #60a5fa;
+    --z3: #F5E215;
+    --z4: #f97316;
+    --z5: #e8000a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--w);
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-weight: 400;
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.45;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .eyebrow {
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--y);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--b); }
+
+  /* HEADER */
+  header { border-bottom: 1px solid var(--b); }
+  .header-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 48px 20px 40px;
+  }
+  .logo-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+  .logo-img { height: 30px; width: auto; display: block; }
+  .header-link {
+    font-size: 12.5px;
+    color: var(--m);
+    text-decoration: none;
+    transition: color .12s;
+    letter-spacing: -.1px;
+  }
+  .header-link:hover { color: var(--w); }
+
+  h1 {
+    font-weight: 800;
+    font-size: clamp(42px, 9vw, 72px);
+    line-height: .95;
+    color: var(--w);
+    letter-spacing: -1.4px;
+    margin-bottom: 18px;
+  }
+  h1 span { color: var(--y); }
+
+  .header-sub {
+    font-size: 16.5px;
+    color: var(--m);
+    line-height: 1.65;
+    max-width: 600px;
+    margin-bottom: 26px;
+  }
+
+  .credential-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--y);
+    border: 1px solid rgba(245,226,21,0.4);
+    padding: 9px 16px;
+    border-radius: 999px;
+  }
+  .credential-bar .dot {
+    width: 6px; height: 6px; background: var(--y); border-radius: 50%;
+    box-shadow: 0 0 6px rgba(245,226,21,0.6);
+  }
+
+  /* BOOKMARK BANNER */
+  .bookmark-banner { border-bottom: 1px solid var(--b); background: #0f0f0c; }
+  .bookmark-inner {
+    max-width: 800px; margin: 0 auto; padding: 13px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .bookmark-text {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px; color: var(--m); line-height: 1.5;
+  }
+  .bookmark-text strong { color: var(--w); font-weight: 600; }
+  .bookmark-emoji { font-size: 16px; flex-shrink: 0; }
+  .bookmark-btn {
+    background: transparent; border: 1px solid rgba(245,226,21,0.4); color: var(--y);
+    font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 1.2px; text-transform: uppercase; padding: 8px 16px;
+    border-radius: 8px; cursor: pointer; transition: background .15s, color .15s;
+    white-space: nowrap;
+  }
+  .bookmark-btn:hover, .bookmark-btn.saved { background: var(--y); color: #0a0a0a; }
+
+  /* SECTIONS */
+  section.block {
+    max-width: 800px; margin: 0 auto; padding: 56px 20px;
+    border-bottom: 1px solid var(--b); position: relative; z-index: 1;
+  }
+  .section-intro {
+    font-weight: 800;
+    font-size: clamp(24px, 4.4vw, 36px);
+    line-height: 1.1;
+    letter-spacing: -.6px;
+    margin-bottom: 32px;
+    max-width: 700px;
+  }
+  .section-intro span { color: var(--y); }
+
+  /* HOW IT WORKS */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 28px; }
+  .step { background: var(--s); border: 1px solid var(--b); border-radius: 10px; padding: 18px 18px 20px; }
+  .step-num { font-weight: 800; font-size: 13px; color: var(--y); margin-bottom: 8px; }
+  .step-title { font-weight: 700; font-size: 15px; color: var(--w); margin-bottom: 6px; letter-spacing: -.2px; }
+  .step-desc { font-size: 13px; color: var(--m); line-height: 1.55; }
+
+  /* DISCLAIMER */
+  .disclaimer {
+    background: var(--s); border: 1px solid var(--b); border-left: 3px solid var(--race);
+    border-radius: 8px; padding: 14px 16px; margin-bottom: 28px;
+    font-size: 13px; color: var(--m); line-height: 1.55;
+  }
+  .disclaimer-label {
+    font-weight: 700; color: var(--race); font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+
+  /* INPUT */
+  .input-card {
+    background: linear-gradient(135deg, var(--s), #0e0e00);
+    border: 1px solid rgba(245,226,21,0.18); border-radius: 14px; padding: 28px 24px;
+  }
+  .input-card-title { font-weight: 800; font-size: 20px; color: var(--w); letter-spacing: -.3px; margin-bottom: 6px; }
+  .input-card-title span { color: var(--y); }
+  .input-card-sub { font-size: 13.5px; color: var(--m); margin-bottom: 22px; line-height: 1.55; }
+  .time-inputs { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+  .time-group { display: flex; flex-direction: column; gap: 6px; }
+  .time-label { font-size: 10px; letter-spacing: 1.5px; color: var(--m); font-weight: 600; text-transform: uppercase; }
+  .time-group input {
+    width: 86px; background: var(--bg); border: 1px solid var(--b); border-radius: 10px; color: var(--w);
+    font-family: 'DM Sans', sans-serif; font-weight: 800; font-size: 30px; text-align: center;
+    padding: 12px 6px; outline: none; transition: border-color .15s, background .15s;
+    -moz-appearance: textfield; letter-spacing: -.4px;
+  }
+  .time-group input::-webkit-outer-spin-button, .time-group input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .time-group input:focus { border-color: var(--y); background: #0d0d00; }
+  .time-sep { font-weight: 800; font-size: 30px; color: var(--m2); padding-top: 22px; }
+  .btn-calculate {
+    background: var(--y); color: #0a0a0a; border: none; border-radius: 10px; padding: 14px 28px;
+    font-family: 'DM Sans', sans-serif; font-weight: 800; font-size: 15px; letter-spacing: .5px;
+    cursor: pointer; transition: opacity .15s, transform .08s; display: inline-flex; align-items: center;
+    gap: 8px; text-transform: uppercase;
+  }
+  .btn-calculate:hover { opacity: .9; }
+  .btn-calculate:active { transform: scale(.98); }
+  .btn-bolt-svg { width: 14px; height: 14px; }
+  .error-msg {
+    background: rgba(212,72,72,0.08); border: 1px solid rgba(212,72,72,0.3); color: #ff9aa1;
+    padding: 11px 14px; border-radius: 8px; font-size: 13px; margin-top: 14px; display: none;
+  }
+
+  /* RESULTS */
+  #results { display: none; animation: fadeUp .4s ease; margin-top: 28px; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .result-hero {
+    background: linear-gradient(135deg, var(--s), #0e0e00); border: 1px solid rgba(245,226,21,0.25);
+    border-radius: 14px; padding: 32px 28px; margin-bottom: 16px; display: flex; align-items: center; gap: 28px;
+  }
+  .vdot-block { text-align: center; flex-shrink: 0; }
+  .vdot-num { font-weight: 800; font-size: 88px; line-height: .9; color: var(--y); letter-spacing: -3px; }
+  .vdot-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--m); font-weight: 700; margin-top: 4px; }
+  .result-summary { flex: 1; padding-left: 24px; border-left: 1px solid var(--b); }
+  .result-summary h2 { font-weight: 800; font-size: 26px; color: var(--w); letter-spacing: -.5px; margin-bottom: 8px; line-height: 1.15; }
+  .result-summary p { font-size: 14.5px; color: var(--m); line-height: 1.55; }
+
+  .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .result-card { background: var(--s); border: 1px solid var(--b); border-radius: 12px; overflow: hidden; }
+  .card-header { padding: 14px 16px; border-bottom: 1px solid var(--b); display: flex; align-items: center; gap: 10px; }
+  .card-title { font-weight: 700; font-size: 13px; color: var(--w); letter-spacing: -.1px; }
+  .card-icon-svg { width: 16px; height: 16px; color: var(--y); flex-shrink: 0; }
+  .pace-row {
+    display: flex; align-items: center; justify-content: space-between; padding: 13px 16px;
+    border-bottom: 1px solid var(--b); transition: background .12s;
+  }
+  .pace-row:last-child { border-bottom: none; }
+  .pace-row:hover { background: var(--s2); }
+  .pace-name { font-size: 13px; color: var(--w); font-weight: 500; letter-spacing: -.1px; }
+  .pace-sub { font-size: 11.5px; color: var(--m); margin-top: 2px; line-height: 1.4; }
+  .pace-value { font-weight: 700; font-size: 17px; color: var(--w); text-align: right; white-space: nowrap; letter-spacing: -.3px; }
+  .pace-unit { font-size: 11px; color: var(--m); font-weight: 500; margin-left: 2px; }
+  .pace-accent { color: var(--y); }
+
+  .recommend-box {
+    background: var(--yd); border: 1px solid rgba(245,226,21,0.2); border-radius: 10px;
+    padding: 16px 18px; margin-bottom: 16px; display: none;
+  }
+  .recommend-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--y); font-weight: 700; margin-bottom: 6px; }
+  .recommend-plan-name { font-weight: 800; font-size: 18px; color: var(--w); margin-bottom: 5px; letter-spacing: -.2px; }
+  .recommend-rationale { font-size: 13px; color: #c8c8cc; line-height: 1.55; }
+
+  .btn-reset {
+    background: transparent; border: 1px solid var(--b); color: var(--m); font-family: 'DM Sans', sans-serif;
+    font-weight: 600; font-size: 12.5px; padding: 10px 18px; border-radius: 8px; cursor: pointer;
+    transition: color .15s, border-color .15s; letter-spacing: -.1px;
+  }
+  .btn-reset:hover { color: var(--w); border-color: var(--m); }
+
+  /* STORY BLOCKS */
+  .story-blocks { display: grid; gap: 1px; background: var(--b); border: 1px solid var(--b); border-radius: 12px; overflow: hidden; }
+  .story-block { background: var(--s); padding: 24px 28px; }
+  .story-block p { font-size: 15px; line-height: 1.7; color: var(--m); }
+  .story-block p strong { color: var(--w); font-weight: 600; }
+  .story-block p em { color: var(--y); font-style: normal; font-weight: 600; }
+
+  /* 3 PLAYERS */
+  .players-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1px;
+    background: var(--b); border: 1px solid var(--b); border-radius: 12px; overflow: hidden; margin-bottom: 22px;
+  }
+  .player-card { background: var(--s); padding: 28px 24px; display: flex; flex-direction: column; gap: 16px; }
+  .player-num { font-size: 56px; font-weight: 800; color: var(--b); line-height: 1; }
+  .player-title { font-size: 20px; font-weight: 800; letter-spacing: -.3px; color: var(--y); line-height: 1.1; }
+  .player-title span { display: block; font-size: 11px; color: var(--m); letter-spacing: 1px; margin-top: 6px; font-weight: 600; text-transform: uppercase; }
+  .player-row { display: flex; flex-direction: column; gap: 5px; padding-top: 12px; border-top: 1px solid var(--b); }
+  .player-row-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--m); }
+  .player-row-body { font-size: 13.5px; color: var(--w); line-height: 1.55; }
+  .player-row-body strong { color: var(--y); font-weight: 600; }
+  .citation { font-size: 12px; color: var(--m); font-style: italic; line-height: 1.5; }
+  .citation em { font-style: normal; color: #c8c8cc; }
+
+  /* PULLQUOTE */
+  .pullquote { background: var(--s); border-left: 3px solid var(--y); border-radius: 0 12px 12px 0; padding: 28px 32px; margin-bottom: 22px; }
+  .pullquote p { font-size: clamp(19px, 2.6vw, 24px); font-weight: 800; line-height: 1.3; color: var(--w); letter-spacing: -.3px; margin-bottom: 14px; }
+  .pullquote p:last-child { margin-bottom: 0; font-size: 14px; font-weight: 400; color: var(--m); letter-spacing: 0; line-height: 1.65; }
+
+  /* HR FINDER */
+  .hr-card {
+    background: var(--s); border: 1px solid var(--b); border-radius: 14px; padding: 36px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: center;
+  }
+  @media (max-width: 600px) { .hr-card { grid-template-columns: 1fr; gap: 28px; padding: 24px; } }
+  .hr-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--m); margin-bottom: 8px; }
+  .hr-input-wrap { margin-bottom: 18px; }
+  .hr-input-wrap input {
+    background: var(--bg); border: 1px solid var(--b); border-radius: 10px; color: var(--w);
+    font-family: 'DM Sans', sans-serif; font-size: 30px; font-weight: 800; padding: 12px 16px; width: 100%;
+    outline: none; transition: border-color .2s; -moz-appearance: textfield; letter-spacing: -.5px;
+  }
+  .hr-input-wrap input::-webkit-inner-spin-button, .hr-input-wrap input::-webkit-outer-spin-button { -webkit-appearance: none; }
+  .hr-input-wrap input:focus { border-color: var(--y); }
+  .hr-btn {
+    background: var(--y); color: #0a0a0a; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; padding: 14px 28px;
+    cursor: pointer; transition: opacity .15s, transform .08s; width: 100%;
+  }
+  .hr-btn:hover { opacity: .9; } .hr-btn:active { transform: scale(.99); }
+  .hr-result-title { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--m); margin-bottom: 18px; }
+  .zone-bar { margin-bottom: 12px; }
+  .zone-name { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
+  .zone-label { font-size: 12px; font-weight: 600; letter-spacing: .3px; }
+  .zone-range { font-size: 16px; font-weight: 800; color: var(--w); letter-spacing: -.3px; }
+  .zone-track { height: 4px; background: var(--b); border-radius: 2px; position: relative; overflow: hidden; }
+  .zone-fill { height: 100%; width: 0; transition: width .6s cubic-bezier(.4,0,.2,1); border-radius: 2px; }
+  .z2-highlight { background: var(--s2); border: 1px solid var(--y); border-radius: 10px; padding: 16px 20px; margin-top: 20px; display: none; }
+  .z2-highlight-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--y); margin-bottom: 4px; }
+  .z2-highlight-range { font-size: 34px; font-weight: 800; color: var(--y); line-height: 1; letter-spacing: -1px; }
+  .z2-highlight-note { font-size: 12px; color: var(--m); margin-top: 6px; line-height: 1.5; }
+
+  /* TESTING CARDS */
+  .testing-options { margin-top: 32px; border-top: 1px solid var(--b); padding-top: 28px; }
+  .testing-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--m); margin-bottom: 18px; }
+  .testing-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--b); border: 1px solid var(--b); border-radius: 12px; overflow: hidden; }
+  @media (max-width: 560px) { .testing-cards { grid-template-columns: 1fr; } }
+  .testing-card { background: var(--s); padding: 26px 26px 22px; display: flex; flex-direction: column; gap: 10px; }
+  .testing-card--app { background: #131310; }
+  .testing-card-tag {
+    font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--y);
+    border: 1px solid rgba(245,226,21,0.4); border-radius: 6px; display: inline-block; padding: 3px 8px; width: fit-content;
+  }
+  .testing-card-title { font-size: 20px; font-weight: 800; color: var(--w); letter-spacing: -.3px; }
+  .testing-card-body { font-size: 13px; color: var(--m); line-height: 1.65; flex: 1; }
+  .testing-card-rec { font-size: 13px; color: var(--w); line-height: 1.6; border-left: 2px solid var(--y); padding-left: 10px; }
+  .testing-card-rec strong { color: var(--y); }
+  .testing-card-link { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--y); text-decoration: none; margin-top: 4px; }
+  .testing-card-link:hover { text-decoration: underline; }
+
+  /* MESOCYCLE VISUAL */
+  .meso-visual { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; align-items: end; height: 260px; margin-bottom: 22px; }
+  .meso-bar { display: flex; flex-direction: column; justify-content: flex-end; }
+  .meso-bar .bar { background: var(--s); border: 1px solid var(--b); border-bottom: none; border-radius: 8px 8px 0 0; display: flex; align-items: flex-start; justify-content: center; padding-top: 12px; }
+  .meso-bar.b1 .bar { height: 65%; }
+  .meso-bar.b2 .bar { height: 80%; }
+  .meso-bar.b3 .bar { height: 100%; background: var(--y); border-color: var(--y); }
+  .meso-bar.b4 .bar { height: 45%; background: var(--s2); border-style: dashed; }
+  .meso-bar .pct { font-size: 22px; font-weight: 800; color: var(--w); letter-spacing: -.5px; }
+  .meso-bar.b3 .pct { color: #0a0a0a; }
+  .meso-bar.b4 .pct { color: var(--y); }
+  .meso-bar .lbl { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--m); text-align: center; padding-top: 12px; border-top: 1px solid var(--b); }
+  .meso-bar .lbl strong { display: block; color: var(--w); font-size: 13px; margin-bottom: 3px; }
+
+  /* PRINCIPLES */
+  .principles { display: grid; gap: 1px; background: var(--b); border: 1px solid var(--b); border-radius: 12px; overflow: hidden; }
+  .principle { background: var(--s); padding: 26px 28px; display: grid; grid-template-columns: 48px 1fr; gap: 20px; align-items: start; }
+  .principle-num { font-size: 32px; font-weight: 800; color: var(--y); line-height: 1; }
+  .principle h4 { font-size: 17px; font-weight: 800; letter-spacing: -.2px; margin-bottom: 8px; line-height: 1.2; }
+  .principle p { font-size: 14px; color: var(--m); line-height: 1.65; }
+  .principle p strong { color: var(--w); font-weight: 600; }
+  .principle p em { color: #c8c8cc; font-style: italic; }
+
+  /* MICROCYCLE */
+  .micro-disclaimer { background: var(--s2); border: 1px dashed rgba(245,226,21,0.4); border-radius: 10px; padding: 18px 22px; margin-bottom: 22px; font-size: 13px; color: var(--w); line-height: 1.65; }
+  .micro-disclaimer strong { color: var(--y); }
+  .micro-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: var(--b); border: 1px solid var(--b); border-radius: 12px; overflow: hidden; }
+  @media (max-width: 800px) { .micro-grid { grid-template-columns: 1fr; } }
+  .micro-day { background: var(--s); padding: 18px 14px; display: flex; flex-direction: column; gap: 8px; min-height: 190px; }
+  .micro-day.rest { background: var(--s2); }
+  .micro-day.quality, .micro-day.long { border-top: 3px solid var(--y); }
+  .micro-day-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--m); }
+  .micro-day-title { font-size: 14px; font-weight: 800; color: var(--w); line-height: 1.2; letter-spacing: -.2px; }
+  .micro-day.quality .micro-day-title, .micro-day.long .micro-day-title { color: var(--y); }
+  .micro-day-body { font-size: 12px; color: var(--m); line-height: 1.55; flex: 1; }
+
+  /* MACROCYCLE */
+  .macro-strip { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--b); border: 1px solid var(--b); border-radius: 12px; overflow: hidden; margin-bottom: 22px; }
+  @media (max-width: 700px) { .macro-strip { grid-template-columns: 1fr; } }
+  .macro-block { background: var(--s2); padding: 26px 22px; display: flex; flex-direction: column; gap: 10px; min-height: 200px; }
+  .macro-block.active { background: var(--s); border-top: 3px solid var(--y); }
+  .macro-block.locked { background: #0e0e0e; }
+  .macro-tag { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--y); }
+  .macro-block.locked .macro-tag { color: var(--m); }
+  .macro-title { font-size: 19px; font-weight: 800; color: var(--w); line-height: 1.15; letter-spacing: -.3px; }
+  .macro-block.locked .macro-title { color: var(--m); }
+  .macro-weeks { font-size: 11px; letter-spacing: 1.2px; color: var(--m); text-transform: uppercase; font-weight: 600; }
+  .macro-body { font-size: 13px; color: var(--m); line-height: 1.6; flex: 1; }
+  .macro-body strong { color: var(--w); } .macro-body em { color: var(--y); font-style: normal; }
+  .macro-pill { align-self: flex-start; font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 5px 10px; border-radius: 6px; margin-top: auto; }
+  .macro-pill.free { background: var(--y); color: #0a0a0a; }
+  .macro-pill.paid { background: var(--s); border: 1px solid var(--m2); color: var(--m); }
+
+  /* SPARKIES INCLUDES + PRICING */
+  .includes-card { background: linear-gradient(135deg, var(--s), #0e0e00); border: 1px solid var(--b); border-radius: 14px; padding: 28px; margin-bottom: 14px; }
+  .plan-includes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin-bottom: 22px; }
+  @media (max-width: 560px) { .plan-includes { grid-template-columns: 1fr; } }
+  .plan-include { font-size: 13.5px; color: #c8c8cc; display: flex; align-items: flex-start; gap: 8px; line-height: 1.5; }
+  .plan-include::before {
+    content: ''; width: 14px; height: 14px; background: var(--y); flex-shrink: 0; margin-top: 3px;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' fill='currentColor'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z'/%3E%3C/svg%3E") no-repeat center / contain;
+    mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' fill='currentColor'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z'/%3E%3C/svg%3E") no-repeat center / contain;
+  }
+  .pricing-row { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .price-main { font-weight: 800; font-size: 30px; color: var(--w); letter-spacing: -.8px; }
+  .price-main span { color: var(--y); }
+  .price-period { font-size: 14px; color: var(--m); font-weight: 500; }
+  .price-or { font-size: 11px; letter-spacing: 1.5px; color: var(--m); text-transform: uppercase; font-weight: 600; }
+  .price-lifetime { font-size: 14px; color: #c8c8cc; font-weight: 600; }
+  .price-lifetime strong { color: var(--y); font-weight: 700; }
+
+  /* CTA CARD */
+  .cta-card { background: var(--y); border-radius: 14px; padding: 44px; position: relative; overflow: hidden; }
+  .cta-card::before {
+    content: 'BOLTIN'; position: absolute; right: -12px; top: -10px; font-weight: 800; font-size: 120px;
+    color: rgba(0,0,0,0.06); line-height: 1; pointer-events: none; user-select: none; letter-spacing: -4px;
+  }
+  .cta-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(0,0,0,0.5); margin-bottom: 12px; position: relative; }
+  .cta-headline { font-size: clamp(30px, 5.5vw, 50px); font-weight: 800; line-height: 1; color: #0a0a0a; margin-bottom: 20px; letter-spacing: -1px; position: relative; }
+  .cta-body { font-size: 15px; color: rgba(0,0,0,0.8); max-width: 580px; line-height: 1.7; margin-bottom: 14px; position: relative; }
+  .cta-body strong { color: #0a0a0a; font-weight: 700; }
+  .cta-body.last { margin-bottom: 30px; }
+  .cta-links { display: flex; flex-wrap: wrap; gap: 12px; position: relative; }
+  .cta-link {
+    display: inline-block; background: #0a0a0a; color: var(--y); text-decoration: none;
+    font-size: 13px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; padding: 14px 26px;
+    border-radius: 10px; transition: background .15s, transform .08s;
+  }
+  .cta-link:hover { background: #1a1a1a; transform: translateY(-2px); }
+  .cta-link.secondary { background: transparent; border: 2px solid #0a0a0a; color: #0a0a0a; }
+  .cta-link.secondary:hover { background: rgba(0,0,0,0.08); }
+
+  /* FOOTER */
+  footer { border-top: 1px solid var(--b); padding: 32px 20px; text-align: center; max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+  footer p { font-size: 12px; color: var(--m); line-height: 1.7; }
+  footer a { color: var(--y); text-decoration: none; }
+  footer .footer-cred { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--w); font-weight: 700; margin-bottom: 8px; }
+  footer em { font-style: italic; color: #c8c8cc; }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    .steps { grid-template-columns: 1fr; }
+    .results-grid { grid-template-columns: 1fr; }
+    .result-hero { flex-direction: column; align-items: flex-start; gap: 18px; padding: 24px 20px; }
+    .vdot-block { text-align: left; }
+    .vdot-num { font-size: 68px; }
+    .result-summary { border-left: none; padding-left: 0; padding-top: 18px; border-top: 1px solid var(--b); width: 100%; }
+    .input-card { padding: 22px 18px; }
+    .time-group input { width: 72px; font-size: 26px; }
+    .cta-card { padding: 28px 22px; }
+    .principle { grid-template-columns: 40px 1fr; gap: 14px; }
+    .meso-visual { height: 220px; }
+  }
+</style>
+<script src="analytics.js" defer></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="tool.css">
+</head>
+<body>
+<nav class="bb-bar" aria-label="Boltin Ben"><a class="bb-logo" href="index.html"><img src="assets/logo.svg" alt="Boltin Ben"></a><a class="bb-alt" href="free.html">All free tools</a><a class="bb-cta" href="plans.html" data-track="Tool Bar" data-what="Get a plan">Get a plan →</a></nav>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo-row">
+      <a href="index.html"><img class="logo-img" src="assets/logo.svg" alt="BoltinBen"></a>
+      <a href="plans.html" class="header-link">Plans →</a>
+    </div>
+    <div class="eyebrow">zone 2 foundations</div>
+    <h1>know your engine.<br>then <span>build it.</span></h1>
+    <p class="header-sub">Run one mile, all out, and get your VDOT, training paces and race times. Then see why Zone 2 sits underneath every fast runner you know, find your zones, and learn what a real periodised plan actually looks like. ISSA-certified, no guru nonsense.</p>
+    <div class="credential-bar"><span class="dot"></span> ISSA Certified Running Coach</div>
+  </div>
+</header>
+
+<!-- BOOKMARK BANNER -->
+<div class="bookmark-banner">
+  <div class="bookmark-inner">
+    <div class="bookmark-text">
+      <span class="bookmark-emoji">🔖</span>
+      <span>Free resource. <strong>Bookmark it</strong> so you can check your numbers and sessions while you train.</span>
+    </div>
+    <button class="bookmark-btn" onclick="handleBookmark()">Save this page</button>
+  </div>
+</div>
+
+<!-- THE BOLT TEST -->
+<section class="block">
+  <div class="eyebrow">the bolt test</div>
+  <p class="section-intro">Start with a number. One all-out mile tells you nearly <span>everything.</span></p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-title">Run one mile</div>
+      <div class="step-desc">Flat route or track. Warm up for 10 minutes, then go all out for one mile. Nothing saved for later.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-title">Enter your time</div>
+      <div class="step-desc">Plug in the minutes and seconds off your watch. If you went all out, your max HR is roughly what you finished at.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-title">Get your paces</div>
+      <div class="step-desc">VDOT score, training paces and race predictions. Retest every 4 to 8 weeks to track real progress.</div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <div class="disclaimer-label">Quick safety note</div>
+    This is an all-out maximal effort. Before you attempt it, make sure you are injury-free and have no cardiovascular conditions that high-intensity running could aggravate. If anything is off, see a doctor first. Run this test at your own risk.
+  </div>
+
+  <div class="input-card">
+    <div class="input-card-title">enter your <span>one mile time.</span></div>
+    <div class="input-card-sub">A 7 minute 30 second mile is 7 mins, 30 secs. Use the actual time off your watch, no rounding.</div>
+    <div class="time-inputs">
+      <div class="time-group">
+        <label class="time-label">Min</label>
+        <input type="number" id="mins" min="3" max="20" placeholder="00" inputmode="numeric">
+      </div>
+      <div class="time-sep">:</div>
+      <div class="time-group">
+        <label class="time-label">Sec</label>
+        <input type="number" id="secs" min="0" max="59" placeholder="00" inputmode="numeric">
+      </div>
+    </div>
+    <button class="btn-calculate" onclick="calculate()">
+      <svg class="btn-bolt-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M2 14.201 10.5115 1h9.3003l-4.8629 6.59923H22.5L7.82341 23H5.64856l4.86304 -8.799H2Z"/></svg>
+      Calculate my score
+    </button>
+    <div class="error-msg" id="errorMsg">Please enter a valid mile time between 3:30 and 20:00.</div>
+  </div>
+
+  <div id="results">
+    <div class="result-hero">
+      <div class="vdot-block">
+        <div class="vdot-num" id="vdotDisplay">—</div>
+        <div class="vdot-label">VDOT score</div>
+      </div>
+      <div class="result-summary">
+        <h2 id="fitnessLevel">Loading...</h2>
+        <p id="fitnessDesc">Your personalised paces and predictions are below.</p>
+      </div>
+    </div>
+
+    <div class="results-grid">
+      <div class="result-card">
+        <div class="card-header">
+          <svg class="card-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4v16M19 8v8M7 8v8M1 12h22"/></svg>
+          <span class="card-title">Training paces</span>
+        </div>
+        <div>
+          <div class="pace-row"><div><div class="pace-name">Easy / Zone 2</div><div class="pace-sub">Conversational. Most of your runs.</div></div><div class="pace-value"><span id="paceEasy">—</span><span class="pace-unit">/km</span></div></div>
+          <div class="pace-row"><div><div class="pace-name">Marathon pace</div><div class="pace-sub">Comfortably hard.</div></div><div class="pace-value"><span id="paceMarathon">—</span><span class="pace-unit">/km</span></div></div>
+          <div class="pace-row"><div><div class="pace-name">Threshold</div><div class="pace-sub">Hard but controlled. Tempo work.</div></div><div class="pace-value pace-accent"><span id="paceThreshold">—</span><span class="pace-unit">/km</span></div></div>
+          <div class="pace-row"><div><div class="pace-name">Interval</div><div class="pace-sub">VO2 max work. Uncomfortable.</div></div><div class="pace-value pace-accent"><span id="paceInterval">—</span><span class="pace-unit">/km</span></div></div>
+          <div class="pace-row"><div><div class="pace-name">Repetition</div><div class="pace-sub">Short, fast, full recovery.</div></div><div class="pace-value pace-accent"><span id="paceRep">—</span><span class="pace-unit">/km</span></div></div>
+        </div>
+      </div>
+
+      <div class="result-card">
+        <div class="card-header">
+          <svg class="card-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+          <span class="card-title">Race predictions</span>
+        </div>
+        <div>
+          <div class="pace-row"><div><div class="pace-name">5 km</div></div><div class="pace-value pace-accent"><span id="race5k">—</span></div></div>
+          <div class="pace-row"><div><div class="pace-name">10 km</div></div><div class="pace-value"><span id="race10k">—</span></div></div>
+          <div class="pace-row"><div><div class="pace-name">15 km</div></div><div class="pace-value"><span id="race15k">—</span></div></div>
+          <div class="pace-row"><div><div class="pace-name">Half marathon</div><div class="pace-sub">21.1 km</div></div><div class="pace-value"><span id="raceHalf">—</span></div></div>
+          <div class="pace-row"><div><div class="pace-name">Full marathon</div><div class="pace-sub">42.2 km</div></div><div class="pace-value"><span id="raceFull">—</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="recommend-box" id="recommendBox">
+      <div class="recommend-label">Recommended for your VDOT</div>
+      <div class="recommend-plan-name" id="recommendPlanName">—</div>
+      <div class="recommend-rationale" id="recommendRationale">—</div>
+    </div>
+
+    <button class="btn-reset" onclick="reset()">↩ Run another test</button>
+  </div>
+</section>
+
+<!-- THE ZONE 2 PROBLEM -->
+<section class="block">
+  <div class="eyebrow">the zone 2 problem</div>
+  <p class="section-intro">I did "easy" runs for months. Turns out I wasn't even in <span>Zone 2.</span></p>
+  <div class="story-blocks">
+    <div class="story-block"><p>Feeling disciplined. Feeling smug. Feeling slow, with nothing to show for it. If your zones are wrong, your training is wrong. Not a little wrong. More like <em>that's three months you won't get back</em> wrong.</p></div>
+    <div class="story-block"><p>I got lab tested. Aerobic threshold came back at <strong>147 bpm.</strong> Not what my watch said. Not what I thought. My legs had been lying to me for months, and one number changed everything.</p></div>
+    <div class="story-block"><p>Same heart rate, faster pace, less suffering. Zone 2 is boring and slow and quietly making you a better runner while you feel like you are barely trying. <em>Not sexy. It works.</em></p></div>
+    <div class="story-block"><p>But Zone 2 isn't only about heart rate. There are <strong>three</strong> things going on under the bonnet, and Zone 2 trains all of them.</p></div>
+  </div>
+</section>
+
+<!-- THE 3 PLAYERS -->
+<section class="block">
+  <div class="eyebrow">the 3 players of distance running</div>
+  <p class="section-intro">Every endurance runner is bottlenecked by <span>one</span> of three things. Zone 2 trains all three at once.</p>
+
+  <div class="players-grid">
+    <div class="player-card">
+      <div class="player-num">01</div>
+      <div class="player-title">Aerobic Power<span>VO2max, the ceiling</span></div>
+      <div class="player-row"><div class="player-row-label">What it is</div><div class="player-row-body">The maximum volume of oxygen your muscles can use per minute. The <strong>aerobic ceiling.</strong></div></div>
+      <div class="player-row"><div class="player-row-label">Why it matters</div><div class="player-row-body">The higher the ceiling, the longer you can hold a pace before your body goes anaerobic. Without it, nothing else matters.</div></div>
+      <div class="player-row"><div class="player-row-label">How Zone 2 trains it</div><div class="player-row-body">Builds mitochondrial density and stroke volume, the two physiological levers that raise the ceiling.</div></div>
+    </div>
+    <div class="player-card">
+      <div class="player-num">02</div>
+      <div class="player-title">Running Economy<span>How much oxygen you spend</span></div>
+      <div class="player-row"><div class="player-row-label">What it is</div><div class="player-row-body">How much oxygen you use at a given submaximal pace. The runner who uses less is the one who finishes ahead.</div></div>
+      <div class="player-row"><div class="player-row-label">Why it matters</div><div class="player-row-body">Two runners with the same VO2max can finish a marathon <strong>minutes apart</strong> on economy alone. This is what separates similar engines.</div></div>
+      <div class="player-row"><div class="player-row-label">How Zone 2 trains it</div><div class="player-row-body">Cumulative aerobic volume builds slow-twitch recruitment, smooths mechanics and improves mitochondrial efficiency.</div></div>
+    </div>
+    <div class="player-card">
+      <div class="player-num">03</div>
+      <div class="player-title">Acidosis Threshold<span>The pace you can race at</span></div>
+      <div class="player-row"><div class="player-row-label">What it is</div><div class="player-row-body">The fastest pace you can hold aerobically before lactate accumulates and metabolic acidosis kicks in. Often called the lactate threshold.</div></div>
+      <div class="player-row"><div class="player-row-label">Why it matters</div><div class="player-row-body">This is the pace you can realistically race a half or full marathon at. Raise it and your race times drop.</div></div>
+      <div class="player-row"><div class="player-row-label">How Zone 2 trains it</div><div class="player-row-body">A deep aerobic base raises the threshold <strong>from underneath.</strong> Specific threshold work later in the macrocycle pushes it the rest of the way.</div></div>
+    </div>
+  </div>
+
+  <p class="citation">Framework: Dr. Jason Karp, PhD. <em>Foundations and Applications of Running Technique and Programming</em>, ISSA, 2022.</p>
+</section>
+
+<!-- WHY ZONE 2 -->
+<section class="block">
+  <div class="eyebrow">why zone 2 is the foundation</div>
+  <div class="pullquote">
+    <p>Zone 2 doesn't train one Player. It trains all three. Slowly. Boringly. Repeatedly.</p>
+    <p>Sprint sessions train Player 1. Tempo runs train Player 3. Strength work helps Player 2. Zone 2 is the only thing that touches all three, which is why every periodised plan starts with a base mesocycle.</p>
+  </div>
+  <div class="story-blocks">
+    <div class="story-block"><p>Skip the base and every other phase is built on sand. You can train threshold all you want, but without aerobic capacity underneath it you will burn out before you peak. <strong>This is the part everyone wants to skip. It's the part you can't.</strong></p></div>
+  </div>
+</section>
+
+<!-- FIND YOUR ZONES -->
+<section class="block">
+  <div class="eyebrow">find your zones</div>
+  <p class="section-intro">Plug in your max heart rate. Your <span>Zone 2</span> is where the base gets built.</p>
+  <div class="hr-card">
+    <div>
+      <div class="hr-label">Your max heart rate (bpm)</div>
+      <div class="hr-input-wrap"><input type="number" id="maxHR" placeholder="185" min="140" max="220"></div>
+      <div class="hr-label" style="margin-top:14px;">Your age (optional, for an estimate)</div>
+      <div class="hr-input-wrap"><input type="number" id="age" placeholder="35" min="16" max="80"></div>
+      <button class="hr-btn" onclick="calcZones()">Calculate my zones</button>
+    </div>
+    <div>
+      <div class="hr-result-title">Your heart rate zones</div>
+      <div class="zone-bar"><div class="zone-name"><span class="zone-label" style="color:var(--z1)">Zone 1 · Recovery</span><span class="zone-range" id="z1">—</span></div><div class="zone-track"><div class="zone-fill" id="z1bar" style="background:var(--z1)"></div></div></div>
+      <div class="zone-bar"><div class="zone-name"><span class="zone-label" style="color:var(--y)">Zone 2 · Aerobic Base ★</span><span class="zone-range" id="z2">—</span></div><div class="zone-track"><div class="zone-fill" id="z2bar" style="background:var(--y)"></div></div></div>
+      <div class="zone-bar"><div class="zone-name"><span class="zone-label" style="color:#aaa">Zone 3 · Tempo</span><span class="zone-range" id="z3">—</span></div><div class="zone-track"><div class="zone-fill" id="z3bar" style="background:#888"></div></div></div>
+      <div class="zone-bar"><div class="zone-name"><span class="zone-label" style="color:var(--z4)">Zone 4 · Threshold</span><span class="zone-range" id="z4">—</span></div><div class="zone-track"><div class="zone-fill" id="z4bar" style="background:var(--z4)"></div></div></div>
+      <div class="zone-bar"><div class="zone-name"><span class="zone-label" style="color:var(--race)">Zone 5 · Max</span><span class="zone-range" id="z5">—</span></div><div class="zone-track"><div class="zone-fill" id="z5bar" style="background:var(--z5)"></div></div></div>
+      <div class="z2-highlight" id="z2highlight">
+        <div class="z2-highlight-label">Your Zone 2 target</div>
+        <div class="z2-highlight-range" id="z2big">— bpm</div>
+        <div class="z2-highlight-note">Stay in this range. Walk if your HR creeps above it. That's the work.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="testing-options">
+    <div class="testing-label">Want something more accurate than a formula?</div>
+    <div class="testing-cards">
+      <div class="testing-card">
+        <div class="testing-card-tag">Sydney based</div>
+        <div class="testing-card-title">Lab testing</div>
+        <div class="testing-card-body">The gold standard. A proper lab test finds your actual aerobic threshold, not an estimate. Mine came back 147 bpm. My watch said something very different.</div>
+        <div class="testing-card-rec">I use <strong>@peakformtesting</strong> in Sydney.<br>Mention <strong>BoltinBen</strong> for 10% off.</div>
+        <a href="https://instagram.com/peakformtesting" target="_blank" class="testing-card-link">→ Find @peakformtesting</a>
+      </div>
+      <div class="testing-card testing-card--app">
+        <div class="testing-card-tag">Apple & Garmin</div>
+        <div class="testing-card-title">Zone2AI App</div>
+        <div class="testing-card-body">If a lab test sounds like too much commitment, this is the next best thing. Uses your existing run data to estimate your zones. Weirdly accurate. Nailed mine.</div>
+        <div class="testing-card-rec">Available on <strong>Apple</strong> and <strong>Garmin</strong>. Free to try.</div>
+        <a href="https://apps.apple.com/app/id6742467259?ct=boltinben" target="_blank" class="testing-card-link">→ Get Zone2AI</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE BASE MESOCYCLE -->
+<section class="block">
+  <div class="eyebrow">the base mesocycle</div>
+  <p class="section-intro">Three weeks build. One week recover. That's how you build the engine without <span>breaking the chassis.</span></p>
+
+  <div class="meso-visual">
+    <div class="meso-bar b1"><div class="bar"><span class="pct">80%</span></div><div class="lbl"><strong>Week 1</strong>Build</div></div>
+    <div class="meso-bar b2"><div class="bar"><span class="pct">90%</span></div><div class="lbl"><strong>Week 2</strong>Build</div></div>
+    <div class="meso-bar b3"><div class="bar"><span class="pct">100%</span></div><div class="lbl"><strong>Week 3</strong>Peak</div></div>
+    <div class="meso-bar b4"><div class="bar"><span class="pct">60%</span></div><div class="lbl"><strong>Week 4</strong>Recover</div></div>
+  </div>
+
+  <div class="story-blocks">
+    <div class="story-block"><p>A <strong>mesocycle</strong> is the medium block of training, usually 3 to 6 weeks, with one or two clear objectives. For aerobic base the structure is <strong>3:1</strong>. Three stimulating weeks, one recovery week. The cycle repeats, and you come out the other side stronger each time.</p></div>
+  </div>
+
+  <div class="principles" style="margin-top:22px;">
+    <div class="principle">
+      <div class="principle-num">01</div>
+      <div>
+        <h4>Linear progression breaks. Periodised progression adapts.</h4>
+        <p>Adding more every week forever doesn't build endurance, it builds injury. <strong>Variation in training stimulus is the cornerstone of periodisation</strong>, the part that actually causes adaptation.</p>
+      </div>
+    </div>
+    <div class="principle">
+      <div class="principle-num">02</div>
+      <div>
+        <h4>Adaptation happens in the recovery week.</h4>
+        <p>Karp puts it plainly: you get fitter during the recovery between sessions, not during the sessions themselves. You don't build mitochondria grinding out junk miles. <strong>Skip the deload, skip the fitness.</strong></p>
+      </div>
+    </div>
+    <div class="principle">
+      <div class="principle-num">03</div>
+      <div>
+        <h4>Volume is the primary fatigue variable.</h4>
+        <p>When you back off in week 4 you drop <strong>volume</strong> more than intensity. Volume accumulates fatigue. Intensity tunes the engine. The recovery week trims fatigue without erasing the adaptations.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SAMPLE MICROCYCLE -->
+<section class="block">
+  <div class="eyebrow">what a week looks like</div>
+  <p class="section-intro">This is the <span>shape.</span> Not your plan.</p>
+
+  <div class="micro-disclaimer">
+    <strong>Important:</strong> the exact distances, paces and which day your quality session lands on depend on where you are now and what you're training for. A 25k/week runner building toward a half does this very differently to a 60k/week runner building toward a marathon. The shape stays the same. The numbers don't. <strong>That's what a proper plan sorts out for you.</strong>
+  </div>
+
+  <div class="micro-grid">
+    <div class="micro-day"><div class="micro-day-label">Day 1</div><div class="micro-day-title">Easy Zone 2</div><div class="micro-day-body">The bread and butter. 30 to 60 min, conversational. The mileage that builds the base.</div></div>
+    <div class="micro-day rest"><div class="micro-day-label">Day 2</div><div class="micro-day-title">Rest or cross-train</div><div class="micro-day-body">Cycle, swim, walk. Or nothing. Recovery is part of the work, not the absence of it.</div></div>
+    <div class="micro-day quality"><div class="micro-day-label">Day 3</div><div class="micro-day-title">Quality day</div><div class="micro-day-body">One session per week. Tempo touch, hill strides or fartlek. Sharpens the engine without burning the base.</div></div>
+    <div class="micro-day"><div class="micro-day-label">Day 4</div><div class="micro-day-title">Easy Zone 2</div><div class="micro-day-body">Shorter recovery run, 25 to 40 min. Wash the quality day out of the legs.</div></div>
+    <div class="micro-day rest"><div class="micro-day-label">Day 5</div><div class="micro-day-title">Rest</div><div class="micro-day-body">Don't fill the gaps. The gaps are doing work.</div></div>
+    <div class="micro-day long"><div class="micro-day-label">Day 6</div><div class="micro-day-title">Long run</div><div class="micro-day-body">The whole-week kicker. Pure Zone 2. Builds from about 45 min in week 1 to 75+ in week 3, then drops back in the recovery week.</div></div>
+    <div class="micro-day rest"><div class="micro-day-label">Day 7</div><div class="micro-day-title">Rest or easy walk</div><div class="micro-day-body">If you ran long yesterday, today is sacred. Don't undo it.</div></div>
+  </div>
+</section>
+
+<!-- MACROCYCLE -->
+<section class="block">
+  <div class="eyebrow">where this fits in a real plan</div>
+  <p class="section-intro">A full training cycle has <span>three</span> mesocycles. You're reading the first one.</p>
+
+  <div class="macro-strip">
+    <div class="macro-block active">
+      <div class="macro-tag">Mesocycle 01</div>
+      <div class="macro-title">General Aerobic Preparation</div>
+      <div class="macro-weeks">3 to 6 weeks</div>
+      <div class="macro-body">Build the engine. Zone 2 volume, 3:1 build/recover, one quality day per week. <strong>This is what's on this page.</strong></div>
+      <div class="macro-pill free">★ Free, you're here</div>
+    </div>
+    <div class="macro-block locked">
+      <div class="macro-tag">Mesocycle 02</div>
+      <div class="macro-title">Specific Preparation</div>
+      <div class="macro-weeks">4 to 6 weeks</div>
+      <div class="macro-body">Race-specific work. Threshold sessions, race-pace long runs, VO2max intervals. Calibrated to <em>your</em> goal race.</div>
+      <div class="macro-pill paid">→ In the plans</div>
+    </div>
+    <div class="macro-block locked">
+      <div class="macro-tag">Mesocycle 03</div>
+      <div class="macro-title">Competitive Phase</div>
+      <div class="macro-weeks">3 to 4 weeks</div>
+      <div class="macro-body">Race simulation, peaking and a structured taper. Volume drops. Sharpness peaks. You arrive ready.</div>
+      <div class="macro-pill paid">→ In the plans</div>
+    </div>
+  </div>
+
+  <div class="story-blocks">
+    <div class="story-block"><p>This is what real training looks like. Not a Strava streak. Not "run more, run faster." <strong>A periodised plan with a base, a build and a taper</strong>, each mesocycle setting up the next.</p></div>
+    <div class="story-block"><p>You can't build this from a blog post. The base is the only mesocycle you can semi-DIY, because the principles do most of the work. The specific and competitive phases need <em>your</em> numbers, <em>your</em> race date and <em>your</em> real training hours. That's not generic content, that's a plan.</p></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="block" style="border-bottom:none;">
+  <div class="eyebrow">the plans</div>
+
+  <div class="includes-card">
+    <div class="plan-includes">
+        <div class="plan-include">A plan for every distance, 0 to 5K through to the marathon</div>
+        <div class="plan-include">The PDF, from $19</div>
+        <div class="plan-include">PDF + Training Plan on your watch, $49 a month</div>
+        <div class="plan-include">Add my voice feedback, $99 a month</div>
+    </div>
+  </div>
+
+  <div class="cta-card">
+    <div class="cta-eyebrow">Want the whole macrocycle?</div>
+    <div class="cta-headline">Mesocycle one is<br>the warm-up.<br>The plan is<br>the whole build.</div>
+    <p class="cta-body"><strong>My plans</strong> lay out the full build for your goal race, from 5K to the marathon, with every session written out.</p>
+    <p class="cta-body">Proper periodisation. Build microcycles. Recovery microcycles. A taper that doesn't waste the work you've already put in.</p>
+    <p class="cta-body last">If you've read this far, you already know guessing isn't working. <strong>Plans start at $19.</strong></p>
+    <div class="cta-links">
+      <a href="plans.html" class="cta-link">→ See the plans</a>
+      <a href="https://stan.store/boltinben/p/-the-runners-playbook" target="_blank" class="cta-link secondary">Get the Playbook</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p class="footer-cred">Ben Williams · ISSA Certified Running Coach</p>
+  <p>Periodisation framework adapted from Dr. Jason Karp's <em>Foundations and Applications of Running Technique and Programming</em> (ISSA, 2022).<br>Pace and race tables based on Jack Daniels' VDOT methodology. Built by <a href="https://instagram.com/boltinben" target="_blank">@BoltinBen</a>. Free because running should be accessible, not expensive.</p>
+</footer>
+
+<script>
+// SUPABASE TRACKING
+const SUPABASE_URL = 'https://ysbufbmeamjujrqfgsam.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_-v_MbEnfu3qBtv3kFMiOZw_M_2O1Nle';
+const TRACKING_ON = SUPABASE_URL.indexOf('http') === 0;
+
+async function getCount() { /* count display removed; tracking still posts */ }
+
+async function trackUse(vdot) {
+  if (!TRACKING_ON) return;
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/bolt_calculator_uses`, {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ vdot })
+    });
+  } catch { /* silent */ }
+}
+
+// VDOT TABLE  | cols: vdot, easy, marathon, threshold, interval, rep, 5k, 10k, 15k, half, full
+const VDOT_TABLE = [
+  [30,"7:40","6:51","6:24","5:55","5:35","30:40","1:03:45","1:38:14","2:21:04","4:49:17"],
+  [31,"7:29","6:41","6:15","5:45","5:25","29:53","1:02:03","1:35:36","2:17:21","4:41:57"],
+  [32,"7:18","6:31","6:05","5:35","5:15","29:05","1:00:26","1:33:07","2:13:49","4:34:59"],
+  [33,"7:08","6:22","5:56","5:27","5:08","28:22","58:54","1:30:45","2:10:27","4:28:22"],
+  [34,"6:58","6:13","5:48","5:20","5:00","27:39","57:26","1:28:30","2:07:16","4:22:03"],
+  [35,"6:49","6:04","5:41","5:12","4:45","27:00","56:03","1:26:22","2:04:13","4:16:03"],
+  [36,"6:40","5:56","5:33","5:07","4:30","26:22","54:44","1:24:20","2:01:19","4:10:19"],
+  [37,"6:31","5:48","5:26","5:00","4:30","25:47","53:29","1:22:24","1:58:34","4:04:50"],
+  [38,"6:23","5:41","5:19","4:54","4:30","25:12","52:17","1:20:33","1:55:55","3:59:35"],
+  [39,"6:16","5:34","5:13","4:48","4:25","24:40","51:09","1:18:47","1:53:24","3:54:34"],
+  [40,"6:08","5:27","5:06","4:42","4:20","24:08","50:03","1:17:06","1:50:59","3:49:45"],
+  [41,"6:01","5:20","5:00","4:36","4:15","23:38","49:01","1:15:29","1:48:40","3:45:45"],
+  [42,"5:55","5:14","4:54","4:31","4:10","23:09","48:01","1:13:56","1:46:27","3:40:43"],
+  [43,"5:48","5:08","4:49","4:26","4:05","22:42","47:04","1:12:27","1:44:20","3:36:28"],
+  [44,"5:41","5:02","4:43","4:21","4:00","22:15","46:09","1:11:02","1:42:17","3:32:23"],
+  [45,"5:36","4:56","4:38","4:16","3:55","21:50","45:16","1:09:40","1:40:20","3:28:26"],
+  [46,"5:30","4:51","4:33","4:12","3:50","21:25","44:25","1:08:22","1:38:27","3:24:39"],
+  [47,"5:24","4:46","4:29","4:07","3:45","21:02","43:36","1:07:06","1:36:38","3:20:56"],
+  [48,"5:19","4:41","4:24","4:03","3:40","20:39","42:50","1:05:53","1:34:53","3:17:29"],
+  [49,"5:13","4:36","4:20","3:59","3:40","20:18","42:04","1:04:44","1:33:12","3:14:06"],
+  [50,"5:08","4:31","4:15","3:55","3:35","19:57","41:21","1:03:26","1:31:35","3:10:49"],
+  [51,"5:04","4:27","4:11","3:51","3:30","19:36","40:39","1:02:31","1:30:02","3:07:39"],
+  [52,"4:59","4:22","4:07","3:48","3:30","19:17","39:59","1:01:29","1:28:31","3:04:36"],
+  [53,"4:55","4:18","4:04","3:44","3:20","18:58","39:20","1:00:28","1:27:04","3:01:39"],
+  [54,"4:50","4:14","4:00","3:41","3:20","18:40","38:42","59:30","1:25:50","2:58:47"],
+  [55,"4:46","4:10","3:56","3:37","3:20","18:22","38:06","58:33","1:24:18","2:56:01"],
+  [56,"4:41","4:06","3:53","3:34","3:15","18:05","37:31","57:39","1:23:00","2:53:20"],
+  [57,"4:38","4:03","3:50","3:31","3:15","17:49","36:57","56:46","1:21:43","2:50:45"],
+  [58,"4:34","3:59","3:45","3:28","3:10","17:33","36:24","55:55","1:20:30","2:48:14"],
+  [59,"4:30","3:56","3:43","3:25","3:05","17:17","35:52","55:06","1:19:18","2:45:47"],
+  [60,"4:26","3:52","3:40","3:23","3:05","17:03","35:22","54:18","1:18:09","2:43:25"],
+  [61,"4:23","3:49","3:37","3:20","3:00","16:48","34:52","53:32","1:17:02","2:41:08"],
+  [62,"4:20","3:46","3:34","3:17","3:00","16:34","34:23","52:47","1:15:57","2:38:54"],
+  [63,"4:16","3:43","3:32","3:15","2:55","16:20","33:55","52:03","1:14:54","2:36:44"],
+  [64,"4:13","3:40","3:29","3:12","2:55","16:07","33:28","51:20","1:13:53","2:34:38"],
+  [65,"4:10","3:37","3:26","3:10","2:50","15:54","33:01","50:40","1:12:53","2:32:35"],
+  [66,"4:18","3:34","3:24","3:08","2:50","15:42","32:35","50:00","1:11:56","2:30:36"],
+  [67,"4:03","3:31","3:21","3:05","2:45","15:29","32:11","49:22","1:11:00","2:28:40"],
+  [68,"4:01","3:29","3:19","3:03","2:45","15:18","31:46","48:44","1:10:05","2:26:47"],
+  [69,"3:58","3:26","3:16","3:01","2:40","15:06","31:23","48:08","1:09:12","2:24:57"],
+  [70,"3:55","3:24","3:14","2:59","2:40","14:55","31:00","47:32","1:08:21","2:23:10"],
+  [71,"3:52","3:21","3:12","2:57","2:35","14:44","30:38","46:58","1:07:31","2:21:26"],
+  [72,"3:50","3:19","3:10","2:55","2:35","14:33","30:16","46:24","1:06:42","2:19:44"],
+  [73,"3:47","3:16","3:08","2:53","2:30","14:23","29:55","45:51","1:05:54","2:18:05"],
+  [74,"3:45","3:14","3:06","2:51","2:30","14:13","29:34","45:19","1:05:08","2:16:29"],
+  [75,"3:42","3:12","3:04","2:49","2:25","14:03","29:14","44:48","1:04:23","2:14:55"],
+  [76,"3:40","3:10","3:02","2:48","2:25","13:54","28:55","44:18","1:03:39","2:13:23"],
+  [77,"3:37","3:08","3:00","2:46","2:25","13:44","28:36","43:49","1:02:56","2:11:54"],
+  [78,"3:35","3:05","2:58","2:44","2:20","13:35","28:17","43:20","1:02:15","2:10:27"],
+  [79,"3:33","3:03","2:56","2:42","2:20","13:26","27:59","42:52","1:01:34","2:09:02"],
+  [80,"3:31","3:01","2:54","2:41","2:20","13:18","27:41","42:25","1:00:54","2:07:38"],
+  [81,"3:28","3:00","2:53","2:39","2:15","13:09","27:24","41:58","1:00:15","2:06:17"],
+  [82,"3:26","2:58","2:51","2:38","2:15","13:01","27:07","41:32","59:38","2:04:57"],
+  [83,"3:25","2:56","2:49","2:36","2:15","12:53","26:51","41:06","59:01","2:03:24"],
+  [84,"3:23","2:54","2:48","2:35","2:15","12:45","26:34","40:42","58:25","2:02:24"],
+  [85,"3:20","2:52","2:46","2:33","2:15","12:37","26:19","40:17","57:50","2:01:10"]
+];
+
+function mileSecsToVDOT(s) {
+  const t = s / 60;
+  const v = 1609.34 / s * 60;
+  const vo2 = -4.60 + 0.182258 * v + 0.000104 * v * v;
+  const pct = 0.8 + 0.1894393 * Math.exp(-0.012778 * t) + 0.2989558 * Math.exp(-0.1932605 * t);
+  return Math.round(vo2 / pct);
+}
+
+function findRow(vdot) {
+  return VDOT_TABLE.reduce((best, row) => Math.abs(row[0] - vdot) < Math.abs(best[0] - vdot) ? row : best);
+}
+
+function getFitnessLevel(v) {
+  if (v < 35) return ["You're at the start line.", "Every run from here is progress. Build the aerobic engine first and the speed comes later."];
+  if (v < 45) return ["Solid recreational level.", "You've got a base. Consistent, structured training moves this number fast."];
+  if (v < 55) return ["Properly trained runner.", "Half marathons are well within reach. Now it's about precision."];
+  if (v < 65) return ["Competitive runner.", "Strong aerobic fitness. You're racing seriously now, so every detail matters."];
+  if (v < 75) return ["Elite age-grouper.", "Very high fitness. Sub-3 marathon territory."];
+  return ["Elite level.", "World-class fitness. Less than 1% of runners ever reach this."];
+}
+
+function getPlanRecommendation(v) {
+  if (v < 38) return {
+    name: "The Base, 8 week aerobic foundation",
+    rationale: "Your biggest gains right now come from building the aerobic engine, not chasing speed. The Base is 8 weeks of patient Zone 2 work that quietly drops your easy pace. Build it once, properly, and everything after gets easier."
+  };
+  if (v < 50) return {
+    name: "5K Blueprint, 6 weeks of speed work",
+    rationale: "You've got base fitness. The next jump comes from intervals, threshold work and learning to sit in the discomfort at race pace. The 5K Blueprint is built for runners right where you are."
+  };
+  if (v < 62) return {
+    name: "10K or Half Marathon Blueprint",
+    rationale: "You're a properly trained runner. Gains from here come from precision, knowing when to push and when to sit on easy, and a real periodised plan instead of running on feel."
+  };
+  return {
+    name: "The 21K Bible or Marathon",
+    rationale: "At your level the gains live in pacing discipline, recovery and a coach watching your data. You don't need more volume, you need smarter structure."
+  };
+}
+
+function calculate() {
+  const mins = parseInt(document.getElementById('mins').value) || 0;
+  const secs = parseInt(document.getElementById('secs').value) || 0;
+  const total = mins * 60 + secs;
+  const err = document.getElementById('errorMsg');
+
+  if (total < 210 || total > 1200 || mins === 0) {
+    err.style.display = 'block';
+    err.textContent = 'Please enter a valid mile time between 3:30 and 20:00.';
+    return;
+  }
+  if (secs > 59) {
+    err.style.display = 'block';
+    err.textContent = 'Seconds must be between 0 and 59.';
+    return;
+  }
+  err.style.display = 'none';
+
+  const vdot = Math.max(30, Math.min(85, mileSecsToVDOT(total)));
+  const row = findRow(vdot);
+
+  document.getElementById('vdotDisplay').textContent = vdot;
+  const [lvl, desc] = getFitnessLevel(vdot);
+  document.getElementById('fitnessLevel').textContent = lvl;
+  document.getElementById('fitnessDesc').textContent = desc;
+
+  document.getElementById('paceEasy').textContent      = row[1];
+  document.getElementById('paceMarathon').textContent  = row[2];
+  document.getElementById('paceThreshold').textContent = row[3];
+  document.getElementById('paceInterval').textContent  = row[4];
+  document.getElementById('paceRep').textContent       = row[5];
+  document.getElementById('race5k').textContent        = row[6];
+  document.getElementById('race10k').textContent       = row[7];
+  document.getElementById('race15k').textContent       = row[8];
+  document.getElementById('raceHalf').textContent      = row[9];
+  document.getElementById('raceFull').textContent      = row[10];
+
+  const rec = getPlanRecommendation(vdot);
+  document.getElementById('recommendPlanName').textContent = rec.name;
+  document.getElementById('recommendRationale').textContent = rec.rationale;
+  document.getElementById('recommendBox').style.display = 'block';
+
+  trackUse(vdot);
+
+  const results = document.getElementById('results');
+  results.style.display = 'block';
+  results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function reset() {
+  document.getElementById('mins').value = '';
+  document.getElementById('secs').value = '';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('errorMsg').style.display = 'none';
+  document.getElementById('recommendBox').style.display = 'none';
+}
+
+// HR ZONE FINDER
+function calcZones() {
+  let maxHR = parseInt(document.getElementById('maxHR').value);
+  const age = parseInt(document.getElementById('age').value);
+  if (!maxHR && age) {
+    maxHR = 220 - age;
+    document.getElementById('maxHR').value = maxHR;
+  }
+  if (!maxHR || maxHR < 140 || maxHR > 220) {
+    alert('Please enter a valid max heart rate (140 to 220 bpm), or enter your age for an estimate.');
+    return;
+  }
+  const zones = [
+    { id: 'z1', bar: 'z1bar', low: 0.50, high: 0.60, pct: 55 },
+    { id: 'z2', bar: 'z2bar', low: 0.60, high: 0.70, pct: 72 },
+    { id: 'z3', bar: 'z3bar', low: 0.70, high: 0.80, pct: 82 },
+    { id: 'z4', bar: 'z4bar', low: 0.80, high: 0.90, pct: 90 },
+    { id: 'z5', bar: 'z5bar', low: 0.90, high: 1.00, pct: 100 }
+  ];
+  zones.forEach(z => {
+    const lo = Math.round(z.low * maxHR);
+    const hi = Math.round(z.high * maxHR);
+    document.getElementById(z.id).textContent = lo + '\u2013' + hi + ' bpm';
+    setTimeout(() => { document.getElementById(z.bar).style.width = z.pct + '%'; }, 50);
+  });
+  document.getElementById('z2big').textContent = Math.round(0.60 * maxHR) + '\u2013' + Math.round(0.70 * maxHR) + ' bpm';
+  document.getElementById('z2highlight').style.display = 'block';
+}
+
+function handleBookmark() {
+  const btn = document.querySelector('.bookmark-btn');
+  btn.textContent = (navigator.userAgent.toLowerCase().indexOf('mac') !== -1) ? '\u2318 + D to bookmark' : 'Ctrl + D to bookmark';
+  btn.classList.add('saved');
+  setTimeout(() => { btn.textContent = '\u2713 Bookmarked?'; }, 2500);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.activeElement.tagName === 'INPUT') {
+    const id = document.activeElement.id;
+    if (id === 'mins' || id === 'secs') calculate();
+    if (id === 'maxHR' || id === 'age') calcZones();
+  }
+});
+document.getElementById('mins').addEventListener('input', function() {
+  if (this.value.length >= 2) document.getElementById('secs').focus();
+});
+</script>
+</body>
+</html>

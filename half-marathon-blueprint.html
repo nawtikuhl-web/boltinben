@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Half Marathon Blueprint — BoltinBen</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#0a0a0a;--s:#111;--s2:#181818;--s3:#1e1e1e;--b:#242424;--y:#F5E215;--yd:rgba(245,226,21,0.12);--w:#f0f0f0;--m:#666;--m2:#3a3a3a;--easy:#4ade80;--mod:#f97316;--hard:#a855f7;--race:#e8000a;--rest:#444}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--w);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* AUTH */
+#auth{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px}
+#auth::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 40%,rgba(245,226,21,0.07),transparent);pointer-events:none}
+.a-logo{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:5px;color:var(--y);margin-bottom:44px}
+.a-head{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,10vw,80px);line-height:.9;text-align:center;margin-bottom:28px}
+.a-head em{color:var(--y);font-style:normal;display:block}
+.a-box{background:var(--s);border:1px solid var(--b);border-radius:14px;padding:28px;width:100%;max-width:370px}
+.a-tabs{display:flex;background:var(--s2);border-radius:8px;padding:3px;margin-bottom:22px}
+.a-tab{flex:1;background:none;border:none;color:var(--m);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:8px;cursor:pointer;border-radius:6px;transition:all .2s}
+.a-tab.on{background:var(--s3);color:var(--w)}
+.a-form{display:none;flex-direction:column;gap:12px}
+.a-form.on{display:flex}
+.lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--m);margin-bottom:4px;display:block}
+.inp{width:100%;background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:12px 15px;color:var(--w);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border-color .2s}
+.inp:focus{border-color:var(--y)}
+.a-btn{width:100%;background:var(--y);color:#0a0a0a;border:none;border-radius:8px;padding:13px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;cursor:pointer;transition:opacity .2s}
+.a-btn:hover{opacity:.85}
+.a-err{font-size:12px;color:var(--race);text-align:center;min-height:16px;margin-top:2px}
+
+/* PORTAL */
+#portal{display:none}
+.nav{background:var(--s);border-bottom:1px solid var(--b);padding:0 14px;display:flex;align-items:center;gap:10px;height:54px;position:sticky;top:0;z-index:100}
+.nav-brand{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;white-space:nowrap;flex-shrink:0}
+.nav-brand span{color:var(--y)}
+.nav-tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;flex:1}
+.nav-tabs::-webkit-scrollbar{display:none}
+.t-btn{background:none;border:none;color:var(--m);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;padding:6px 10px;cursor:pointer;border-radius:6px;white-space:nowrap;transition:color .15s,background .15s}
+.t-btn:hover{color:var(--w);background:var(--s2)}
+.t-btn.on{color:var(--y);background:var(--yd)}
+.nav-u{font-size:11px;color:var(--m);white-space:nowrap;flex-shrink:0}
+.nav-out{background:none;border:1px solid var(--b);border-radius:6px;color:var(--m);font-size:11px;padding:4px 9px;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;flex-shrink:0;transition:color .15s,border-color .15s}
+.nav-out:hover{color:var(--race);border-color:var(--race)}
+.nav-bolt{flex-shrink:0}
+
+/* SECTIONS */
+.sec{display:none;padding:26px 16px 80px;max-width:860px;margin:0 auto}
+.sec.on{display:block}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;margin-bottom:5px}
+.sec-desc{font-size:13px;color:var(--m);line-height:1.7;margin-bottom:20px;max-width:600px}
+.divider{height:1px;background:var(--b);margin:22px 0}
+.callout{background:rgba(245,226,21,0.05);border:1px solid rgba(245,226,21,0.15);border-radius:10px;padding:15px 17px;margin-bottom:20px;font-size:13px;color:#ccc;line-height:1.7}
+.callout strong{color:var(--y)}
+
+/* OVERVIEW */
+.hero{background:linear-gradient(135deg,var(--s),#111100);border:1px solid var(--b);border-left:4px solid var(--y);border-radius:12px;padding:26px;margin-bottom:22px;position:relative;overflow:hidden}
+.hero::after{content:'21.1';position:absolute;right:-8px;top:50%;transform:translateY(-50%);font-family:'Bebas Neue',sans-serif;font-size:90px;color:rgba(245,226,21,0.05);line-height:1;pointer-events:none}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(26px,5vw,46px);line-height:1;margin-bottom:7px}
+.hero h1 span{color:var(--y)}
+.hero p{font-size:13px;color:#aaa;max-width:460px;line-height:1.7}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;margin-bottom:22px}
+.stat{background:var(--s);border:1px solid var(--b);border-radius:10px;padding:15px 11px;text-align:center}
+.stat .n{font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--y);line-height:1;margin-bottom:3px}
+.stat .l{font-size:10px;color:var(--m);letter-spacing:1px;text-transform:uppercase}
+.sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin-bottom:10px}
+.sc{background:var(--s);border:1px solid var(--b);border-radius:10px;padding:14px}
+.sc h4{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;margin-bottom:5px}
+.sc p{font-size:12px;color:#888;line-height:1.6}
+.tips{list-style:none;display:flex;flex-direction:column;gap:7px}
+.tips li{background:var(--s);border:1px solid var(--b);border-radius:8px;padding:11px 14px;font-size:12px;color:#ccc;line-height:1.6;display:flex;gap:10px;align-items:flex-start}
+
+/* VIDEOS */
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:20px}
+.vc{background:var(--s);border:1px solid var(--b);border-radius:10px;overflow:hidden;transition:border-color .2s}
+.vc:hover{border-color:var(--y)}
+.vthumb{width:100%;aspect-ratio:16/9;background:var(--s2);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.vthumb iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
+.vph{display:flex;flex-direction:column;align-items:center;gap:7px;color:var(--m)}
+.vplay{width:40px;height:40px;background:var(--y);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.vinfo{padding:11px}
+.vinfo h4{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.8px;margin-bottom:3px}
+.vinfo p{font-size:11px;color:var(--m);line-height:1.5}
+.psub{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:10px;color:#bbb}
+
+/* PLAN */
+.leg{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.leg-i{display:flex;align-items:center;gap:6px;font-size:11px;color:#aaa}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.ph{background:var(--s);border:1px solid var(--b);border-radius:12px;overflow:hidden;margin-bottom:11px}
+.ph-head{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;cursor:pointer;user-select:none;transition:background .15s}
+.ph-head:hover{background:var(--s2)}
+.ph-left{display:flex;align-items:center;gap:10px}
+.ph-num{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--y);line-height:1;width:24px}
+.ph-info h3{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px}
+.ph-info span{font-size:11px;color:var(--m)}
+.ph-tag{font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:20px;flex-shrink:0}
+.tag-base{background:rgba(74,222,128,0.12);color:var(--easy)}
+.tag-build{background:rgba(168,85,247,0.12);color:var(--hard)}
+.tag-taper{background:rgba(249,115,22,0.12);color:var(--mod)}
+.chev{color:var(--m);font-size:13px;transition:transform .2s;flex-shrink:0;margin-left:6px}
+.ph.open .chev{transform:rotate(180deg)}
+.ph-body{display:none}
+.ph.open .ph-body{display:block}
+.wacc{border-top:1px solid var(--b)}
+.wh{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;cursor:pointer;transition:background .15s;user-select:none}
+.wh:hover,.wh.open{background:var(--s2)}
+.wl{display:flex;align-items:center;gap:11px}
+.wnum{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--m2);line-height:1;width:20px}
+.wsumm{font-size:11px;color:#aaa}
+.wkm{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--y)}
+.wdet{display:none;padding:3px 16px 12px 48px;border-bottom:1px solid var(--b)}
+.wh.open+.wdet{display:block}
+.dr{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.dr:last-child{border-bottom:none}
+.dlbl{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--m);width:22px;flex-shrink:0;padding-top:2px}
+.dcon{font-size:11px;color:#ccc;line-height:1.6;flex:1}
+.dtype{display:flex;align-items:center;gap:4px;font-weight:600;margin-bottom:1px}
+.idot{display:inline-block;width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* PACING */
+.pc{background:var(--s);border:1px solid var(--b);border-radius:10px;overflow:hidden;margin-bottom:10px}
+.pc-head{padding:11px 15px;background:var(--s2);display:flex;align-items:center;gap:7px;border-bottom:1px solid var(--b)}
+.pc-head h4{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px}
+.ptab{width:100%;border-collapse:collapse;font-size:12px}
+.ptab th{text-align:left;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--m);padding:8px 15px;border-bottom:1px solid var(--b)}
+.ptab td{padding:8px 15px;border-bottom:1px solid rgba(255,255,255,0.04);color:#ccc}
+.ptab tr:last-child td{border-bottom:none}
+.phl{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--y)}
+
+/* TRACKER */
+.tsetup{background:var(--s);border:1px solid var(--b);border-radius:12px;overflow:hidden;margin-bottom:18px}
+.stabs{display:flex;border-bottom:1px solid var(--b)}
+.stab{flex:1;background:none;border:none;color:var(--m);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;padding:11px 5px;cursor:pointer;border-bottom:2px solid transparent;text-align:center;transition:color .15s}
+.stab.on{color:var(--y);border-bottom-color:var(--y);background:var(--yd)}
+.span{display:none;padding:18px}
+.span.on{display:block}
+.zg{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:8px;margin-top:11px}
+.zi label{display:block;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}
+.zi input{width:100%;background:var(--s2);border:1px solid var(--b);border-radius:7px;padding:8px 11px;color:var(--w);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border-color .2s}
+.zi input:focus{border-color:var(--y)}
+.sbtn{margin-top:13px;background:var(--y);color:#0a0a0a;border:none;border-radius:8px;padding:9px 18px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1.5px;cursor:pointer;transition:opacity .2s}
+.sbtn:hover{opacity:.85}
+.zd{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:11px}
+.zp{border-radius:7px;padding:9px 4px;text-align:center}
+.zp .zn{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:1px;display:block}
+.zp .zr{font-size:9px;margin-top:2px;opacity:.8;display:block}
+.z1{background:rgba(74,222,128,0.1);color:#4ade80;border:1px solid rgba(74,222,128,0.2)}
+.z2{background:rgba(96,165,250,0.1);color:#60a5fa;border:1px solid rgba(96,165,250,0.2)}
+.z3{background:rgba(245,226,21,0.1);color:#F5E215;border:1px solid rgba(245,226,21,0.2)}
+.z4{background:rgba(249,115,22,0.1);color:#f97316;border:1px solid rgba(249,115,22,0.2)}
+.z5{background:rgba(232,0,10,0.1);color:#e8000a;border:1px solid rgba(232,0,10,0.2)}
+.mhr-res{margin-top:13px;background:var(--yd);border:1px solid rgba(245,226,21,0.2);border-radius:9px;padding:13px 17px;display:none}
+.mhr-res .big{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--y);line-height:1}
+.hrsteps{counter-reset:s;list-style:none;display:flex;flex-direction:column;gap:7px;margin-top:10px}
+.hrsteps li{counter-increment:s;background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:9px 12px 9px 40px;font-size:12px;color:#ccc;line-height:1.6;position:relative}
+.hrsteps li::before{content:counter(s);position:absolute;left:11px;top:50%;transform:translateY(-50%);font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--y)}
+
+/* LOG */
+.lf{background:var(--s);border:1px solid var(--b);border-radius:12px;padding:17px;margin-bottom:18px}
+.lf-title{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;margin-bottom:11px}
+.lrow{display:grid;grid-template-columns:64px 1fr 1fr 1fr auto;gap:7px;align-items:end}
+.lf .lbl{display:block;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--m);margin-bottom:3px}
+.lf input,.lf select{width:100%;background:var(--s2);border:1px solid var(--b);border-radius:7px;padding:8px 9px;color:var(--w);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;transition:border-color .2s;-webkit-appearance:none}
+.lf input:focus,.lf select:focus{border-color:var(--y)}
+.lf select option{background:var(--s2)}
+.ladd{background:var(--y);color:#0a0a0a;border:none;border-radius:7px;padding:8px 13px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;height:36px;white-space:nowrap;transition:opacity .2s}
+.ladd:hover{opacity:.85}
+#lfb{margin-top:9px;font-size:12px;min-height:16px;line-height:1.5}
+
+/* SUMMARY */
+.psum{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:18px}
+.cwrap{background:var(--s);border:1px solid var(--b);border-radius:12px;padding:17px;margin-bottom:18px}
+.ctitle{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;margin-bottom:11px;color:var(--m)}
+.ctitle span{color:var(--w)}
+
+/* RUN LOG */
+.rlw{background:var(--s);border:1px solid var(--b);border-radius:12px;overflow:hidden}
+.rlh{padding:12px 15px;border-bottom:1px solid var(--b);display:flex;justify-content:space-between;align-items:center}
+.rlh h3{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px}
+.clr{background:none;border:1px solid var(--b);border-radius:6px;color:var(--m);font-size:10px;padding:3px 8px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:color .15s,border-color .15s}
+.clr:hover{color:var(--race);border-color:var(--race)}
+.rlt{width:100%;border-collapse:collapse;font-size:12px}
+.rlt th{text-align:left;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--m);padding:8px 12px;border-bottom:1px solid var(--b)}
+.rlt td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04);color:#ccc;vertical-align:middle}
+.rlt tr:last-child td{border-bottom:none}
+.zbadge{font-size:10px;font-weight:600;padding:2px 6px;border-radius:10px;letter-spacing:.5px;white-space:nowrap}
+.empty{padding:30px;text-align:center;color:var(--m);font-size:12px}
+.shbtn{background:none;border:1px solid var(--b);border-radius:6px;color:var(--y);font-size:10px;padding:2px 7px;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:background .15s}
+.shbtn:hover{background:var(--yd)}
+
+/* MODAL */
+.moverlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.moverlay.open{display:flex}
+.modal{background:var(--s);border:1px solid var(--b);border-radius:14px;width:100%;max-width:440px;overflow:hidden}
+.mhead{padding:13px 17px;border-bottom:1px solid var(--b);display:flex;justify-content:space-between;align-items:center}
+.mhead h3{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px}
+.mclose{background:none;border:none;color:var(--m);font-size:21px;cursor:pointer;line-height:1;padding:0 3px}
+.mclose:hover{color:var(--w)}
+.mbody{padding:17px}
+.cstabs{display:flex;gap:6px;margin-bottom:14px}
+.cstab{flex:1;background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:8px;cursor:pointer;text-align:center;font-size:11px;color:var(--m);transition:all .2s;font-family:'DM Sans',sans-serif}
+.cstab.on{border-color:var(--y);color:var(--y);background:var(--yd)}
+.cwrap2{display:flex;justify-content:center;margin-bottom:13px}
+#storyCanvas{border-radius:8px;max-width:100%;border:1px solid var(--b)}
+.macts{display:flex;gap:8px}
+.dlbtn{flex:1;background:var(--y);color:#0a0a0a;border:none;border-radius:8px;padding:10px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1.5px;cursor:pointer;transition:opacity .2s}
+.dlbtn:hover{opacity:.85}
+.dlbtn2{flex:1;background:none;border:1px solid var(--b);color:var(--w);border-radius:8px;padding:10px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1.5px;cursor:pointer;transition:border-color .2s}
+.dlbtn2:hover{border-color:var(--y)}
+
+@media(max-width:600px){
+  .lrow{grid-template-columns:1fr 1fr}
+  .lrow .ladd{grid-column:1/-1}
+  .zd{grid-template-columns:repeat(3,1fr)}
+  .nav-u{display:none}
+}
+</style>
+<script src="analytics.js" defer></script>
+</head>
+<body>
+
+<div id="auth">
+  <div class="a-logo">for sparkies only</div>
+  <div class="a-head">THE HALF<br>MARATHON<br><em>BLUEPRINT</em></div>
+  <div class="a-box">
+    <div class="a-tabs">
+      <button class="a-tab on" onclick="authTab('login',this)">Sign In</button>
+      <button class="a-tab" onclick="authTab('signup',this)">Create Account</button>
+    </div>
+    <div class="a-form on" id="f-login">
+      <div><label class="lbl">Email</label><input class="inp" type="email" id="l-email" placeholder="you@email.com"></div>
+      <div><label class="lbl">Password</label><input class="inp" type="password" id="l-pw" placeholder="••••••••"></div>
+      <button class="a-btn" id="signin-btn">SIGN IN →</button>
+      <div class="a-err" id="l-err"></div>
+    </div>
+    <div class="a-form" id="f-signup">
+      <div><label class="lbl">Username</label><input class="inp" type="text" id="s-user" placeholder="e.g. fastben" maxlength="30"></div>
+      <div><label class="lbl">Email</label><input class="inp" type="email" id="s-email" placeholder="you@email.com"></div>
+      <div><label class="lbl">Password</label><input class="inp" type="password" id="s-pw" placeholder="Min 6 characters"></div>
+      <button class="a-btn" id="signup-btn">CREATE ACCOUNT →</button>
+      <div class="a-err" id="s-err"></div>
+    </div>
+  </div>
+  <p style="margin-top:16px;font-size:11px;color:var(--m)">Need help? Email ben@boltinben.com</p>
+</div>
+
+<div id="portal">
+  <nav class="nav">
+    <div class="nav-brand">BOLTIN<span>BEN</span></div>
+    <div class="nav-tabs">
+      <button class="t-btn on" onclick="goTab('overview',this)">Overview</button>
+      <button class="t-btn" onclick="goTab('videos',this)">Videos</button>
+      <button class="t-btn" onclick="goTab('plan',this)">12-Week Plan</button>
+      <button class="t-btn" onclick="goTab('pacing',this)">Pacing</button>
+      <button class="t-btn" onclick="goTab('sessions',this)">Sessions</button>
+      <button class="t-btn" onclick="goTab('tracker',this)">📊 Tracker</button>
+      <button class="t-btn" onclick="goTab('race',this)">Race Day</button>
+    </div>
+    <span class="nav-u" id="nav-u"></span>
+    <button class="nav-out" id="out-btn">Sign Out</button>
+    <svg class="nav-bolt" width="30" height="26" viewBox="0 0 66 57" fill="none"><path d="M6.59 22.8L0 34.2l13.15 0 6.57-11.4Z" fill="#F5E215"/><path d="M26.29 34.2l13.15 0-6.58 11.4-13.15 0 6.58-11.4-13.14 0L0 57l39.44 0 13.14-22.8-6.58-11.4-13.14 0 6.58-11.4Z" fill="#F5E215"/><path d="M65.72 11.43L65.71 11.4 59.15 0.01 59.13 0 32.87 0 19.72 22.8l13.15 0 6.58-11.4 13.14 0-6.58 11.4 13.15 0 6.56-11.37Z" fill="#F5E215"/></svg>
+  </nav>
+
+  <div class="sec on" id="overview">
+    <div class="hero"><h1>THE HALF MARATHON<br><span>BLUEPRINT</span></h1><p>12 weeks. Built around real running science. Structured to get you to the start line fit, confident, and ready to run your best 21.1km.</p></div>
+    <div class="stats">
+      <div class="stat"><div class="n">12</div><div class="l">Weeks</div></div>
+      <div class="stat"><div class="n">4–5</div><div class="l">Days/Week</div></div>
+      <div class="stat"><div class="n">3</div><div class="l">Phases</div></div>
+      <div class="stat"><div class="n">21.1</div><div class="l">Kilometres</div></div>
+    </div>
+    <div class="callout"><strong>Who this is for:</strong> runners who can currently run 5–10km comfortably and want a structured path to their first or fastest half marathon. You need consistency and about 4–5 hours a week.</div>
+    <div class="sec-title">How The Plan Works</div>
+    <div class="sg">
+      <div class="sc"><h4 style="color:var(--easy)">Phase 1 — Base</h4><p>Weeks 1–4. Build your aerobic engine. Easy mileage, Zone 2 focus, long runs. Nothing heroic. Just consistent.</p></div>
+      <div class="sc"><h4 style="color:var(--hard)">Phase 2 — Build</h4><p>Weeks 5–9. Add quality sessions — tempo runs, intervals. Long runs extend to 16–18km. This is where fitness compounds.</p></div>
+      <div class="sc"><h4 style="color:var(--mod)">Phase 3 — Taper</h4><p>Weeks 10–12. Volume drops, intensity stays. Your body consolidates the work. Trust the taper.</p></div>
+    </div>
+    <div class="divider"></div>
+    <div class="sec-title">The Golden Rules</div>
+    <ul class="tips">
+      <li><span>📌</span>80% of your runs should feel easy. If you are breathing hard on easy days, you are going too fast.</li>
+      <li><span>📌</span>The long run is non-negotiable. Miss a tempo, make it up. Miss a long run — do not try to cram it in.</li>
+      <li><span>📌</span>Sleep is training. 7–9 hours is part of the plan, not a bonus.</li>
+      <li><span>📌</span>If something hurts (not soreness — actual pain), take a day.</li>
+      <li><span>📌</span>On runs over 75 min: fuel every 30–40 min. Practice in training — nothing new on race day.</li>
+    </ul>
+  </div>
+
+  <div class="sec" id="videos">
+    <div class="sec-title">Training Videos</div>
+    <p class="sec-desc">Watch these before each phase. Drop your YouTube embed URLs into the VIDEOS object in the code to replace placeholders.</p>
+    <div class="psub">Phase 1 — Base</div><div class="vgrid" id="vp1"></div>
+    <div class="psub">Phase 2 — Build</div><div class="vgrid" id="vp2"></div>
+    <div class="psub">Phase 3 — Taper + Race</div><div class="vgrid" id="vp3"></div>
+  </div>
+
+  <div class="sec" id="plan">
+    <div class="sec-title">12-Week Training Plan</div>
+    <p class="sec-desc">Click a phase to expand, then each week for the full daily breakdown.</p>
+    <div class="leg">
+      <div class="leg-i"><div class="dot" style="background:var(--easy)"></div>Easy/Zone 2</div>
+      <div class="leg-i"><div class="dot" style="background:var(--mod)"></div>Tempo</div>
+      <div class="leg-i"><div class="dot" style="background:var(--hard)"></div>Intervals</div>
+      <div class="leg-i"><div class="dot" style="background:var(--race)"></div>Race Pace</div>
+      <div class="leg-i"><div class="dot" style="background:var(--rest)"></div>Rest</div>
+    </div>
+    <div id="plan-wrap"></div>
+  </div>
+
+  <div class="sec" id="pacing">
+    <div class="sec-title">Pacing Guide</div>
+    <p class="sec-desc">Your training paces built around your goal finish time. All paces per kilometre.</p>
+    <div class="callout"><strong>The 80/20 rule:</strong> 80% of weekly volume at easy/Zone 2 pace. 20% at quality. Most runners do this backwards and plateau.</div>
+    <div class="pc"><div class="pc-head"><div class="dot" style="background:var(--easy)"></div><h4>Easy / Zone 2 Pace</h4></div>
+      <table class="ptab"><thead><tr><th>Goal Finish</th><th>Easy Pace</th><th>Feel</th></tr></thead><tbody>
+        <tr><td>Under 1:45</td><td class="phl">5:30–6:00/km</td><td>Conversational. Nose breathing possible.</td></tr>
+        <tr><td>1:45–2:00</td><td class="phl">6:00–6:45/km</td><td>Comfortable. Full sentences.</td></tr>
+        <tr><td>2:00–2:20</td><td class="phl">6:45–7:30/km</td><td>Relaxed. HR below 75% max.</td></tr>
+        <tr><td>Over 2:20</td><td class="phl">7:30–8:30/km</td><td>Slow feels right. That is the point.</td></tr>
+      </tbody></table></div>
+    <div class="pc"><div class="pc-head"><div class="dot" style="background:var(--mod)"></div><h4>Tempo Pace</h4></div>
+      <table class="ptab"><thead><tr><th>Goal Finish</th><th>Tempo Pace</th><th>Feel</th></tr></thead><tbody>
+        <tr><td>Under 1:45</td><td class="phl">4:30–4:45/km</td><td>Comfortably hard. 3–4 word answers.</td></tr>
+        <tr><td>1:45–2:00</td><td class="phl">4:50–5:10/km</td><td>Working but controlled.</td></tr>
+        <tr><td>2:00–2:20</td><td class="phl">5:20–5:45/km</td><td>Breathing elevated.</td></tr>
+        <tr><td>Over 2:20</td><td class="phl">5:50–6:30/km</td><td>Sustained push.</td></tr>
+      </tbody></table></div>
+    <div class="pc"><div class="pc-head"><div class="dot" style="background:var(--race)"></div><h4>Race Pace</h4></div>
+      <table class="ptab"><thead><tr><th>Goal Finish</th><th>Race Pace</th><th>5km Split</th></tr></thead><tbody>
+        <tr><td>1:30</td><td class="phl">4:16/km</td><td>21:20</td></tr>
+        <tr><td>1:45</td><td class="phl">4:58/km</td><td>24:50</td></tr>
+        <tr><td>2:00</td><td class="phl">5:41/km</td><td>28:25</td></tr>
+        <tr><td>2:15</td><td class="phl">6:24/km</td><td>32:00</td></tr>
+        <tr><td>2:30</td><td class="phl">7:06/km</td><td>35:30</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec" id="sessions">
+    <div class="sec-title">Session Glossary</div>
+    <p class="sec-desc">Every session type explained.</p>
+    <div class="sg">
+      <div class="sc"><h4 style="color:var(--easy)">Easy Run</h4><p>Zone 2. Full sentences. Nose breathing ideally. Do not run these faster than prescribed.</p></div>
+      <div class="sc"><h4 style="color:var(--mod)">Tempo Run</h4><p>Comfortably hard. Sustained effort 20–40 min. Raises your lactate threshold.</p></div>
+      <div class="sc"><h4 style="color:var(--hard)">Intervals 800m</h4><p>Hard repeats, easy jog recovery. 5x800m at 5k effort, 90 sec between. Builds VO2max.</p></div>
+      <div class="sc"><h4 style="color:var(--hard)">Intervals 1600m</h4><p>Longer repeats at 10k effort. More race-specific. 2 full minutes recovery.</p></div>
+      <div class="sc"><h4 style="color:var(--race)">Race Pace Run</h4><p>Sustained effort at goal race pace. Teaches your body what that pace feels like.</p></div>
+      <div class="sc"><h4 style="color:var(--easy)">Long Run</h4><p>Always easy. Time on feet, not speed. Fat adaptation and mental durability.</p></div>
+      <div class="sc"><h4>Strides</h4><p>6–8x 20-second accelerations to 90% effort, full recovery. Keeps legs sharp.</p></div>
+      <div class="sc"><h4 style="color:var(--rest)">Deload Week</h4><p>Cut volume 30%. Keep some quality, drop the long run. You get stronger during recovery.</p></div>
+    </div>
+  </div>
+
+  <div class="sec" id="tracker">
+    <div class="sec-title">Training Tracker</div>
+    <p class="sec-desc">Set up your HR zones first, then log every run. After each run generate a story card to share.</p>
+    <div class="tsetup">
+      <div class="stabs">
+        <button class="stab on" onclick="stab('test',this)">Max HR Test</button>
+        <button class="stab" onclick="stab('manual',this)">Enter Manually</button>
+        <button class="stab" onclick="stab('zones',this)">My Zones</button>
+      </div>
+      <div class="span on" id="sp-test">
+        <p style="font-size:12px;color:#aaa;line-height:1.7;margin-bottom:3px">Run on a flat surface with a HR monitor. Takes 25 min. Proper warmup first.</p>
+        <ol class="hrsteps">
+          <li>Warmup: 10 min easy jog, then 5 min at moderate effort.</li>
+          <li>Run 3x 1 min at maximum effort with 1 min easy jog between each.</li>
+          <li>On the final rep, sprint the last 20 seconds.</li>
+          <li>The highest HR recorded is your Max HR. Enter it below.</li>
+        </ol>
+        <div style="margin-top:15px;display:flex;gap:9px;align-items:flex-end;flex-wrap:wrap">
+          <div class="zi"><label style="color:var(--m)">Max HR (bpm)</label><input type="number" id="mhr-in" placeholder="e.g. 185" min="120" max="220" style="width:140px"></div>
+          <button class="sbtn" style="margin-top:0" onclick="calcZones()">CALCULATE ZONES</button>
+        </div>
+        <div class="mhr-res" id="mhr-res">
+          <div style="display:flex;align-items:baseline;gap:7px;margin-bottom:9px"><div class="big" id="mhr-show">--</div><div style="font-size:12px;color:var(--m)">bpm max HR</div></div>
+          <div class="zd" id="zd-calc"></div>
+          <button class="sbtn" onclick="saveZonesFromMax()">SAVE THESE ZONES</button>
+        </div>
+      </div>
+      <div class="span" id="sp-manual">
+        <p style="font-size:12px;color:#aaa;line-height:1.7;margin-bottom:11px">Know your zones from Garmin, Polar or Whoop? Enter each zones upper limit.</p>
+        <div class="zg">
+          <div class="zi"><label style="color:#4ade80">Zone 1 Recovery (max bpm)</label><input type="number" id="z1m" placeholder="e.g. 120"></div>
+          <div class="zi"><label style="color:#60a5fa">Zone 2 Aerobic (max bpm)</label><input type="number" id="z2m" placeholder="e.g. 140"></div>
+          <div class="zi"><label style="color:#F5E215">Zone 3 Tempo (max bpm)</label><input type="number" id="z3m" placeholder="e.g. 155"></div>
+          <div class="zi"><label style="color:#f97316">Zone 4 Threshold (max bpm)</label><input type="number" id="z4m" placeholder="e.g. 168"></div>
+          <div class="zi"><label style="color:#e8000a">Zone 5 Max (max bpm)</label><input type="number" id="z5m" placeholder="e.g. 185"></div>
+        </div>
+        <button class="sbtn" onclick="saveManualZones()">SAVE ZONES</button>
+        <div id="msaved" style="margin-top:8px;font-size:12px;color:var(--easy);display:none">Zones saved.</div>
+      </div>
+      <div class="span" id="sp-zones"><div id="zones-out"><p style="font-size:12px;color:var(--m)">No zones set yet. Use the Max HR Test or Manual Entry tab.</p></div></div>
+    </div>
+
+    <div class="lf">
+      <div class="lf-title">Log a Run</div>
+      <div class="lrow">
+        <div><label class="lbl">Week</label><select id="wk-sel"><option value="">Wk</option></select></div>
+        <div><label class="lbl">Session</label><select id="sess-sel"><option>Easy Run</option><option>Long Run</option><option>Tempo</option><option>Intervals</option><option>Race Pace</option><option>Strides</option></select></div>
+        <div><label class="lbl">Distance (km)</label><input type="number" id="km-in" placeholder="0.0" step="0.1" min="0"></div>
+        <div><label class="lbl">Avg HR (bpm)</label><input type="number" id="hr-in" placeholder="opt." min="60" max="220"></div>
+        <button class="ladd" id="add-btn">+ ADD</button>
+      </div>
+      <div id="lfb"></div>
+    </div>
+
+    <div class="psum" id="psum" style="display:none">
+      <div class="stat"><div class="n" id="st-runs">0</div><div class="l">Runs</div></div>
+      <div class="stat"><div class="n" id="st-km">0</div><div class="l">Total km</div></div>
+      <div class="stat"><div class="n" id="st-hr">—</div><div class="l">Avg HR</div></div>
+      <div class="stat"><div class="n" id="st-wk">—</div><div class="l">Week</div></div>
+    </div>
+
+    <div class="cwrap" id="chart-wrap" style="display:none">
+      <div class="ctitle"><span>Weekly Distance</span> — km per week</div>
+      <canvas id="myChart" height="160"></canvas>
+    </div>
+
+    <div class="rlw">
+      <div class="rlh"><h3>Run History</h3><button class="clr" id="clr-btn">Clear All</button></div>
+      <div id="rl-body"><div class="empty">no runs yet, sparky. get moving.</div></div>
+    </div>
+  </div>
+
+  <div class="sec" id="race">
+    <div class="sec-title">Race Day Guide</div>
+    <p class="sec-desc">Nothing is new — you have trained for this.</p>
+    <div class="callout"><strong>The cardinal rule:</strong> nothing new on race day. Not shoes, nutrition, socks, or warmup routine. Trust it.</div>
+    <ul class="tips">
+      <li><span>🌙</span><div><strong>Night before:</strong> Lay out every item. Normal dinner. Bed on time. Two alarms.</div></li>
+      <li><span>☀️</span><div><strong>Morning:</strong> Eat 2–3 hours out. 500ml water on waking. Coffee only if you are used to it.</div></li>
+      <li><span>🏃</span><div><strong>Warmup:</strong> 10–15 min easy jog plus dynamic stretches. Skip static stretching pre-race.</div></li>
+      <li><span>🚀</span><div><strong>First 5km:</strong> Start 10–15 sec/km slower than race pace. The race starts at km 15.</div></li>
+      <li><span>🍬</span><div><strong>Nutrition:</strong> First gel at km 5–6, then every 30–40 min. Wash down with water.</div></li>
+      <li><span>💧</span><div><strong>Aid stations:</strong> Walk through them. 10 seconds beats choking and losing 90 seconds.</div></li>
+      <li><span>🧠</span><div><strong>Km 15 onwards:</strong> Break into 2km chunks. Cadence, relaxed shoulders, forward lean.</div></li>
+      <li><span>🏁</span><div><strong>Finish:</strong> Leave nothing in the tank. The last kilometre is yours.</div></li>
+    </ul>
+    <div class="divider"></div>
+    <div class="sec-title">Post-Race Recovery</div>
+    <ul class="tips">
+      <li><span>🥤</span>Within 30 min: protein plus carbs. Recovery shake, banana plus milk.</li>
+      <li><span>🛁</span>Day 1–2: walk, gentle movement, contrast shower. No running.</li>
+      <li><span>😴</span>Day 3–5: prioritise sleep. Your body is doing the hard work now.</li>
+      <li><span>📅</span>Return to running: easy only after 7–10 days.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="moverlay" id="story-modal">
+  <div class="modal">
+    <div class="mhead"><h3>SHARE TO STORIES</h3><button class="mclose" id="mclose-btn">x</button></div>
+    <div class="mbody">
+      <div class="cstabs">
+        <div class="cstab on" onclick="cardStyle('dark',this)">Card Style</div>
+        <div class="cstab" onclick="cardStyle('clear',this)">Transparent</div>
+      </div>
+      <div class="cwrap2"><canvas id="storyCanvas" width="380" height="380"></canvas></div>
+      <p style="font-size:10px;color:var(--m);text-align:center;margin-bottom:11px">Download then post to stories and tag @boltinben</p>
+      <div class="macts">
+        <button class="dlbtn" id="dl-btn">DOWNLOAD PNG</button>
+        <button class="dlbtn2" id="mclose-btn2">CLOSE</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── SUPABASE ──
+const SB = supabase.createClient(
+  'https://ysbufbmeamjujrqfgsam.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzYnVmYm1lYW1qdWpycWZnc2FtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1NDE0NjUsImV4cCI6MjA5MTExNzQ2NX0.q6rkHvsjMSCb-8O5QSB4VQxzRDpFuq52n0WT-gRpDNM'
+);
+
+// ── STATE ──
+var USER = null;
+var UNAME = '';
+var ZONES = null;
+var LOGS = [];
+var CHART = null;
+var PENDING = null;
+var CSTYLE = 'dark';
+var CALC_ZONES = null;
+
+// ── AUTH ──
+function authTab(tab, btn) {
+  document.querySelectorAll('.a-tab').forEach(function(b){ b.classList.remove('on'); });
+  document.querySelectorAll('.a-form').forEach(function(f){ f.classList.remove('on'); });
+  btn.classList.add('on');
+  document.getElementById('f-' + tab).classList.add('on');
+}
+
+document.getElementById('signin-btn').addEventListener('click', function() {
+  var email = document.getElementById('l-email').value.trim();
+  var pw = document.getElementById('l-pw').value;
+  var err = document.getElementById('l-err');
+  err.textContent = '';
+  if (!email || !pw) { err.textContent = 'Please fill in all fields.'; return; }
+  SB.auth.signInWithPassword({ email: email, password: pw }).then(function(r) {
+    if (r.error) { err.textContent = r.error.message; return; }
+    var uname = (r.data.user.user_metadata && r.data.user.user_metadata.username) || email.split('@')[0];
+    boot(r.data.user, uname);
+  });
+});
+
+document.getElementById('signup-btn').addEventListener('click', function() {
+  var uname = document.getElementById('s-user').value.trim();
+  var email = document.getElementById('s-email').value.trim();
+  var pw = document.getElementById('s-pw').value;
+  var err = document.getElementById('s-err');
+  err.textContent = '';
+  if (!uname) { err.textContent = 'Please choose a username.'; return; }
+  if (!email || !pw) { err.textContent = 'Please fill in all fields.'; return; }
+  if (pw.length < 6) { err.textContent = 'Password must be at least 6 characters.'; return; }
+  SB.auth.signUp({ email: email, password: pw, options: { data: { username: uname } } }).then(function(r) {
+    if (r.error) { err.textContent = r.error.message; return; }
+    if (r.data.user) boot(r.data.user, uname);
+  });
+});
+
+document.getElementById('out-btn').addEventListener('click', function() {
+  SB.auth.signOut().then(function() {
+    USER = null; UNAME = ''; ZONES = null; LOGS = [];
+    document.getElementById('portal').style.display = 'none';
+    document.getElementById('auth').style.display = 'flex';
+    document.getElementById('l-email').value = '';
+    document.getElementById('l-pw').value = '';
+    document.getElementById('l-err').textContent = '';
+  });
+});
+
+// check existing session on load
+SB.auth.getSession().then(function(r) {
+  if (r.data && r.data.session && r.data.session.user) {
+    var u = r.data.session.user;
+    var uname = (u.user_metadata && u.user_metadata.username) || u.email.split('@')[0];
+    boot(u, uname);
+  }
+});
+
+// ── BOOT ──
+function boot(user, uname) {
+  USER = user;
+  UNAME = uname;
+  document.getElementById('auth').style.display = 'none';
+  document.getElementById('portal').style.display = 'block';
+  document.getElementById('nav-u').textContent = 'sparky @' + uname;
+
+  // week dropdown
+  var sel = document.getElementById('wk-sel');
+  sel.innerHTML = '<option value="">Wk</option>';
+  for (var i = 1; i <= 12; i++) {
+    var o = document.createElement('option');
+    o.value = i; o.textContent = i;
+    sel.appendChild(o);
+  }
+
+  buildPlan();
+  buildVideos();
+
+  SB.from('hm_zones').select('zones').eq('user_id', USER.id).single().then(function(r) {
+    if (r.data) ZONES = r.data.zones;
+    renderZones();
+  });
+
+  SB.from('hm_runs').select('*').eq('user_id', USER.id).order('created_at', { ascending: false }).then(function(r) {
+    LOGS = r.data || [];
+    renderLog();
+    renderChart();
+    renderSummary();
+  });
+}
+
+// ── TABS ──
+function goTab(id, btn) {
+  document.querySelectorAll('.sec').forEach(function(s){ s.classList.remove('on'); });
+  document.querySelectorAll('.t-btn').forEach(function(b){ b.classList.remove('on'); });
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('on');
+}
+
+// ── PLAN ──
+var PLAN = [
+  { phase: 'Base Phase', tag: 'tag-base', label: 'Base', weeks: [
+    { w: 1, total: '~26km', days: [
+      { d: 'Mon', c: 'easy', t: 'Easy Run', info: '5km easy. Fully conversational pace.' },
+      { d: 'Tue', c: 'rest', t: 'Rest', info: 'Full rest or 20 min walk.' },
+      { d: 'Wed', c: 'easy', t: 'Easy Run + Strides', info: '6km easy, then 6x 20-second strides with full walking recovery.' },
+      { d: 'Thu', c: 'rest', t: 'Rest', info: 'Rest or light cross-training.' },
+      { d: 'Fri', c: 'easy', t: 'Easy Run', info: '5km easy. Same pace as Monday.' },
+      { d: 'Sat', c: 'easy', t: 'Long Run', info: '8km easy. HR should stay Zone 1-2 the whole time.' },
+      { d: 'Sun', c: 'rest', t: 'Rest', info: 'Full rest.' }
+    ]},
+    { w: 2, total: '~31km', days: [
+      { d: 'Mon', c: 'easy', t: 'Easy Run', info: '6km easy.' },
+      { d: 'Tue', c: 'rest', t: 'Rest', info: 'Full rest.' },
+      { d: 'Wed', c: 'mod', t: 'Easy Tempo', info: '8km total: 2km warmup, 4km moderate effort, 2km cooldown.' },
+      { d: 'Thu', c: 'rest', t: 'Rest', info: 'Rest.' },
+      { d: 'Fri', c: 'easy', t: 'Easy Run + Strides', info: '5km easy + 6x strides.' },
+      { d: 'Sat', c: 'easy', t: 'Long Run', info: '10km easy. Bring water.' },
+      { d: 'Sun', c: 'rest', t: 'Rest', info: 'Rest.' }
+    ]},
+    { w: 3, total: '~35km', days: [
+      { d: 'Mon', c: 'easy', t: 'Easy Run', info: '6km easy.' },
+      { d: 'Tue', c: 'rest', t: 'Rest', info: 'Rest.' },
+      { d: 'Wed', c: 'mod', t: 'Moderate Run', info: '8km total: 2km easy, 5km moderate, 1km cooldown.' },
+      { d: 'Thu', c: 'easy', t: 'Easy Run', info: '5km easy. Optional strides.' },
+      { d: 'Fri', c: 'rest', t: 'Rest', info: 'Rest.' },
+      { d: 'Sat', c: 'easy', t: 'Long Run', info: '12km easy. Walk breaks are fine.' },
+      { d: 'Sun', c: 'rest', t: 'Rest', info: 'Rest.' }
+    ]},
+    { w: 4, total: '~23km', days: [
+      { d: 'Mon', c: 'easy', t: 'Easy Run', info: '5km easy. Deload week.' },
+      { d: 'Tue', c: 'rest', t: 'Rest', info: 'Rest.' },
+      { d: 'Wed', c: 'easy', t: 'Easy Run + Strides', info: '5km easy + strides.' },
+      { d: 'Thu', c: 'rest', t: 'Rest', info: 'Rest.' },
+      { d: 'Fri', c: 'easy', t: 'Easy Run', info: '5km easy.' },
+      { d: 'Sat', c: 'easy', t: 'Long Run', info: '8km easy. Let the body absorb the last 3 weeks.' },
+      { d: 'Sun', c: 'rest', t: 'Rest', info: 'Rest.' }
+    ]}
+  ]},
+  { phase: 'Build Phase', tag: 'tag-build', label: 'Build', weeks: [
+    { w: 5, total: '~37km', days: [
+      { d: 'Mon', c: 'easy', t: 'Easy Run', info: '6km easy.' },
+      { d: 'Tue', c: 'hard', t: 'Intervals', info: '2km warmup, 4x 800m at hard effort with 90 sec jog recovery, 1km cooldown.' },
+      { d: 'Wed', c: 'rest', t: 'Rest', info: 'Rest.' },
+      { d: 'Thu', c: 'mod', t: 'Tempo Run', info: '8km total: 2km warmup, 4km tempo, 2km cooldown.' },
+      { d: 'Fri', c: 'easy', t: 'Easy Run', info: '5km easy.' },
+      { d: 'Sat', c: 'easy', t: 'Long Run', info: '13km easy. Bring fuel for the last 30 min.' },
+      { d: 'Sun', c: 'rest', t: 'Rest', info: 'Rest.' }
+    ]},
+    { w: 6, total: '~41km', days: [
+      { d: 'Mon', c: 'easy', t: 'Easy Run', info: '6km easy.' },
+      { d: 'Tue', c: 'hard', t: 'Intervals', info: '2km warmup, 5x 800m hard with 90 sec recovery, 1km cooldown.' },
+      { d: 'Wed', c: 'rest', t: 'Rest', info: 'Rest.' },
+      { d: 'Thu', c: 'mod', t: 'Tempo Run', info: '9km total: 2km warmup, 5km tempo, 2km cooldown.' },
+      { d: 'Fri', c: 'easy', t: 'Easy Run + Strides', info: '6km easy + strides.' },
+      { d: 'Sat', c: 'easy', t: 'Long Run', info: '14km easy. Focus on form in the back half.' },
+      { d: 'Sun', c: 'rest', t: 'Rest', info: 'Rest.' }
+    ]},
+    { w: 7, total: '~45km', days: [
+      { d: 'Mon', c: 'easy', t: 'Easy Run', info: '7km easy.' },
+      { d: 'Tue', c: 'hard', t: 'Intervals', info: '2km warmup, 6x 800m hard, 90 sec recovery, 1km cooldown.' },
+      { d: 'Wed', c: 'rest', t: 'Rest', info: 'Rest.' },
+      { d: 'Thu', c: 'race', t: 'Race Pace Run', info: '10km total: 1km warmup, 8km at goal race pace, 1km cooldown.' },
+      { d: 'Fri', c: 'easy', t: 'Easy Run', info: '5km easy.' },
+      { d: 'Sat', c: 'easy', t: 'Long Run', info: '16km easy. Fuel every 40 min.' },
+      { d: 'Sun', c: 'rest', t: 'Rest', info: 'Rest.' }
+    ]},
+    { w: 8, total: '~26km', days: [
+      { d: 'Mon', c: 'easy', t: 'Easy Run', info: '5km easy. Deload week.' },
+      { d: 'Tue', c: 'rest', t: 'Rest', info: 'Rest.' },
+      { d: 'Wed', c: 'easy', t: 'Easy Run + Strides', info: '6km easy + strides.' },
+      { d: 'Thu', c: 'rest', t: 'Rest', info: 'Rest.' },
+      { d: 'Fri', c: 'easy', t: 'Easy Run', info: '5km easy.' },
+      { d: 'Sat', c: 'easy', t: 'Long Run', info: '10km easy. Do not make up missed sessions.' },
+      { d: 'Sun', c: 'rest', t: 'Rest', info: 'Rest.' }
+    ]},
+    { w: 9, total: '~49km', days: [
+      { d: 'Mon', c: 'easy', t: 'Easy Run', info: '7km easy.' },
+      { d: 'Tue', c: 'hard', t: 'Intervals', info: '2km warmup, 3x 1600m at 10k effort with 2 min recovery, 1km cooldown.' },
+      { d: 'Wed', c: 'rest', t: 'Rest', info: 'Rest.' },
+      { d: 'Thu', c: 'race', t: 'Race Pace Run', info: '12km total: 1km warmup, 10km race pace, 1km cooldown.' },
+      { d: 'Fri', c: 'easy', t: 'Easy Run', info: '5km easy.' },
+      { d: 'Sat', c: 'easy', t: 'Long Run', info: '18km easy. Peak long run. Fuel and hydrate properly.' },
+      { d: 'Sun', c: 'rest', t: 'Rest', info: 'Rest.' }
+    ]}
+  ]},
+  { phase: 'Taper Phase', tag: 'tag-taper', label: 'Taper', weeks: [
+    { w: 10, total: '~38km', days: [
+      { d: 'Mon', c: 'easy', t: 'Easy Run', info: '6km easy.' },
+      { d: 'Tue', c: 'hard', t: 'Intervals', info: '2km warmup, 4x 800m hard, 90 sec recovery, 1km cooldown. Last hard intervals.' },
+      { d: 'Wed', c: 'rest', t: 'Rest', info: 'Rest.' },
+      { d: 'Thu', c: 'race', t: 'Race Pace Run', info: '8km total: 1km warmup, 6km race pace, 1km cooldown.' },
+      { d: 'Fri', c: 'easy', t: 'Easy Run', info: '5km easy.' },
+      { d: 'Sat', c: 'easy', t: 'Long Run', info: '14km easy. Volume dropping — resist adding extra.' },
+      { d: 'Sun', c: 'rest', t: 'Rest', info: 'Rest.' }
+    ]},
+    { w: 11, total: '~27km', days: [
+      { d: 'Mon', c: 'easy', t: 'Easy Run', info: '5km easy.' },
+      { d: 'Tue', c: 'rest', t: 'Rest', info: 'Rest. Legs are loading for race day.' },
+      { d: 'Wed', c: 'race', t: 'Race Pace Strides', info: '6km total: 4km easy, then 6x 30-sec race pace efforts with full recovery.' },
+      { d: 'Thu', c: 'rest', t: 'Rest', info: 'Rest.' },
+      { d: 'Fri', c: 'easy', t: 'Easy Run + Strides', info: '5km easy + strides.' },
+      { d: 'Sat', c: 'easy', t: 'Long Run', info: '10km easy. Last proper run. Run in race shoes and kit.' },
+      { d: 'Sun', c: 'rest', t: 'Rest', info: 'Rest.' }
+    ]},
+    { w: 12, total: 'Race Week', days: [
+      { d: 'Mon', c: 'easy', t: 'Easy Run', info: '4km very easy. Just keep the legs moving.' },
+      { d: 'Tue', c: 'rest', t: 'Rest', info: 'Rest. Trust the training.' },
+      { d: 'Wed', c: 'rest', t: 'Rest', info: 'Rest.' },
+      { d: 'Thu', c: 'easy', t: 'Shakeout', info: '2-3km easy + 4x strides. Nothing more.' },
+      { d: 'Fri', c: 'rest', t: 'Rest', info: 'Rest. Pack gear. Early dinner. Early bed.' },
+      { d: 'Sat', c: 'race', t: 'RACE DAY', info: 'You are ready. Start conservative, finish strong.' },
+      { d: 'Sun', c: 'rest', t: 'Rest', info: 'Rest. You earned it.' }
+    ]}
+  ]}
+];
+
+function buildPlan() {
+  var wrap = document.getElementById('plan-wrap');
+  wrap.innerHTML = '';
+  PLAN.forEach(function(phase, pi) {
+    var block = document.createElement('div');
+    block.className = 'ph' + (pi === 0 ? ' open' : '');
+    block.id = 'ph' + pi;
+
+    var head = document.createElement('div');
+    head.className = 'ph-head';
+    head.innerHTML = '<div class="ph-left"><div class="ph-num">' + (pi+1) + '</div><div class="ph-info"><h3>' + phase.phase + '</h3><span>Weeks ' + phase.weeks[0].w + ' to ' + phase.weeks[phase.weeks.length-1].w + '</span></div></div><span class="ph-tag ' + phase.tag + '">' + phase.label + '</span><span class="chev">v</span>';
+    head.onclick = (function(id){ return function(){ document.getElementById(id).classList.toggle('open'); }; })('ph' + pi);
+    block.appendChild(head);
+
+    var body = document.createElement('div');
+    body.className = 'ph-body';
+    var acc = document.createElement('div');
+    acc.className = 'wacc';
+
+    phase.weeks.forEach(function(wk) {
+      var whead = document.createElement('div');
+      whead.className = 'wh';
+      var numStr = wk.w < 10 ? '0' + wk.w : '' + wk.w;
+      var sessions = wk.days.filter(function(d){ return d.c !== 'rest'; }).length;
+      whead.innerHTML = '<div class="wl"><div class="wnum">' + numStr + '</div><div class="wsumm">Week ' + wk.w + ' · ' + sessions + ' sessions</div></div><div style="display:flex;align-items:center;gap:7px"><span class="wkm">' + wk.total + '</span><span class="chev" style="font-size:11px">v</span></div>';
+      whead.onclick = function() {
+        var open = whead.classList.contains('open');
+        acc.querySelectorAll('.wh').forEach(function(h){ h.classList.remove('open'); });
+        if (!open) whead.classList.add('open');
+      };
+      acc.appendChild(whead);
+
+      var wdet = document.createElement('div');
+      wdet.className = 'wdet';
+      wk.days.forEach(function(day) {
+        var row = document.createElement('div');
+        row.className = 'dr';
+        var lbl = document.createElement('div');
+        lbl.className = 'dlbl';
+        lbl.textContent = day.d;
+        var con = document.createElement('div');
+        con.className = 'dcon';
+        var tp = document.createElement('div');
+        tp.className = 'dtype';
+        var dot = document.createElement('span');
+        dot.className = 'idot';
+        dot.style.background = 'var(--' + day.c + ')';
+        tp.appendChild(dot);
+        tp.appendChild(document.createTextNode(day.t));
+        var inf = document.createElement('span');
+        inf.style.cssText = 'color:#777;font-size:10px;display:block';
+        inf.textContent = day.info;
+        con.appendChild(tp);
+        con.appendChild(inf);
+        row.appendChild(lbl);
+        row.appendChild(con);
+        wdet.appendChild(row);
+      });
+      acc.appendChild(wdet);
+    });
+
+    body.appendChild(acc);
+    block.appendChild(body);
+    wrap.appendChild(block);
+  });
+}
+
+// ── VIDEOS ──
+var VIDEOS = {
+  p1: [
+    { title: 'Zone 2 Running Explained', desc: 'Why 80% of your training should feel embarrassingly easy.', url: '' },
+    { title: 'Running Form Basics', desc: 'Posture, cadence, foot strike — the fundamentals before week 1.', url: '' },
+    { title: 'How to Do Strides', desc: 'The most underused tool in a beginner runners kit.', url: '' }
+  ],
+  p2: [
+    { title: 'What is a Tempo Run', desc: 'How to find and hold the right effort for 20-40 minutes.', url: '' },
+    { title: 'Interval Training 101', desc: 'How to structure 800m repeats and why they work.', url: '' },
+    { title: 'Fuelling on Long Runs', desc: 'When, what, and how much to eat during runs over 75 min.', url: '' }
+  ],
+  p3: [
+    { title: 'The Taper — Why Less is More', desc: 'Why cutting volume before a race makes you faster.', url: '' },
+    { title: 'Race Week Routine', desc: 'Exactly what to do in the 7 days before your race.', url: '' },
+    { title: 'Race Day Strategy', desc: 'Pacing, fuelling, and mindset for your best 21.1km.', url: '' }
+  ]
+};
+
+function buildVideos() {
+  var map = { p1: 'vp1', p2: 'vp2', p3: 'vp3' };
+  Object.keys(map).forEach(function(key) {
+    var el = document.getElementById(map[key]);
+    el.innerHTML = '';
+    VIDEOS[key].forEach(function(v) {
+      var card = document.createElement('div');
+      card.className = 'vc';
+      var thumb = document.createElement('div');
+      thumb.className = 'vthumb';
+      if (v.url) {
+        var iframe = document.createElement('iframe');
+        iframe.src = v.url;
+        iframe.setAttribute('allowfullscreen', '');
+        thumb.appendChild(iframe);
+      } else {
+        var ph = document.createElement('div');
+        ph.className = 'vph';
+        ph.innerHTML = '<div class="vplay"><svg width="12" height="14" viewBox="0 0 12 14" fill="#0a0a0a"><polygon points="0,0 12,7 0,14"/></svg></div><span style="font-size:10px;letter-spacing:1px">COMING SOON</span>';
+        thumb.appendChild(ph);
+      }
+      var info = document.createElement('div');
+      info.className = 'vinfo';
+      var h4 = document.createElement('h4');
+      h4.textContent = v.title;
+      var p = document.createElement('p');
+      p.textContent = v.desc;
+      info.appendChild(h4);
+      info.appendChild(p);
+      card.appendChild(thumb);
+      card.appendChild(info);
+      el.appendChild(card);
+    });
+  });
+}
+
+// ── ZONES ──
+var ZONE_DEFS = [
+  { name: 'Zone 1', label: 'Recovery',  min: .50, max: .60, cls: 'z1' },
+  { name: 'Zone 2', label: 'Aerobic',   min: .60, max: .70, cls: 'z2' },
+  { name: 'Zone 3', label: 'Tempo',     min: .70, max: .80, cls: 'z3' },
+  { name: 'Zone 4', label: 'Threshold', min: .80, max: .90, cls: 'z4' },
+  { name: 'Zone 5', label: 'Max',       min: .90, max: 1.0, cls: 'z5' }
+];
+
+function stab(id, btn) {
+  document.querySelectorAll('.stab').forEach(function(b){ b.classList.remove('on'); });
+  document.querySelectorAll('.span').forEach(function(p){ p.classList.remove('on'); });
+  btn.classList.add('on');
+  document.getElementById('sp-' + id).classList.add('on');
+  if (id === 'zones') renderZones();
+}
+
+function calcZones() {
+  var maxHR = parseInt(document.getElementById('mhr-in').value);
+  if (!maxHR || maxHR < 120 || maxHR > 220) { alert('Enter a valid Max HR between 120 and 220.'); return; }
+  CALC_ZONES = ZONE_DEFS.map(function(z) {
+    return { name: z.name, label: z.label, cls: z.cls, minBpm: Math.round(maxHR * z.min), maxBpm: Math.round(maxHR * z.max) };
+  });
+  document.getElementById('mhr-show').textContent = maxHR;
+  var el = document.getElementById('zd-calc');
+  el.innerHTML = '';
+  CALC_ZONES.forEach(function(z) {
+    var d = document.createElement('div');
+    d.className = 'zp ' + z.cls;
+    d.innerHTML = '<span class="zn">' + z.name + '</span><span class="zr">' + z.minBpm + '-' + z.maxBpm + '</span>';
+    el.appendChild(d);
+  });
+  document.getElementById('mhr-res').style.display = 'block';
+}
+
+function saveZonesFromMax() {
+  if (!CALC_ZONES) return;
+  ZONES = CALC_ZONES;
+  SB.from('hm_zones').upsert({ user_id: USER.id, zones: ZONES }, { onConflict: 'user_id' }).then(function() {
+    renderZones();
+    alert('Zones saved!');
+  });
+}
+
+function saveManualZones() {
+  var vals = [1,2,3,4,5].map(function(i){ return parseInt(document.getElementById('z' + i + 'm').value); });
+  if (vals.some(isNaN)) { alert('Please fill in all 5 zone values.'); return; }
+  var zones = ZONE_DEFS.map(function(z, i) {
+    return { name: z.name, label: z.label, cls: z.cls, minBpm: i === 0 ? 0 : vals[i-1]+1, maxBpm: vals[i] };
+  });
+  ZONES = zones;
+  SB.from('hm_zones').upsert({ user_id: USER.id, zones: ZONES }, { onConflict: 'user_id' }).then(function() {
+    document.getElementById('msaved').style.display = 'block';
+    setTimeout(function(){ document.getElementById('msaved').style.display = 'none'; }, 2500);
+    renderZones();
+  });
+}
+
+function getZone(hr) {
+  if (!ZONES || !hr) return null;
+  for (var i = ZONES.length - 1; i >= 0; i--) {
+    if (hr >= ZONES[i].minBpm) return ZONES[i];
+  }
+  return ZONES[0];
+}
+
+function renderZones() {
+  var el = document.getElementById('zones-out');
+  if (!ZONES) { el.innerHTML = '<p style="font-size:12px;color:var(--m)">No zones set yet. Use the Max HR Test or Manual Entry tab.</p>'; return; }
+  var html = '<p style="font-size:12px;color:#aaa;margin-bottom:10px">Your current HR zones.</p><div class="zd">';
+  ZONES.forEach(function(z) {
+    html += '<div class="zp ' + z.cls + '"><span class="zn">' + z.name + '</span><span class="zr">' + z.minBpm + '-' + z.maxBpm + ' bpm</span></div>';
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+// ── LOG ──
+document.getElementById('add-btn').addEventListener('click', function() {
+  var week = document.getElementById('wk-sel').value;
+  var type = document.getElementById('sess-sel').value;
+  var km = parseFloat(document.getElementById('km-in').value);
+  var hr = parseInt(document.getElementById('hr-in').value) || null;
+  var fb = document.getElementById('lfb');
+
+  if (!week) { fb.style.color = 'var(--race)'; fb.textContent = 'Please select a week.'; return; }
+  if (!km || km <= 0) { fb.style.color = 'var(--race)'; fb.textContent = 'Please enter a valid distance.'; return; }
+
+  var zone = getZone(hr);
+  var entry = {
+    user_id: USER.id,
+    week: parseInt(week),
+    type: type,
+    km: km,
+    hr: hr,
+    zone_name: zone ? zone.name : null,
+    zone_cls: zone ? zone.cls : null,
+    zone_label: zone ? zone.label : null,
+    logged_date: new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'short' })
+  };
+
+  SB.from('hm_runs').insert(entry).select().single().then(function(r) {
+    if (r.error) { fb.style.color = 'var(--race)'; fb.textContent = 'Error: ' + r.error.message; return; }
+    LOGS.unshift(r.data);
+    renderLog();
+    renderChart();
+    renderSummary();
+
+    fb.style.color = 'var(--easy)';
+    fb.textContent = km + 'km logged for Week ' + week + (zone ? ' — HR in ' + zone.name + ' (' + zone.label + ')' : '') + ' ✓';
+    setTimeout(function(){ fb.textContent = ''; }, 5000);
+
+    document.getElementById('km-in').value = '';
+    document.getElementById('hr-in').value = '';
+
+    PENDING = { week: parseInt(week), type: type, km: km, hr: hr, zone: zone || { name: '', cls: '', label: '' }, username: UNAME };
+    setTimeout(function(){ openModal(PENDING); }, 400);
+  });
+});
+
+function renderLog() {
+  var body = document.getElementById('rl-body');
+  if (!LOGS.length) { body.innerHTML = '<div class="empty">no runs yet, sparky. get moving.</div>'; return; }
+  var html = '<table class="rlt"><thead><tr><th>Date</th><th>Wk</th><th>Type</th><th>Dist</th><th>HR</th><th>Zone</th><th></th></tr></thead><tbody>';
+  LOGS.forEach(function(l, idx) {
+    var zone_badge = l.zone_name ? '<span class="zbadge ' + l.zone_cls + '">' + l.zone_name + '</span>' : '—';
+    html += '<tr>';
+    html += '<td>' + l.logged_date + '</td>';
+    html += '<td style="font-family:Bebas Neue,sans-serif;font-size:16px;color:var(--m2)">' + l.week + '</td>';
+    html += '<td>' + l.type + '</td>';
+    html += '<td style="font-family:Bebas Neue,sans-serif;font-size:16px;color:var(--y)">' + l.km + 'km</td>';
+    html += '<td>' + (l.hr ? l.hr + ' bpm' : '—') + '</td>';
+    html += '<td>' + zone_badge + '</td>';
+    html += '<td><button class="shbtn" data-idx="' + idx + '">Share</button></td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  body.innerHTML = html;
+
+  body.querySelectorAll('.shbtn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var l = LOGS[parseInt(btn.dataset.idx)];
+      PENDING = {
+        week: l.week, type: l.type, km: l.km, hr: l.hr || null,
+        zone: { name: l.zone_name || '', cls: l.zone_cls || '', label: l.zone_label || '' },
+        username: UNAME
+      };
+      openModal(PENDING);
+    });
+  });
+}
+
+function renderSummary() {
+  if (!LOGS.length) { document.getElementById('psum').style.display = 'none'; return; }
+  document.getElementById('psum').style.display = 'grid';
+  var totalKm = LOGS.reduce(function(s, l){ return s + Number(l.km); }, 0);
+  var withHR = LOGS.filter(function(l){ return l.hr; });
+  var avgHR = withHR.length ? Math.round(withHR.reduce(function(s,l){ return s + l.hr; }, 0) / withHR.length) : null;
+  document.getElementById('st-runs').textContent = LOGS.length;
+  document.getElementById('st-km').textContent = totalKm.toFixed(1);
+  document.getElementById('st-hr').textContent = avgHR || '—';
+  document.getElementById('st-wk').textContent = Math.max.apply(null, LOGS.map(function(l){ return l.week; }));
+}
+
+function renderChart() {
+  document.getElementById('chart-wrap').style.display = LOGS.length ? 'block' : 'none';
+  if (!LOGS.length) return;
+  var wkKm = Array(12).fill(0);
+  LOGS.forEach(function(l){ wkKm[l.week - 1] += Number(l.km); });
+  var ctx = document.getElementById('myChart').getContext('2d');
+  if (CHART) CHART.destroy();
+  CHART = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: Array.from({length:12}, function(_,i){ return 'Wk ' + (i+1); }),
+      datasets: [{
+        data: wkKm,
+        backgroundColor: wkKm.map(function(v){ return v > 0 ? 'rgba(245,226,21,0.7)' : 'rgba(255,255,255,0.04)'; }),
+        borderColor: wkKm.map(function(v){ return v > 0 ? '#F5E215' : 'transparent'; }),
+        borderWidth: 1, borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#181818', borderColor: '#333', borderWidth: 1, titleColor: '#F5E215', bodyColor: '#ccc' }},
+      scales: {
+        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#555', font: { size: 9 } }},
+        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#555', font: { size: 9 } }, beginAtZero: true }
+      }
+    }
+  });
+}
+
+document.getElementById('clr-btn').addEventListener('click', function() {
+  if (!confirm('Clear all logged runs? This cannot be undone.')) return;
+  SB.from('hm_runs').delete().eq('user_id', USER.id).then(function() {
+    LOGS = []; renderLog(); renderChart(); renderSummary();
+  });
+});
+
+// ── STORY CARD ──
+function openModal(run) {
+  document.getElementById('story-modal').classList.add('open');
+  drawCard(run);
+}
+
+document.getElementById('mclose-btn').addEventListener('click', function(){ document.getElementById('story-modal').classList.remove('open'); });
+document.getElementById('mclose-btn2').addEventListener('click', function(){ document.getElementById('story-modal').classList.remove('open'); });
+document.getElementById('story-modal').addEventListener('click', function(e){ if (e.target === this) this.classList.remove('open'); });
+
+function cardStyle(style, btn) {
+  CSTYLE = style;
+  document.querySelectorAll('.cstab').forEach(function(b){ b.classList.remove('on'); });
+  btn.classList.add('on');
+  if (PENDING) drawCard(PENDING);
+}
+
+function drawCard(run) {
+  var canvas = document.getElementById('storyCanvas');
+  var ctx = canvas.getContext('2d');
+  var W = 380, H = 380;
+  canvas.width = W; canvas.height = H;
+  var dark = CSTYLE !== 'clear';
+
+  ctx.clearRect(0, 0, W, H);
+  if (dark) {
+    ctx.fillStyle = '#0a0a0a';
+    ctx.beginPath(); ctx.roundRect(0, 0, W, H, 12); ctx.fill();
+    ctx.fillStyle = '#F5E215';
+    ctx.fillRect(0, 0, W, 4);
+  } else {
+    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+    ctx.beginPath(); ctx.roundRect(0, 0, W, H, 12); ctx.fill();
+  }
+
+  // grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)'; ctx.lineWidth = 1;
+  for (var x = 40; x < W; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+  for (var y = 40; y < H; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+
+  // bolt logo as SVG image
+  var boltColor = dark ? '#F5E215' : 'white';
+  var svgStr = '<svg width="140" height="30" viewBox="0 0 271 57" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.59 22.8L0 34.2l13.15 0 6.57-11.4Z" fill="' + boltColor + '"/><path d="M26.29 34.2l13.15 0-6.58 11.4-13.15 0 6.58-11.4-13.14 0L0 57l39.44 0 13.14-22.8-6.58-11.4-13.14 0 6.58-11.4Z" fill="' + boltColor + '"/><path d="M65.72 11.43L65.71 11.4 59.15 0.01 59.13 0 32.87 0 19.72 22.8l13.15 0 6.58-11.4 13.14 0-6.58 11.4 13.15 0 6.56-11.37Z" fill="' + boltColor + '"/><path d="M87.06 7.12h9.26c5.81 0 9.86 3.03 9.86 8.47v6.42c0 3.21-1.09 5.08-3.14 5.99 2.12.96 3.46 2.67 3.46 6.35v7.2c0 5.39-4.05 8.29-9.92 8.29h-9.5V7.11Z" fill="white"/><path d="M110.59 40.07V17.11c0-6.11 4.05-10.36 9.92-10.36s10 4.24 10 10.36v22.96c0 6.06-4.12 10.29-10 10.29s-9.92-4.23-9.92-10.29Z" fill="white"/><path d="M135.07 7.12h7.5v35.55h8.16v7.2h-15.66V7.12Z" fill="white"/><path d="M154.79 14.39h-5.08V7.12h17.65v7.27h-5.08v35.48h-7.5V14.39Z" fill="white"/><path d="M170.57 7.12h7.43v42.75h-7.43V7.12Z" fill="white"/><path d="M183.08 7.12h7.07l5.38 21.26V7.12h7.5v42.75h-7.07l-5.38-20.59v20.59h-7.5V7.12Z" fill="white"/></svg>';
+  var img = new Image();
+  var blob = new Blob([svgStr], { type: 'image/svg+xml' });
+  var url = URL.createObjectURL(blob);
+  img.onload = function() { ctx.drawImage(img, 20, 16, 140, 30); URL.revokeObjectURL(url); };
+  img.src = url;
+
+  ctx.fillStyle = 'rgba(255,255,255,0.35)';
+  ctx.font = '500 10px DM Sans,sans-serif';
+  ctx.fillText('WEEK ' + (run.week || '') + '  ·  ' + (run.type || '').toUpperCase(), 20, 62);
+
+  ctx.fillStyle = '#F5E215';
+  ctx.font = 'bold ' + (run.km >= 100 ? '95' : '115') + 'px Bebas Neue,sans-serif';
+  ctx.fillText(run.km + 'km', 14, 185);
+
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  ctx.font = 'bold 24px Bebas Neue,sans-serif';
+  ctx.fillText('DONE.', 20, 218);
+
+  if (run.hr) {
+    var zc = { z1: '#4ade80', z2: '#60a5fa', z3: '#F5E215', z4: '#f97316', z5: '#e8000a' };
+    ctx.fillStyle = 'rgba(255,255,255,0.38)';
+    ctx.font = '500 11px DM Sans,sans-serif';
+    ctx.fillText('AVG HR', 20, 256);
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 28px Bebas Neue,sans-serif';
+    ctx.fillText(run.hr + ' BPM', 20, 282);
+    if (run.zone && run.zone.name) {
+      ctx.fillStyle = zc[run.zone.cls] || '#aaa';
+      ctx.font = '600 11px DM Sans,sans-serif';
+      ctx.fillText('● ' + run.zone.name + (run.zone.label ? ' — ' + run.zone.label : ''), 20, 302);
+    }
+  }
+
+  ctx.fillStyle = 'rgba(255,255,255,0.28)';
+  ctx.font = '500 10px DM Sans,sans-serif';
+  var un = 'sparky @' + (run.username || '');
+  ctx.fillText(un, W - ctx.measureText(un).width - 18, H - 18);
+  ctx.fillStyle = 'rgba(255,255,255,0.18)';
+  ctx.font = '500 9px DM Sans,sans-serif';
+  ctx.fillText('Half Marathon Blueprint · @boltinben', 18, H - 18);
+}
+
+document.getElementById('dl-btn').addEventListener('click', function() {
+  var canvas = document.getElementById('storyCanvas');
+  var a = document.createElement('a');
+  a.download = 'boltinben-wk' + (PENDING ? PENDING.week : 'x') + '-' + (PENDING ? PENDING.km : '') + 'km.png';
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+});
+</script>
+</body>
+</html>

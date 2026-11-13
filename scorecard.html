@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en" class="tool tool-scorecard">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Runner Scorecard — Boltin Ben</title>
+<meta name="description" content="Find out which training zone you're stuck in. Free 90-second diagnostic." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg-elev: #131313;
+    --bg-card: #181818;
+    --line: #262626;
+    --line-bright: #333;
+    --text: #f5f5f5;
+    --text-dim: #8a8a8a;
+    --text-mute: #555;
+    --accent: #f3e34d;
+    --accent-dim: #c9bb33;
+    --red: #ff3b30;
+    --green: #4ade80;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 0%, rgba(243,227,77,0.06), transparent 50%),
+      radial-gradient(circle at 80% 100%, rgba(243,227,77,0.04), transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 48px;
+  }
+  .brand {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .brand span { color: var(--accent); }
+  .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-mute);
+    letter-spacing: 0.1em;
+  }
+
+  /* INTRO */
+  .intro { animation: fadeUp 0.6s ease-out; }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--accent);
+  }
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 9vw, 92px);
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+    margin-bottom: 24px;
+  }
+  h1 .accent { color: var(--accent); font-style: italic; }
+  .lede {
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--text-dim);
+    max-width: 560px;
+    margin-bottom: 40px;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-bottom: 48px;
+  }
+  .stat {
+    background: var(--bg);
+    padding: 20px;
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-mute);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  /* CTA */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 18px 32px;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn:hover {
+    background: #fff;
+    transform: translateY(-1px);
+  }
+  .btn-arrow {
+    font-size: 18px;
+    transition: transform 0.2s ease;
+  }
+  .btn:hover .btn-arrow { transform: translateX(4px); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--line-bright);
+  }
+  .btn-secondary:hover {
+    background: var(--bg-card);
+    border-color: var(--accent);
+  }
+
+  /* QUIZ */
+  .quiz { display: none; animation: fadeUp 0.4s ease-out; }
+  .quiz.active { display: block; }
+
+  .progress-bar {
+    height: 2px;
+    background: var(--line);
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-mute);
+    letter-spacing: 0.1em;
+    margin-bottom: 56px;
+  }
+  .progress-meta .current { color: var(--accent); }
+
+  .q-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    margin-bottom: 20px;
+  }
+  .q-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(32px, 5.5vw, 48px);
+    line-height: 1.05;
+    margin-bottom: 40px;
+    letter-spacing: -0.005em;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 1.4;
+    width: 100%;
+  }
+  .option:hover {
+    border-color: var(--accent);
+    background: var(--bg-elev);
+    transform: translateX(4px);
+  }
+  .option-key {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--line-bright);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    transition: all 0.2s ease;
+  }
+  .option:hover .option-key {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(243,227,77,0.08);
+  }
+
+  /* RESULT */
+  .result { display: none; animation: fadeUp 0.5s ease-out; }
+  .result.active { display: block; }
+
+  .result-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .score-block {
+    position: relative;
+    padding: 48px 32px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    margin-bottom: 32px;
+    overflow: hidden;
+  }
+  .score-block::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent);
+  }
+  .score-block::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(243,227,77,0.08), transparent 70%);
+    pointer-events: none;
+  }
+  .score-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .score-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(96px, 18vw, 160px);
+    line-height: 0.85;
+    color: var(--accent);
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .score-num .out {
+    font-size: 28px;
+    color: var(--text-mute);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0;
+  }
+  .score-tier {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.02em;
+    position: relative;
+  }
+
+  .verdict {
+    padding: 32px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 40px;
+  }
+  .verdict-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .verdict-text {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  .verdict-text strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .breakdown {
+    margin-bottom: 40px;
+  }
+  .breakdown-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .breakdown-row {
+    display: flex;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+    gap: 16px;
+  }
+  .breakdown-row:last-child { border-bottom: none; }
+  .breakdown-icon {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .breakdown-icon.bad { background: var(--red); }
+  .breakdown-icon.ok { background: var(--accent); }
+  .breakdown-icon.good { background: var(--green); }
+  .breakdown-text {
+    flex: 1;
+    font-size: 15px;
+    color: var(--text-dim);
+  }
+  .breakdown-text strong { color: var(--text); font-weight: 500; }
+
+  /* SOLUTION BLOCK */
+  .solution {
+    padding: 40px 32px;
+    background: linear-gradient(135deg, rgba(243,227,77,0.06), rgba(243,227,77,0.02));
+    border: 1px solid rgba(243,227,77,0.25);
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .solution::before {
+    content: 'BOLTIN';
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    opacity: 0.5;
+  }
+  .solution-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .solution-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(32px, 5vw, 44px);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+  .solution-body {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--text-dim);
+    margin-bottom: 28px;
+  }
+  .solution-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .feat {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .feat::before {
+    content: '+';
+    color: var(--accent);
+    font-weight: bold;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .restart {
+    text-align: center;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+  }
+  .restart button {
+    background: none;
+    border: none;
+    color: var(--text-mute);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+  }
+  .restart button:hover { color: var(--accent); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 24px 20px 64px; }
+    .stats { grid-template-columns: 1fr; }
+    .solution-features { grid-template-columns: 1fr; }
+    .score-block { padding: 32px 24px; }
+    .solution { padding: 32px 24px; }
+  }
+</style>
+<script src="analytics.js" defer></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="tool.css">
+</head>
+<body>
+<nav class="bb-bar" aria-label="Boltin Ben"><a class="bb-logo" href="index.html"><img src="assets/logo.svg" alt="Boltin Ben"></a><a class="bb-alt" href="free.html">All free tools</a><a class="bb-cta" href="plans.html" data-track="Tool Bar" data-what="Get a plan">Get a plan →</a></nav>
+
+<div class="wrap">
+
+  <header class="header">
+    <div class="brand">Boltin<span>·</span>Ben</div>
+    <div class="meta" id="metaLabel">RUNNER · SCORECARD</div>
+  </header>
+
+  <!-- INTRO -->
+  <section class="intro" id="intro">
+    <div class="eyebrow">90-second diagnostic</div>
+    <h1>What zone are<br>you <span class="accent">actually</span><br>training in?</h1>
+    <p class="lede">most runners spend 80% of their week in the grey zone. too hard to recover from, too soft to build fitness. this scorecard tells you exactly where you sit and what it's costing you.</p>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num">8</div>
+        <div class="stat-label">Questions</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">90s</div>
+        <div class="stat-label">To finish</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">100</div>
+        <div class="stat-label">Point score</div>
+      </div>
+    </div>
+
+    <button class="btn" onclick="start()">
+      Start the scorecard
+      <span class="btn-arrow">→</span>
+    </button>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="quiz" id="quiz">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-meta">
+      <span><span class="current" id="qCurrent">01</span> / <span id="qTotal">08</span></span>
+      <span id="qPillar">PILLAR · TRAINING ZONES</span>
+    </div>
+
+    <div class="q-num" id="qNum">QUESTION 01</div>
+    <h2 class="q-text" id="qText">Loading…</h2>
+    <div class="options" id="options"></div>
+  </section>
+
+  <!-- RESULT -->
+  <section class="result" id="result">
+    <div class="result-eyebrow">Your scorecard · diagnosis complete</div>
+
+    <div class="score-block">
+      <div class="score-label">Training Health Score</div>
+      <div class="score-num"><span id="scoreNum">0</span><span class="out">/100</span></div>
+      <div class="score-tier" id="scoreTier">—</div>
+    </div>
+
+    <div class="verdict">
+      <div class="verdict-label">Verdict</div>
+      <div class="verdict-text" id="verdictText"></div>
+    </div>
+
+    <div class="breakdown">
+      <div class="breakdown-title">What this means</div>
+      <div id="breakdownList"></div>
+    </div>
+
+    <div class="solution">
+      <div class="solution-eyebrow">The Fix</div>
+      <div class="solution-title">A plan built around <span style="color:var(--accent)">your</span> zones, not anyone else's.</div>
+      <p class="solution-body">my plans give you a structured week built around easy running, from your first 5K to the marathon. take one as a PDF, on your watch, or with my voice feedback.</p>
+      <div class="solution-features">
+        <div class="feat">Every session written out</div>
+        <div class="feat">Voice feedback option</div>
+        <div class="feat">5K · 10K · Half · Full</div>
+        <div class="feat">Weekly structure</div>
+      </div>
+      <a class="btn" href="plans.html">
+        See the plans
+        <span class="btn-arrow">→</span>
+      </a>
+    </div>
+
+    <div class="restart">
+      <button onclick="restart()">↻ Retake the scorecard</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // Questions — each answer carries a points value (max 100 total over 8 qs)
+  // High points = healthy training. Low points = grey-zone runner.
+  const QUESTIONS = [
+    {
+      pillar: 'PILLAR · TRAINING ZONES',
+      q: 'When you go for an easy run, what does it actually feel like?',
+      opts: [
+        { t: 'Conversational. I could talk in full sentences.', p: 12 },
+        { t: 'Steady. A bit puffy but manageable.', p: 6 },
+        { t: 'Honestly? Hard. I always feel like I\'m pushing.', p: 2 },
+        { t: 'I don\'t do "easy" runs. I just run.', p: 0 },
+      ]
+    },
+    {
+      pillar: 'PILLAR · HEART RATE',
+      q: 'Do you know your actual heart rate zones?',
+      opts: [
+        { t: 'Yes — calculated from a recent test or threshold run.', p: 14 },
+        { t: 'Roughly. I use what my watch told me.', p: 7 },
+        { t: 'No. I just run by feel.', p: 4 },
+        { t: 'Heart rate confuses me, I ignore it.', p: 0 },
+      ]
+    },
+    {
+      pillar: 'PILLAR · WEEKLY STRUCTURE',
+      q: 'What does a normal training week look like?',
+      opts: [
+        { t: 'Mix of easy, threshold, long, and at least one rest day.', p: 14 },
+        { t: 'Mostly same-pace runs with the occasional fast one.', p: 6 },
+        { t: 'Whatever I feel like that day.', p: 3 },
+        { t: 'Same loop, same pace, same days.', p: 0 },
+      ]
+    },
+    {
+      pillar: 'PILLAR · PROGRESS',
+      q: 'How has your pace changed over the last 6 months?',
+      opts: [
+        { t: 'Faster — I\'m PB\'ing or close to it.', p: 12 },
+        { t: 'About the same.', p: 5 },
+        { t: 'Slower or going backwards.', p: 2 },
+        { t: 'I don\'t track it.', p: 0 },
+      ]
+    },
+    {
+      pillar: 'PILLAR · RECOVERY',
+      q: 'How do you feel the morning after a hard session?',
+      opts: [
+        { t: 'Tired but sharp. I can run again the next day.', p: 12 },
+        { t: 'Sore. I usually push through anyway.', p: 5 },
+        { t: 'Wrecked. Takes me 2+ days to recover.', p: 2 },
+        { t: 'Every session feels hard, so I can\'t tell.', p: 0 },
+      ]
+    },
+    {
+      pillar: 'PILLAR · CONSISTENCY',
+      q: 'How often do you get injured or have to take a forced break?',
+      opts: [
+        { t: 'Rarely. Maybe once every 12+ months.', p: 12 },
+        { t: 'A niggle every few months but I push through.', p: 6 },
+        { t: 'Something is always sore.', p: 2 },
+        { t: 'I\'m injured right now.', p: 0 },
+      ]
+    },
+    {
+      pillar: 'PILLAR · MINDSET',
+      q: 'What does "going easy" mean to you?',
+      opts: [
+        { t: 'Slowing down so I can run more, more often.', p: 12 },
+        { t: 'A recovery jog after a hard day.', p: 8 },
+        { t: 'A waste of training time.', p: 2 },
+        { t: 'I associate it with being slow.', p: 0 },
+      ]
+    },
+    {
+      pillar: 'PILLAR · PLAN',
+      q: 'Are you following an actual plan right now?',
+      opts: [
+        { t: 'Yes — structured, with zones and goal race.', p: 12 },
+        { t: 'Loose plan I made myself.', p: 6 },
+        { t: 'I\'ve got a goal but no plan.', p: 3 },
+        { t: 'No plan, just vibes.', p: 0 },
+      ]
+    },
+  ];
+
+  let qIndex = 0;
+  let score = 0;
+  let answers = [];
+
+  const introEl = document.getElementById('intro');
+  const quizEl = document.getElementById('quiz');
+  const resultEl = document.getElementById('result');
+
+  function start() {
+    introEl.style.display = 'none';
+    quizEl.classList.add('active');
+    document.getElementById('metaLabel').textContent = 'SCORECARD · IN PROGRESS';
+    qIndex = 0;
+    score = 0;
+    answers = [];
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    const Q = QUESTIONS[qIndex];
+    const pct = (qIndex / QUESTIONS.length) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('qCurrent').textContent = String(qIndex + 1).padStart(2, '0');
+    document.getElementById('qTotal').textContent = String(QUESTIONS.length).padStart(2, '0');
+    document.getElementById('qPillar').textContent = Q.pillar;
+    document.getElementById('qNum').textContent = 'QUESTION ' + String(qIndex + 1).padStart(2, '0');
+    document.getElementById('qText').textContent = Q.q;
+
+    const optsEl = document.getElementById('options');
+    optsEl.innerHTML = '';
+    const keys = ['A', 'B', 'C', 'D'];
+    Q.opts.forEach((o, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'option';
+      btn.innerHTML = `<span class="option-key">${keys[i]}</span><span>${o.t}</span>`;
+      btn.onclick = () => choose(o.p, i);
+      optsEl.appendChild(btn);
+    });
+
+    // scroll to top of quiz block
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function choose(points, optIndex) {
+    score += points;
+    answers.push({ q: qIndex, opt: optIndex, p: points });
+    qIndex++;
+    if (qIndex < QUESTIONS.length) {
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  function showResult() {
+    quizEl.classList.remove('active');
+    document.getElementById('progressFill').style.width = '100%';
+    document.getElementById('metaLabel').textContent = 'SCORECARD · COMPLETE';
+
+    resultEl.classList.add('active');
+
+    // animate score count up
+    const target = score;
+    let current = 0;
+    const scoreEl = document.getElementById('scoreNum');
+    const dur = 1200;
+    const start = performance.now();
+    const tick = (now) => {
+      const t = Math.min((now - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      current = Math.round(eased * target);
+      scoreEl.textContent = current;
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+
+    // tier + verdict
+    let tier, verdict;
+    if (score >= 80) {
+      tier = 'DIALLED IN';
+      verdict = `you're in the top tier. <strong>your training is structured, your zones are honest, and your body knows what it's doing.</strong> the next gain is in precision — making sure every session has a job, and progressing the load without breaking the engine. a structured plan sharpens what's already working.`;
+    } else if (score >= 60) {
+      tier = 'PROMISING · WITH HOLES';
+      verdict = `you've got the basics. you train consistently and you've done some thinking about zones. <strong>but there are leaks in the system</strong> — a few same-pace runs, vague structure, or a recovery problem you're nursing. that's why you've plateaued.`;
+    } else if (score >= 40) {
+      tier = 'STUCK IN THE GREY ZONE';
+      verdict = `classic grey-zone runner. <strong>every run feels hard but nothing is making you faster.</strong> you're spending most of your week at an intensity that builds fatigue without building fitness. this is the single biggest reason runners plateau — and it's the easiest thing to fix once you can see it.`;
+    } else {
+      tier = 'WINGING IT';
+      verdict = `you love running but there's no system underneath it. <strong>no zones, no structure, no plan.</strong> that works for a while — until it doesn't. you'll either plateau, get injured, or burn out. the good news: the gains from putting structure underneath what you already do are enormous.`;
+    }
+    document.getElementById('scoreTier').textContent = tier;
+    document.getElementById('verdictText').innerHTML = verdict;
+
+    // breakdown — pull weakest 3 answers
+    const breakdown = buildBreakdown();
+    const listEl = document.getElementById('breakdownList');
+    listEl.innerHTML = '';
+    breakdown.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'breakdown-row';
+      row.innerHTML = `<div class="breakdown-icon ${item.cls}"></div><div class="breakdown-text"><strong>${item.title}</strong> — ${item.note}</div>`;
+      listEl.appendChild(row);
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function buildBreakdown() {
+    // mapped diagnostic notes for each question's weakest answer
+    const notes = [
+      { title: 'Easy runs', good: 'easy means easy — you understand the assignment.', mid: 'your easy is probably moderate. it\'s borrowing from your hard days.', bad: 'every run hard = no run hard. that\'s the grey zone.' },
+      { title: 'Heart rate zones', good: 'you\'re training to your real numbers, not made-up ones.', mid: 'watch-calculated zones are usually 10-20bpm off. costing you accuracy.', bad: 'without zones you can\'t tell easy from hard. it\'s all guesswork.' },
+      { title: 'Weekly structure', good: 'you\'re training like an athlete, not a hobbyist.', mid: 'structure is loose — sessions are happening but not by design.', bad: 'no polarisation = no progression.' },
+      { title: 'Progress trajectory', good: 'whatever you\'re doing, it\'s working.', mid: 'plateaus mean the stimulus has stopped working.', bad: 'going backwards is a signal, not a phase.' },
+      { title: 'Recovery quality', good: 'your engine recovers. you can absorb more load.', mid: 'you\'re training tired more often than you think.', bad: 'you\'re overtrained or under-recovered. probably both.' },
+      { title: 'Injury rate', good: 'consistency is the actual cheat code.', mid: 'niggles are warnings. ignoring them is how breaks happen.', bad: 'training while injured isn\'t toughness, it\'s tax.' },
+      { title: 'Easy-pace mindset', good: 'you get the philosophy. that\'s 80% of it.', mid: 'easy isn\'t recovery — it\'s the workout that lets you do the workout.', bad: 'going slow IS the training. not the rest day.' },
+      { title: 'Plan or no plan', good: 'a plan with a goal is the difference maker.', mid: 'a loose plan is better than no plan, just barely.', bad: 'no plan means no progress. just kilometres.' },
+    ];
+
+    // pick the 3 lowest-scoring answers to show as breakdown
+    const sorted = [...answers].sort((a, b) => a.p - b.p);
+    const picks = sorted.slice(0, 3);
+
+    return picks.map(a => {
+      const q = QUESTIONS[a.q];
+      const note = notes[a.q];
+      let cls = 'good', body = note.good;
+      if (a.p === 0 || a.p <= 3) { cls = 'bad'; body = note.bad; }
+      else if (a.p < q.opts[0].p * 0.7) { cls = 'ok'; body = note.mid; }
+      return { title: note.title, note: body, cls };
+    });
+  }
+
+  function restart() {
+    resultEl.classList.remove('active');
+    introEl.style.display = 'block';
+    document.getElementById('metaLabel').textContent = 'RUNNER · SCORECARD';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>

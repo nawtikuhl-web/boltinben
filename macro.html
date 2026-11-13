@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en" class="tool tool-macro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>runner fuel calculator · boltin ben</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800;900&family=IBM+Plex+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#17150F;
+    --surface:#211E17;
+    --raised:#2C2820;
+    --line:#3A3529;
+    --yellow:#FFCB2B;
+    --bone:#F3EDE0;
+    --ash:#9A9184;
+    --ember:#E8743B;
+    --font-display:"Archivo",system-ui,sans-serif;
+    --font-mono:"IBM Plex Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:var(--ink);
+    color:var(--bone);
+    font-family:var(--font-display);
+    line-height:1.5;
+    font-weight:400;
+    padding:clamp(20px,5vw,56px) clamp(16px,5vw,24px) 64px;
+    display:flex;justify-content:center;
+    background-image:radial-gradient(120% 80% at 50% -10%, rgba(255,203,43,0.06), transparent 60%);
+  }
+  .wrap{width:100%;max-width:560px}
+
+  /* ---- header ---- */
+  .eyebrow{
+    font-family:var(--font-mono);font-size:12px;font-weight:500;
+    letter-spacing:.22em;text-transform:uppercase;color:var(--yellow);
+    margin-bottom:18px;
+  }
+  h1{
+    font-weight:900;font-size:clamp(34px,9vw,56px);line-height:.98;
+    letter-spacing:-.02em;text-transform:uppercase;
+  }
+  h1 em{font-style:normal;color:var(--yellow)}
+  .sub{color:var(--ash);font-size:15px;margin-top:16px;max-width:44ch}
+
+  /* ---- calculator card ---- */
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:clamp(18px,5vw,26px);margin-top:28px;
+  }
+  .field{margin-bottom:22px}
+  .field:last-child{margin-bottom:0}
+  .label{
+    font-family:var(--font-mono);font-size:12px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--bone);
+    display:block;margin-bottom:10px;
+  }
+  .label .hint{color:var(--ash);font-weight:500;letter-spacing:.04em}
+
+  /* weight input + unit toggle */
+  .weight-row{display:flex;gap:10px}
+  .weight-input{
+    flex:1;background:var(--raised);border:1px solid var(--line);border-radius:9px;
+    color:var(--bone);font-family:var(--font-mono);font-size:26px;font-weight:700;
+    padding:12px 16px;width:100%;
+  }
+  .weight-input::-webkit-outer-spin-button,.weight-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .weight-input{appearance:textfield;-moz-appearance:textfield}
+  .weight-input::placeholder{color:var(--ash);opacity:.6}
+  .unit-toggle{display:flex;background:var(--raised);border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  .unit-toggle button{
+    background:transparent;border:0;color:var(--ash);cursor:pointer;
+    font-family:var(--font-mono);font-size:14px;font-weight:700;padding:0 16px;
+    text-transform:uppercase;letter-spacing:.08em;transition:color .15s,background .15s;
+  }
+  .unit-toggle button[aria-pressed="true"]{background:var(--yellow);color:var(--ink)}
+
+  /* mode selector */
+  .modes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .mode{
+    background:var(--raised);border:1px solid var(--line);border-radius:9px;
+    padding:13px 14px;text-align:left;cursor:pointer;color:var(--bone);
+    font-family:var(--font-display);transition:border-color .15s,background .15s,transform .05s;
+  }
+  .mode:active{transform:translateY(1px)}
+  .mode .m-name{font-weight:800;font-size:15px;letter-spacing:-.01em}
+  .mode .m-meta{font-family:var(--font-mono);font-size:11px;color:var(--ash);margin-top:3px;letter-spacing:.04em}
+  .mode[aria-pressed="true"]{border-color:var(--yellow);background:#332d1a}
+  .mode[aria-pressed="true"] .m-meta{color:var(--yellow)}
+
+  /* optional details */
+  details.extra{margin-top:22px;border-top:1px solid var(--line);padding-top:20px}
+  details.extra > summary{
+    font-family:var(--font-mono);font-size:12px;font-weight:700;letter-spacing:.14em;
+    text-transform:uppercase;cursor:pointer;list-style:none;color:var(--bone);
+    display:flex;align-items:center;gap:8px;
+  }
+  details.extra > summary::-webkit-details-marker{display:none}
+  details.extra > summary::before{content:"+";color:var(--yellow);font-size:16px;font-weight:700}
+  details.extra[open] > summary::before{content:"–"}
+  .extra-note{color:var(--ash);font-size:13px;margin:10px 0 18px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .mini label{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ash);display:block;margin-bottom:6px}
+  .mini input,.mini select{
+    width:100%;background:var(--raised);border:1px solid var(--line);border-radius:8px;
+    color:var(--bone);font-family:var(--font-mono);font-size:15px;padding:10px 12px;
+  }
+  .mini{margin-bottom:12px}
+
+  /* ---- result ---- */
+  .result{margin-top:26px}
+  .result[hidden]{display:none}
+  .prompt{
+    margin-top:26px;background:var(--surface);border:1px dashed var(--line);border-radius:14px;
+    padding:26px;text-align:center;color:var(--ash);font-family:var(--font-mono);
+    font-size:13px;letter-spacing:.04em;
+  }
+
+  /* hero gauge */
+  .gauge-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:clamp(20px,5vw,28px)}
+  .gauge-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+  .gauge-kicker{font-family:var(--font-mono);font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--yellow)}
+  .gauge-range{font-family:var(--font-mono);font-size:12px;color:var(--ash)}
+  .hero-num{font-family:var(--font-mono);font-weight:700;font-size:clamp(56px,16vw,84px);line-height:1;letter-spacing:-.03em;color:var(--bone)}
+  .hero-num .u{font-size:.32em;color:var(--ash);font-weight:500;letter-spacing:0;margin-left:6px;vertical-align:baseline}
+  .hero-sub{color:var(--ash);font-size:14px;margin-top:2px}
+
+  .gauge{margin-top:20px}
+  .gauge-track{position:relative;height:14px;background:var(--raised);border-radius:8px;overflow:hidden;border:1px solid var(--line)}
+  .gauge-fill{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,var(--ember),var(--yellow));border-radius:8px;transition:width .9s cubic-bezier(.16,1,.3,1)}
+  .gauge-ends{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;color:var(--ash);margin-top:7px;text-transform:uppercase}
+
+  /* secondary readouts */
+  .rows{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .cell{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .cell .c-kick{font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ash)}
+  .cell .c-num{font-family:var(--font-mono);font-weight:700;font-size:32px;line-height:1.1;margin-top:6px;color:var(--bone)}
+  .cell .c-num .u{font-size:.4em;color:var(--ash);font-weight:500;margin-left:4px}
+  .cell .c-note{font-size:12px;color:var(--ash);margin-top:4px;line-height:1.35}
+
+  .blurb{
+    margin-top:14px;background:#332d1a;border:1px solid #4a4025;border-radius:12px;
+    padding:15px 18px;font-size:14px;color:var(--bone);
+  }
+  .blurb b{color:var(--yellow);font-weight:800}
+
+  /* ---- upsell ---- */
+  .upsell{margin-top:34px;border-top:1px solid var(--line);padding-top:32px}
+  .upsell h2{font-weight:900;font-size:clamp(24px,6vw,32px);line-height:1.02;letter-spacing:-.01em;text-transform:uppercase}
+  .upsell h2 em{font-style:normal;color:var(--ember)}
+  .upsell p{color:var(--ash);font-size:15px;margin-top:14px}
+  .upsell p b{color:var(--bone);font-weight:600}
+  .cta{
+    display:inline-flex;align-items:center;gap:10px;margin-top:22px;
+    background:var(--yellow);color:var(--ink);text-decoration:none;
+    font-family:var(--font-display);font-weight:800;font-size:16px;
+    padding:15px 24px;border-radius:10px;text-transform:uppercase;letter-spacing:.02em;
+    transition:transform .1s,box-shadow .2s;
+  }
+  .cta:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(255,203,43,.18)}
+  .cta .arr{font-family:var(--font-mono)}
+  .cta-note{font-family:var(--font-mono);font-size:11px;color:var(--ash);letter-spacing:.08em;margin-top:12px;text-transform:uppercase}
+
+  .disclaimer{color:var(--ash);font-size:12px;line-height:1.5;margin-top:36px;padding-top:20px;border-top:1px solid var(--line)}
+
+  :focus-visible{outline:2px solid var(--yellow);outline-offset:2px;border-radius:4px}
+
+  @media (max-width:420px){
+    .modes{grid-template-columns:1fr}
+    .rows{grid-template-columns:1fr}
+    .grid2{grid-template-columns:1fr}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .gauge-fill{transition:none}
+    .cta{transition:none}
+  }
+</style>
+<script src="analytics.js" defer></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="tool.css">
+</head>
+<body>
+<nav class="bb-bar" aria-label="Boltin Ben"><a class="bb-logo" href="index.html"><img src="assets/logo.svg" alt="Boltin Ben"></a><a class="bb-alt" href="free.html">All free tools</a><a class="bb-cta" href="plans.html" data-track="Tool Bar" data-what="Get a plan">Get a plan →</a></nav>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">boltin ben · runner fuel</div>
+    <h1>runners.<br>yes, <em>macros</em><br>matter</h1>
+    <p class="sub">punch in your weight and today's run. real numbers in about 30 seconds. most runners find out they've been eating too little, carbs especially.</p>
+  </header>
+
+  <div class="card">
+    <div class="field">
+      <label class="label" for="weight">your weight</label>
+      <div class="weight-row">
+        <input class="weight-input" id="weight" type="number" inputmode="decimal" placeholder="70" min="30" max="250" aria-describedby="w-unit">
+        <div class="unit-toggle" id="w-unit" role="group" aria-label="weight unit">
+          <button type="button" data-unit="kg" aria-pressed="true">kg</button>
+          <button type="button" data-unit="lb" aria-pressed="false">lb</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">today's run <span class="hint">— this is what moves the carbs</span></label>
+      <div class="modes" id="modes" role="group" aria-label="today's run type">
+        <button type="button" class="mode" data-mode="easy" aria-pressed="false">
+          <div class="m-name">easy / short</div><div class="m-meta">under 60 min, relaxed</div>
+        </button>
+        <button type="button" class="mode" data-mode="long" aria-pressed="false">
+          <div class="m-name">long / hard</div><div class="m-meta">over 60 min, working</div>
+        </button>
+        <button type="button" class="mode" data-mode="double" aria-pressed="false">
+          <div class="m-name">double / depleting</div><div class="m-meta">two runs, quick turnaround</div>
+        </button>
+        <button type="button" class="mode" data-mode="race" aria-pressed="false">
+          <div class="m-name">race / event</div><div class="m-meta">over 2 hrs</div>
+        </button>
+      </div>
+    </div>
+
+    <details class="extra">
+      <summary>dial it in (optional)</summary>
+      <p class="extra-note">add these and the calories come from your actual bmr instead of a rough estimate. leave them blank and we'll estimate from your macros.</p>
+      <div class="grid2">
+        <div class="mini">
+          <label for="sex">sex</label>
+          <select id="sex"><option value="">—</option><option value="m">male</option><option value="f">female</option></select>
+        </div>
+        <div class="mini">
+          <label for="age">age</label>
+          <input id="age" type="number" inputmode="numeric" placeholder="e.g. 34" min="14" max="99">
+        </div>
+        <div class="mini">
+          <label for="height">height (cm)</label>
+          <input id="height" type="number" inputmode="numeric" placeholder="e.g. 178" min="120" max="230">
+        </div>
+        <div class="mini">
+          <label for="bf">body fat % <span style="text-transform:none;letter-spacing:0">(if known)</span></label>
+          <input id="bf" type="number" inputmode="decimal" placeholder="optional" min="3" max="60">
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="prompt" id="prompt">enter your weight and pick today's run to see your numbers</div>
+
+  <section class="result" id="result" hidden aria-live="polite">
+    <div class="gauge-card">
+      <div class="gauge-top">
+        <span class="gauge-kicker">carbs today</span>
+        <span class="gauge-range" id="carbRange"></span>
+      </div>
+      <div class="hero-num"><span id="carbNum">0</span><span class="u">g</span></div>
+      <div class="hero-sub">the number runners cut and shouldn't</div>
+      <div class="gauge">
+        <div class="gauge-track"><div class="gauge-fill" id="carbFill"></div></div>
+        <div class="gauge-ends"><span>empty</span><span>full race-day tank</span></div>
+      </div>
+    </div>
+
+    <div class="rows">
+      <div class="cell">
+        <div class="c-kick">protein</div>
+        <div class="c-num"><span id="proNum">0</span><span class="u">g</span></div>
+        <div class="c-note" id="proNote">spread across the day, not one hit</div>
+      </div>
+      <div class="cell">
+        <div class="c-kick">fat</div>
+        <div class="c-num"><span id="fatNum">0</span><span class="u">g</span></div>
+        <div class="c-note" id="fatNote"></div>
+      </div>
+      <div class="cell">
+        <div class="c-kick">calories</div>
+        <div class="c-num"><span id="calNum">0</span></div>
+        <div class="c-note" id="calNote"></div>
+      </div>
+      <div class="cell">
+        <div class="c-kick">carbs / kg</div>
+        <div class="c-num"><span id="cpkNum">0</span><span class="u">g</span></div>
+        <div class="c-note">today's target per kilo of you</div>
+      </div>
+    </div>
+
+    <div class="blurb" id="blurb"></div>
+  </section>
+
+  <section class="upsell">
+    <h2>fuel sorted. <em>now the training.</em></h2>
+    <p>numbers like these only matter if the running behind them is right.</p>
+    <p><b>my plans cover every distance, from your first 5K to the marathon</b>. take one as a PDF, on your watch, or with my voice feedback.</p>
+    <a class="cta" href="plans.html" id="appCta">see the plans <span class="arr">→</span></a>
+    <div class="cta-note">from $19 · prices in AUD</div>
+  </section>
+
+  <p class="disclaimer">starting points built on population averages for healthy runners, not medical or clinical advice. targets are a place to begin, then adjust to how you actually feel, train and recover. if you have a health condition or an eating disorder history, work with a dietitian before changing your intake.</p>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var DAY = {
+    easy:   { carb:[3,5],  af:1.375, blurb:"nothing fancy today. eat normal, hit your protein, done. the light-looking numbers are the point." },
+    long:   { carb:[5,7],  af:1.55,  blurb:"fuel the effort, not the panic. if it's over an hour, take carbs in from the start instead of waiting till you're cooked." },
+    double: { carb:[6,10], af:1.725, blurb:"the one day the rapid refuel actually matters. get carbs and protein in fast so tomorrow isn't wrecked." },
+    race:   { carb:[8,12], af:1.725, blurb:"load in the days before, top up race morning, drink to thirst on the course. today is not the day to under-eat." }
+  };
+  var PROTEIN = [1.4, 2.2];   // g/kg/day
+  var FAT_FLOOR = 0.8;         // g/kg, hard floor
+  var FAT_ESTIMATE = 1.0;      // g/kg, used when no bmr inputs
+  var RACE_MAX_PER_KG = 12;    // gauge scales against a full race-day tank
+
+  var state = { unit:"kg", weight:null, mode:null };
+
+  var $ = function(id){ return document.getElementById(id); };
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+  var mid = function(pair){ return (pair[0]+pair[1])/2; };
+  var round = function(n){ return Math.round(n); };
+
+  // weight unit toggle
+  Array.prototype.forEach.call(document.querySelectorAll("#w-unit button"), function(btn){
+    btn.addEventListener("click", function(){
+      if(btn.getAttribute("aria-pressed")==="true") return;
+      document.querySelectorAll("#w-unit button").forEach(function(b){ b.setAttribute("aria-pressed","false"); });
+      btn.setAttribute("aria-pressed","true");
+      state.unit = btn.dataset.unit;
+      render();
+    });
+  });
+
+  // mode selector
+  Array.prototype.forEach.call(document.querySelectorAll("#modes .mode"), function(btn){
+    btn.addEventListener("click", function(){
+      document.querySelectorAll("#modes .mode").forEach(function(b){ b.setAttribute("aria-pressed","false"); });
+      btn.setAttribute("aria-pressed","true");
+      state.mode = btn.dataset.mode;
+      render();
+    });
+  });
+
+  ["weight","sex","age","height","bf"].forEach(function(id){
+    $(id).addEventListener("input", render);
+  });
+
+  function getKg(){
+    var raw = parseFloat($("weight").value);
+    if(!raw || raw<=0) return null;
+    return state.unit==="lb" ? raw/2.205 : raw;
+  }
+
+  function animateNum(el, to){
+    if(reduce){ el.textContent = to; return; }
+    var from = parseFloat(el.textContent)||0, start=null, dur=650;
+    function step(t){
+      if(!start) start=t;
+      var p = Math.min((t-start)/dur,1);
+      var e = 1-Math.pow(1-p,3);
+      el.textContent = round(from+(to-from)*e);
+      if(p<1) requestAnimationFrame(step);
+      else el.textContent = to;
+    }
+    requestAnimationFrame(step);
+  }
+
+  function render(){
+    var kg = getKg();
+    var ready = kg && state.mode;
+    $("prompt").style.display = ready ? "none" : "block";
+    $("result").hidden = !ready;
+    if(!ready) return;
+
+    var d = DAY[state.mode];
+
+    // carbs (hero) — session-aware per kg
+    var carbT = round(mid(d.carb)*kg);
+    var carbLo = round(d.carb[0]*kg), carbHi = round(d.carb[1]*kg);
+    animateNum($("carbNum"), carbT);
+    $("carbRange").textContent = "range " + carbLo + "\u2013" + carbHi + " g";
+    var fillPct = Math.min(carbT/(RACE_MAX_PER_KG*kg)*100,100);
+    requestAnimationFrame(function(){ $("carbFill").style.width = fillPct+"%"; });
+    $("cpkNum").textContent = mid(d.carb); // keep decimal like 3.5
+
+    // protein
+    var proT = round(mid(PROTEIN)*kg);
+    animateNum($("proNum"), proT);
+    $("proNote").textContent = round(PROTEIN[0]*kg)+"\u2013"+round(PROTEIN[1]*kg)+" g, spread across the day";
+
+    // calories + fat
+    var sex=$("sex").value, age=parseFloat($("age").value), h=parseFloat($("height").value), bf=parseFloat($("bf").value);
+    var haveBmr = sex && age>0 && h>0;
+    var carbCal = carbT*4, proCal = proT*4;
+    var fatG, tdee, calNote, fatNote;
+
+    if(haveBmr){
+      var bmr;
+      if(bf>0){ // Katch-McArdle
+        var lbm = kg*(1-bf/100);
+        bmr = 370 + 21.6*lbm;
+        calNote = "katch-mcardle bmr \u00d7 today's demand";
+      } else { // Harris-Benedict (revised)
+        bmr = sex==="f"
+          ? 447.593 + 9.247*kg + 3.098*h - 4.330*age
+          : 88.362 + 13.397*kg + 4.799*h - 5.677*age;
+        calNote = "harris-benedict bmr \u00d7 today's demand";
+      }
+      tdee = bmr*d.af;
+      var fatBalance = (tdee - carbCal - proCal)/9;
+      if(fatBalance < FAT_FLOOR*kg){
+        fatG = round(FAT_FLOOR*kg);
+        tdee = carbCal + proCal + fatG*9; // macros win — you can't fuel today on a resting estimate
+        fatNote = "held at your floor. today's carbs push the total above the resting estimate, which is the point.";
+      } else {
+        fatG = round(fatBalance);
+        fatNote = "filling the balance after carbs and protein";
+      }
+    } else {
+      fatG = round(FAT_ESTIMATE*kg);
+      tdee = carbCal + proCal + fatG*9;
+      calNote = "estimated from your macros (4/4/9). add your details for a real number.";
+      fatNote = "estimate at 1 g/kg. never park under " + round(FAT_FLOOR*kg) + " g.";
+    }
+
+    animateNum($("fatNum"), fatG);
+    $("fatNote").textContent = fatNote;
+    animateNum($("calNum"), round(tdee));
+    $("calNote").textContent = calNote;
+
+    $("blurb").innerHTML = "<b>"+state.mode+" day.</b> "+d.blurb;
+  }
+})();
+</script>
+</body>
+</html>

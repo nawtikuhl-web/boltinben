@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en" class="tool tool-bolt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bolt Calculator — find your VDOT, paces, and race times</title>
+<meta name="description" content="One mile. One number. All your training paces, race predictions, and heart rate zones. By Boltin Ben.">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0c0d;
+    --s: #141415;
+    --s2: #1a1a1c;
+    --s3: #222225;
+    --b: #2a2a2d;
+    --y: #F5E215;
+    --yd: rgba(245,226,21,0.10);
+    --w: #f0f0f0;
+    --m: #8e8e93;
+    --m2: #3a3a3d;
+    --easy: #5cd393;
+    --mod: #d4a373;
+    --hard: #9b7fc4;
+    --race: #d44848;
+    --z1: #5cd393;
+    --z2: #60a5fa;
+    --z3: #F5E215;
+    --z4: #f97316;
+    --z5: #e8000a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--bg);
+    color: var(--w);
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  .header {
+    padding: 36px 0 28px;
+    border-bottom: 1px solid var(--b);
+    margin-bottom: 32px;
+  }
+
+  .brand-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+
+  .brand {
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: -.2px;
+    color: var(--w);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .brand-bolt {
+    width: 22px;
+    height: 22px;
+    color: var(--y);
+  }
+
+  .header-link {
+    font-size: 12.5px;
+    color: var(--m);
+    text-decoration: none;
+    transition: color .12s;
+    letter-spacing: -.1px;
+  }
+  .header-link:hover { color: var(--w); }
+
+  h1 {
+    font-weight: 800;
+    font-size: clamp(40px, 8vw, 64px);
+    line-height: .95;
+    color: var(--w);
+    letter-spacing: -1.2px;
+    margin-bottom: 14px;
+  }
+
+  h1 span {
+    color: var(--y);
+    display: block;
+  }
+
+  .header-sub {
+    font-size: 16px;
+    color: var(--m);
+    line-height: 1.55;
+    max-width: 540px;
+  }
+
+  /* USAGE COUNTER */
+  .usage {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px;
+    background: var(--yd);
+    border: 1px solid rgba(245,226,21,0.18);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--m);
+    margin-top: 18px;
+    letter-spacing: -.1px;
+  }
+
+  .usage strong {
+    color: var(--y);
+    font-weight: 700;
+  }
+
+  .usage-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--y);
+    box-shadow: 0 0 6px rgba(245,226,21,0.6);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .35; }
+  }
+
+  /* DISCLAIMER */
+  .disclaimer {
+    background: var(--s);
+    border: 1px solid var(--b);
+    border-left: 3px solid var(--race);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 32px;
+    font-size: 13px;
+    color: var(--m);
+    line-height: 1.55;
+  }
+
+  .disclaimer-label {
+    font-weight: 700;
+    color: var(--race);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  /* HOW IT WORKS */
+  .how-it-works {
+    margin-bottom: 32px;
+  }
+
+  .eyebrow {
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--y);
+    margin-bottom: 14px;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .step {
+    background: var(--s);
+    border: 1px solid var(--b);
+    border-radius: 10px;
+    padding: 18px 18px 20px;
+  }
+
+  .step-num {
+    font-weight: 800;
+    font-size: 13px;
+    color: var(--y);
+    letter-spacing: .5px;
+    margin-bottom: 8px;
+  }
+
+  .step-title {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--w);
+    margin-bottom: 6px;
+    letter-spacing: -.2px;
+  }
+
+  .step-desc {
+    font-size: 13px;
+    color: var(--m);
+    line-height: 1.55;
+  }
+
+  /* INPUT */
+  .input-card {
+    background: linear-gradient(135deg, var(--s), #0e0e00);
+    border: 1px solid rgba(245,226,21,0.18);
+    border-radius: 14px;
+    padding: 28px 24px;
+    margin-bottom: 28px;
+  }
+
+  .input-card-title {
+    font-weight: 800;
+    font-size: 20px;
+    color: var(--w);
+    letter-spacing: -.3px;
+    margin-bottom: 6px;
+  }
+
+  .input-card-title span { color: var(--y); }
+
+  .input-card-sub {
+    font-size: 13.5px;
+    color: var(--m);
+    margin-bottom: 22px;
+    line-height: 1.55;
+  }
+
+  .time-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .time-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .time-label {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--m);
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .time-group input {
+    width: 86px;
+    background: var(--bg);
+    border: 1px solid var(--b);
+    border-radius: 10px;
+    color: var(--w);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 800;
+    font-size: 30px;
+    text-align: center;
+    padding: 12px 6px;
+    outline: none;
+    transition: border-color .15s, background .15s;
+    -moz-appearance: textfield;
+    letter-spacing: -.4px;
+  }
+
+  .time-group input::-webkit-outer-spin-button,
+  .time-group input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
+  .time-group input:focus {
+    border-color: var(--y);
+    background: #0d0d00;
+  }
+
+  .time-sep {
+    font-weight: 800;
+    font-size: 30px;
+    color: var(--m2);
+    padding-top: 22px;
+    letter-spacing: -.5px;
+  }
+
+  .btn-calculate {
+    background: var(--y);
+    color: #0a0a0a;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: opacity .15s, transform .08s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+  }
+
+  .btn-calculate:hover { opacity: .9; }
+  .btn-calculate:active { transform: scale(.98); }
+
+  .btn-bolt-svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .error-msg {
+    background: rgba(212,72,72,0.08);
+    border: 1px solid rgba(212,72,72,0.3);
+    color: #ff9aa1;
+    padding: 11px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-top: 14px;
+    display: none;
+  }
+
+  /* RESULTS */
+  #results {
+    display: none;
+    animation: fadeUp .4s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-hero {
+    background: linear-gradient(135deg, var(--s), #0e0e00);
+    border: 1px solid rgba(245,226,21,0.25);
+    border-radius: 14px;
+    padding: 32px 28px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .vdot-block {
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .vdot-num {
+    font-weight: 800;
+    font-size: 88px;
+    line-height: .9;
+    color: var(--y);
+    letter-spacing: -3px;
+  }
+
+  .vdot-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--m);
+    font-weight: 700;
+    margin-top: 4px;
+  }
+
+  .result-summary {
+    flex: 1;
+    padding-left: 24px;
+    border-left: 1px solid var(--b);
+  }
+
+  .result-summary h2 {
+    font-weight: 800;
+    font-size: 26px;
+    color: var(--w);
+    letter-spacing: -.5px;
+    margin-bottom: 8px;
+    line-height: 1.15;
+  }
+
+  .result-summary p {
+    font-size: 14.5px;
+    color: var(--m);
+    line-height: 1.55;
+  }
+
+  /* RESULT CARDS */
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .result-card {
+    background: var(--s);
+    border: 1px solid var(--b);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--b);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card-title {
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--w);
+    letter-spacing: -.1px;
+  }
+
+  .card-icon-svg {
+    width: 16px;
+    height: 16px;
+    color: var(--y);
+    flex-shrink: 0;
+  }
+
+  .pace-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--b);
+    transition: background .12s;
+  }
+
+  .pace-row:last-child { border-bottom: none; }
+  .pace-row:hover { background: var(--s2); }
+
+  .pace-name {
+    font-size: 13px;
+    color: var(--w);
+    font-weight: 500;
+    letter-spacing: -.1px;
+  }
+
+  .pace-sub {
+    font-size: 11.5px;
+    color: var(--m);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+
+  .pace-value {
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--w);
+    text-align: right;
+    white-space: nowrap;
+    letter-spacing: -.3px;
+  }
+
+  .pace-unit {
+    font-size: 11px;
+    color: var(--m);
+    font-weight: 500;
+    margin-left: 2px;
+  }
+
+  .pace-accent { color: var(--y); }
+
+  /* HR ZONES */
+  .hr-card { grid-column: 1 / -1; }
+
+  .hr-zones {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-bottom: 1px solid var(--b);
+  }
+
+  .hr-zone {
+    padding: 14px 8px;
+    text-align: center;
+    border-right: 1px solid var(--b);
+  }
+
+  .hr-zone:last-child { border-right: none; }
+
+  .zone-bar {
+    height: 3px;
+    border-radius: 2px;
+    margin-bottom: 10px;
+  }
+
+  .zone-num {
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--m);
+    margin-bottom: 4px;
+  }
+
+  .zone-name {
+    font-weight: 700;
+    font-size: 11.5px;
+    color: var(--w);
+    margin-bottom: 6px;
+    letter-spacing: -.1px;
+  }
+
+  .zone-bpm {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--w);
+    letter-spacing: -.3px;
+    margin-bottom: 2px;
+  }
+
+  .zone-pct {
+    font-size: 10px;
+    color: var(--m);
+    letter-spacing: .3px;
+  }
+
+  .hr-note {
+    padding: 12px 16px;
+    font-size: 12.5px;
+    color: var(--m);
+    line-height: 1.55;
+  }
+
+  .hr-note strong { color: var(--y); font-weight: 700; }
+
+  /* PLAN RECOMMENDATION CTA */
+  .plan-cta {
+    background: linear-gradient(135deg, var(--s), #0e0e00);
+    border: 1px solid rgba(245,226,21,0.25);
+    border-radius: 14px;
+    padding: 32px 28px 28px;
+    margin-top: 36px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .plan-cta-eyebrow {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--y);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  .plan-cta-headline {
+    font-weight: 800;
+    font-size: clamp(24px, 4.5vw, 34px);
+    color: var(--w);
+    letter-spacing: -.6px;
+    line-height: 1.1;
+    margin-bottom: 14px;
+    max-width: 520px;
+  }
+
+  .plan-cta-headline span { color: var(--y); }
+
+  .plan-cta-body {
+    font-size: 15px;
+    color: var(--m);
+    line-height: 1.65;
+    margin-bottom: 22px;
+    max-width: 520px;
+  }
+
+  .plan-cta-body strong { color: var(--w); font-weight: 600; }
+
+  /* PERSONALISED RECOMMENDATION */
+  .recommend-box {
+    background: var(--yd);
+    border: 1px solid rgba(245,226,21,0.2);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 24px;
+    display: none;
+  }
+
+  .recommend-label {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--y);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .recommend-plan-name {
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--w);
+    margin-bottom: 5px;
+    letter-spacing: -.2px;
+  }
+
+  .recommend-rationale {
+    font-size: 13px;
+    color: #c8c8cc;
+    line-height: 1.55;
+  }
+
+  /* PRICING + INCLUDES */
+  .plan-includes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 14px;
+    margin-bottom: 26px;
+    max-width: 520px;
+  }
+
+  .plan-include {
+    font-size: 13px;
+    color: #c8c8cc;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+  }
+
+  .plan-include::before {
+    content: '';
+    width: 14px;
+    height: 14px;
+    background: var(--y);
+    flex-shrink: 0;
+    margin-top: 2px;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' fill='currentColor'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z'/%3E%3C/svg%3E") no-repeat center / contain;
+    mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' fill='currentColor'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z'/%3E%3C/svg%3E") no-repeat center / contain;
+  }
+
+  /* PRICING ROW */
+  .pricing-row {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+
+  .price-main {
+    font-weight: 800;
+    font-size: 32px;
+    color: var(--w);
+    letter-spacing: -.8px;
+  }
+  .price-main span { color: var(--y); }
+  .price-period { font-size: 14px; color: var(--m); font-weight: 500; letter-spacing: -.1px; }
+
+  .price-or {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: var(--m);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .price-lifetime {
+    font-size: 14px;
+    color: #c8c8cc;
+    font-weight: 600;
+    letter-spacing: -.1px;
+  }
+  .price-lifetime strong { color: var(--y); font-weight: 700; }
+
+  .btn-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--y);
+    color: #0a0a0a;
+    text-decoration: none;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    padding: 14px 26px;
+    border-radius: 10px;
+    transition: opacity .15s, transform .08s;
+    letter-spacing: -.1px;
+  }
+
+  .btn-cta:hover { opacity: .9; }
+  .btn-cta:active { transform: scale(.98); }
+
+  .btn-cta-arrow {
+    font-size: 18px;
+    transition: transform .2s;
+  }
+
+  .btn-cta:hover .btn-cta-arrow { transform: translateX(3px); }
+
+  .cta-subnote {
+    display: block;
+    font-size: 12px;
+    color: var(--m);
+    margin-top: 12px;
+    line-height: 1.5;
+  }
+
+  .cta-subnote strong { color: #c8c8cc; font-weight: 600; }
+
+  /* RESET BUTTON */
+  .btn-reset {
+    background: transparent;
+    border: 1px solid var(--b);
+    color: var(--m);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: color .15s, border-color .15s;
+    letter-spacing: -.1px;
+  }
+
+  .btn-reset:hover {
+    color: var(--w);
+    border-color: var(--m);
+  }
+
+  /* FOOTER */
+  .footer {
+    border-top: 1px solid var(--b);
+    margin-top: 56px;
+    padding-top: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .footer-brand {
+    font-weight: 800;
+    font-size: 13px;
+    color: var(--m);
+    letter-spacing: -.2px;
+  }
+  .footer-brand span { color: var(--y); }
+
+  .footer-note {
+    font-size: 11.5px;
+    color: var(--m2);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    .steps { grid-template-columns: 1fr; }
+    .results-grid { grid-template-columns: 1fr; }
+    .hr-zones { grid-template-columns: repeat(5, 1fr); }
+    .hr-zone { padding: 10px 4px; }
+    .zone-name { font-size: 10px; }
+    .zone-bpm { font-size: 12px; }
+    .zone-pct { font-size: 9px; }
+
+    .result-hero {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 18px;
+      padding: 24px 20px;
+    }
+    .vdot-block { text-align: left; }
+    .vdot-num { font-size: 68px; }
+    .result-summary {
+      border-left: none;
+      padding-left: 0;
+      padding-top: 18px;
+      border-top: 1px solid var(--b);
+      width: 100%;
+    }
+
+    .plan-includes { grid-template-columns: 1fr; }
+    .plan-cta { padding: 24px 20px; }
+    .input-card { padding: 22px 18px; }
+    .time-group input { width: 72px; font-size: 26px; }
+    .header { padding: 28px 0 22px; }
+  }
+</style>
+<script src="analytics.js" defer></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="tool.css">
+</head>
+<body>
+<nav class="bb-bar" aria-label="Boltin Ben"><a class="bb-logo" href="index.html"><img src="assets/logo.svg" alt="Boltin Ben"></a><a class="bb-alt" href="free.html">All free tools</a><a class="bb-cta" href="plans.html" data-track="Tool Bar" data-what="Get a plan">Get a plan →</a></nav>
+<div class="container">
+
+  <header class="header">
+    <div class="brand-row">
+      <a href="index.html" class="brand">
+        <svg class="brand-bolt" viewBox="0 0 24 24" fill="currentColor"><path d="M2 14.201 10.5115 1h9.3003l-4.8629 6.59923H22.5L7.82341 23H5.64856l4.86304 -8.799H2Z"/></svg>
+        BoltinBen
+      </a>
+      <a href="plans.html" class="header-link">Plans →</a>
+    </div>
+
+    <h1>bolt <span>calculator.</span></h1>
+    <p class="header-sub">One mile, all out. Get your VDOT score, training paces, race times, and HR zones. The fastest way to know what your body can actually do.</p>
+
+    <div class="usage" id="usageWrap" style="display:none">
+      <span class="usage-dot"></span>
+      <strong id="calcCount">—</strong> mile tests run
+    </div>
+  </header>
+
+  <!-- HOW IT WORKS -->
+  <div class="how-it-works">
+    <div class="eyebrow">how it works</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Run one mile</div>
+        <div class="step-desc">Flat route or track. Warm up 10 minutes, then go all out for one mile. No saving anything for later.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Enter your time</div>
+        <div class="step-desc">Plug in minutes and seconds. Your watch should have it. If you went all out, your max HR is what you finished at.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Get your paces</div>
+        <div class="step-desc">VDOT score, training paces, race predictions, and heart rate zones. Retest every 4–8 weeks to track real progress.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISCLAIMER -->
+  <div class="disclaimer">
+    <div class="disclaimer-label">Quick safety note</div>
+    This is an all-out maximal effort. Before attempting, make sure you're injury-free and have no cardiovascular conditions that high-intensity running could aggravate. If anything's off, see a doctor first. Run this test at your own risk.
+  </div>
+
+  <!-- INPUT -->
+  <div class="input-card">
+    <div class="input-card-title">enter your <span>one mile time.</span></div>
+    <div class="input-card-sub">A 7-minute 30-second mile = 7 mins, 30 secs. Use the actual time from your watch — no rounding.</div>
+
+    <div class="time-inputs">
+      <div class="time-group">
+        <label class="time-label">Min</label>
+        <input type="number" id="mins" min="3" max="20" placeholder="00" inputmode="numeric">
+      </div>
+      <div class="time-sep">:</div>
+      <div class="time-group">
+        <label class="time-label">Sec</label>
+        <input type="number" id="secs" min="0" max="59" placeholder="00" inputmode="numeric">
+      </div>
+    </div>
+
+    <button class="btn-calculate" onclick="calculate()">
+      <svg class="btn-bolt-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M2 14.201 10.5115 1h9.3003l-4.8629 6.59923H22.5L7.82341 23H5.64856l4.86304 -8.799H2Z"/></svg>
+      Calculate my score
+    </button>
+    <div class="error-msg" id="errorMsg">Please enter a valid mile time between 3:30 and 20:00.</div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results">
+
+    <div class="result-hero">
+      <div class="vdot-block">
+        <div class="vdot-num" id="vdotDisplay">—</div>
+        <div class="vdot-label">VDOT score</div>
+      </div>
+      <div class="result-summary">
+        <h2 id="fitnessLevel">Loading...</h2>
+        <p id="fitnessDesc">Your personalised paces and predictions are below.</p>
+      </div>
+    </div>
+
+    <div class="results-grid">
+
+      <div class="result-card">
+        <div class="card-header">
+          <svg class="card-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4v16M19 8v8M7 8v8M1 12h22"/></svg>
+          <span class="card-title">Training paces</span>
+        </div>
+        <div>
+          <div class="pace-row">
+            <div>
+              <div class="pace-name">Easy / Zone 2</div>
+              <div class="pace-sub">Conversational. Most of your runs.</div>
+            </div>
+            <div class="pace-value"><span id="paceEasy">—</span><span class="pace-unit">/km</span></div>
+          </div>
+          <div class="pace-row">
+            <div>
+              <div class="pace-name">Marathon pace</div>
+              <div class="pace-sub">Comfortably hard.</div>
+            </div>
+            <div class="pace-value"><span id="paceMarathon">—</span><span class="pace-unit">/km</span></div>
+          </div>
+          <div class="pace-row">
+            <div>
+              <div class="pace-name">Threshold</div>
+              <div class="pace-sub">Hard but controlled. Tempo work.</div>
+            </div>
+            <div class="pace-value pace-accent"><span id="paceThreshold">—</span><span class="pace-unit">/km</span></div>
+          </div>
+          <div class="pace-row">
+            <div>
+              <div class="pace-name">Interval</div>
+              <div class="pace-sub">VO2 max work. Uncomfortable.</div>
+            </div>
+            <div class="pace-value pace-accent"><span id="paceInterval">—</span><span class="pace-unit">/km</span></div>
+          </div>
+          <div class="pace-row">
+            <div>
+              <div class="pace-name">Repetition</div>
+              <div class="pace-sub">Short, fast, full recovery.</div>
+            </div>
+            <div class="pace-value pace-accent"><span id="paceRep">—</span><span class="pace-unit">/km</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-card">
+        <div class="card-header">
+          <svg class="card-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+          <span class="card-title">Race predictions</span>
+        </div>
+        <div>
+          <div class="pace-row">
+            <div><div class="pace-name">5 km</div></div>
+            <div class="pace-value pace-accent"><span id="race5k">—</span></div>
+          </div>
+          <div class="pace-row">
+            <div><div class="pace-name">10 km</div></div>
+            <div class="pace-value"><span id="race10k">—</span></div>
+          </div>
+          <div class="pace-row">
+            <div><div class="pace-name">15 km</div></div>
+            <div class="pace-value"><span id="race15k">—</span></div>
+          </div>
+          <div class="pace-row">
+            <div>
+              <div class="pace-name">Half marathon</div>
+              <div class="pace-sub">21.1 km</div>
+            </div>
+            <div class="pace-value"><span id="raceHalf">—</span></div>
+          </div>
+          <div class="pace-row">
+            <div>
+              <div class="pace-name">Full marathon</div>
+              <div class="pace-sub">42.2 km</div>
+            </div>
+            <div class="pace-value"><span id="raceFull">—</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-card hr-card">
+        <div class="card-header">
+          <svg class="card-icon-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          <span class="card-title">Heart rate zones</span>
+        </div>
+        <div class="hr-zones">
+          <div class="hr-zone">
+            <div class="zone-bar" style="background:var(--z1)"></div>
+            <div class="zone-num">Zone 1</div>
+            <div class="zone-name">Recovery</div>
+            <div class="zone-bpm" id="z1">—</div>
+            <div class="zone-pct">50–60%</div>
+          </div>
+          <div class="hr-zone">
+            <div class="zone-bar" style="background:var(--z2)"></div>
+            <div class="zone-num">Zone 2</div>
+            <div class="zone-name">Aerobic</div>
+            <div class="zone-bpm" id="z2">—</div>
+            <div class="zone-pct">60–70%</div>
+          </div>
+          <div class="hr-zone">
+            <div class="zone-bar" style="background:var(--z3)"></div>
+            <div class="zone-num">Zone 3</div>
+            <div class="zone-name">Tempo</div>
+            <div class="zone-bpm" id="z3">—</div>
+            <div class="zone-pct">70–80%</div>
+          </div>
+          <div class="hr-zone">
+            <div class="zone-bar" style="background:var(--z4)"></div>
+            <div class="zone-num">Zone 4</div>
+            <div class="zone-name">Threshold</div>
+            <div class="zone-bpm" id="z4">—</div>
+            <div class="zone-pct">80–90%</div>
+          </div>
+          <div class="hr-zone">
+            <div class="zone-bar" style="background:var(--z5)"></div>
+            <div class="zone-num">Zone 5</div>
+            <div class="zone-name">Max</div>
+            <div class="zone-bpm" id="z5">—</div>
+            <div class="zone-pct">90–100%</div>
+          </div>
+        </div>
+        <div class="hr-note">
+          Estimated Max HR is <strong id="mhrDisplay">—</strong> bpm. If you went all-out, what you hit at the finish should be close to this. Use the actual number for more accurate zones.
+        </div>
+      </div>
+
+    </div>
+
+    <button class="btn-reset" onclick="reset()">↩ Run another test</button>
+
+    <!-- PLAN CTA — VDOT TAILORED -->
+    <div class="plan-cta">
+      <div class="plan-cta-eyebrow">BOLTIN BEN PLANS</div>
+      <h2 class="plan-cta-headline" id="ctaHeadline">your paces are <span>useless</span> without a plan.</h2>
+      <p class="plan-cta-body" id="ctaBody">
+        Most runners get their numbers, nod, then go out and train exactly the same way they always have. Same jogs. Same guesswork. <strong>Same results.</strong><br><br>
+        My plans are built around paces like these. Take one as a PDF, have it loaded to your watch, or add my voice feedback.
+      </p>
+
+      <div class="recommend-box" id="recommendBox">
+        <div class="recommend-label">Recommended for your VDOT</div>
+        <div class="recommend-plan-name" id="recommendPlanName">—</div>
+        <div class="recommend-rationale" id="recommendRationale">—</div>
+      </div>
+
+      <div class="plan-includes">
+        <div class="plan-include">A plan for every distance, 0 to 5K through to the marathon</div>
+        <div class="plan-include">The PDF, from $19</div>
+        <div class="plan-include">PDF + Training Plan on your watch, $49 a month</div>
+        <div class="plan-include">Add my voice feedback, $99 a month</div>
+      </div>
+
+      <a href="plans.html" class="btn-cta" id="ctaButton">
+        Find your plan
+        <span class="btn-cta-arrow">→</span>
+      </a>
+      <span class="cta-subnote">Plans from $19. Prices in AUD.</span>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <div class="footer-brand">Boltin<span>Ben</span> · Sparkies Running</div>
+    <div class="footer-note">Based on Jack Daniels' VDOT methodology</div>
+  </footer>
+
+</div>
+
+<script>
+// ─── SUPABASE TRACKING ───────────────────────────────────────────────
+const SUPABASE_URL = 'https://ysbufbmeamjujrqfgsam.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_-v_MbEnfu3qBtv3kFMiOZw_M_2O1Nle';
+const TRACKING_ON = SUPABASE_URL.indexOf('http') === 0;
+
+async function getCount() {
+  if (!TRACKING_ON) return;
+  try {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/bolt_calculator_uses?select=id`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Prefer': 'count=exact', 'Range': '0-0' }
+    });
+    const range = r.headers.get('content-range');
+    const total = range ? parseInt(range.split('/')[1]) : 0;
+    if (total > 0) {
+      document.getElementById('calcCount').textContent = total.toLocaleString();
+      document.getElementById('usageWrap').style.display = 'inline-flex';
+    }
+  } catch { /* silent */ }
+}
+
+async function trackUse(vdot) {
+  if (!TRACKING_ON) return;
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/bolt_calculator_uses`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ vdot })
+    });
+    getCount();
+  } catch { /* silent */ }
+}
+
+getCount();
+
+// ─── VDOT TABLE ──────────────────────────────────────────────────────
+const VDOT_TABLE = [
+  [30,"7:40","6:51","6:24","5:55","5:35","30:40","1:03:45","1:38:14","2:21:04","4:49:17"],
+  [31,"7:29","6:41","6:15","5:45","5:25","29:53","1:02:03","1:35:36","2:17:21","4:41:57"],
+  [32,"7:18","6:31","6:05","5:35","5:15","29:05","1:00:26","1:33:07","2:13:49","4:34:59"],
+  [33,"7:08","6:22","5:56","5:27","5:08","28:22","58:54","1:30:45","2:10:27","4:28:22"],
+  [34,"6:58","6:13","5:48","5:20","5:00","27:39","57:26","1:28:30","2:07:16","4:22:03"],
+  [35,"6:49","6:04","5:41","5:12","4:45","27:00","56:03","1:26:22","2:04:13","4:16:03"],
+  [36,"6:40","5:56","5:33","5:07","4:30","26:22","54:44","1:24:20","2:01:19","4:10:19"],
+  [37,"6:31","5:48","5:26","5:00","4:30","25:47","53:29","1:22:24","1:58:34","4:04:50"],
+  [38,"6:23","5:41","5:19","4:54","4:30","25:12","52:17","1:20:33","1:55:55","3:59:35"],
+  [39,"6:16","5:34","5:13","4:48","4:25","24:40","51:09","1:18:47","1:53:24","3:54:34"],
+  [40,"6:08","5:27","5:06","4:42","4:20","24:08","50:03","1:17:06","1:50:59","3:49:45"],
+  [41,"6:01","5:20","5:00","4:36","4:15","23:38","49:01","1:15:29","1:48:40","3:45:45"],
+  [42,"5:55","5:14","4:54","4:31","4:10","23:09","48:01","1:13:56","1:46:27","3:40:43"],
+  [43,"5:48","5:08","4:49","4:26","4:05","22:42","47:04","1:12:27","1:44:20","3:36:28"],
+  [44,"5:41","5:02","4:43","4:21","4:00","22:15","46:09","1:11:02","1:42:17","3:32:23"],
+  [45,"5:36","4:56","4:38","4:16","3:55","21:50","45:16","1:09:40","1:40:20","3:28:26"],
+  [46,"5:30","4:51","4:33","4:12","3:50","21:25","44:25","1:08:22","1:38:27","3:24:39"],
+  [47,"5:24","4:46","4:29","4:07","3:45","21:02","43:36","1:07:06","1:36:38","3:20:56"],
+  [48,"5:19","4:41","4:24","4:03","3:40","20:39","42:50","1:05:53","1:34:53","3:17:29"],
+  [49,"5:13","4:36","4:20","3:59","3:40","20:18","42:04","1:04:44","1:33:12","3:14:06"],
+  [50,"5:08","4:31","4:15","3:55","3:35","19:57","41:21","1:03:26","1:31:35","3:10:49"],
+  [51,"5:04","4:27","4:11","3:51","3:30","19:36","40:39","1:02:31","1:30:02","3:07:39"],
+  [52,"4:59","4:22","4:07","3:48","3:30","19:17","39:59","1:01:29","1:28:31","3:04:36"],
+  [53,"4:55","4:18","4:04","3:44","3:20","18:58","39:20","1:00:28","1:27:04","3:01:39"],
+  [54,"4:50","4:14","4:00","3:41","3:20","18:40","38:42","59:30","1:25:50","2:58:47"],
+  [55,"4:46","4:10","3:56","3:37","3:20","18:22","38:06","58:33","1:24:18","2:56:01"],
+  [56,"4:41","4:06","3:53","3:34","3:15","18:05","37:31","57:39","1:23:00","2:53:20"],
+  [57,"4:38","4:03","3:50","3:31","3:15","17:49","36:57","56:46","1:21:43","2:50:45"],
+  [58,"4:34","3:59","3:45","3:28","3:10","17:33","36:24","55:55","1:20:30","2:48:14"],
+  [59,"4:30","3:56","3:43","3:25","3:05","17:17","35:52","55:06","1:19:18","2:45:47"],
+  [60,"4:26","3:52","3:40","3:23","3:05","17:03","35:22","54:18","1:18:09","2:43:25"],
+  [61,"4:23","3:49","3:37","3:20","3:00","16:48","34:52","53:32","1:17:02","2:41:08"],
+  [62,"4:20","3:46","3:34","3:17","3:00","16:34","34:23","52:47","1:15:57","2:38:54"],
+  [63,"4:16","3:43","3:32","3:15","2:55","16:20","33:55","52:03","1:14:54","2:36:44"],
+  [64,"4:13","3:40","3:29","3:12","2:55","16:07","33:28","51:20","1:13:53","2:34:38"],
+  [65,"4:10","3:37","3:26","3:10","2:50","15:54","33:01","50:40","1:12:53","2:32:35"],
+  [66,"4:18","3:34","3:24","3:08","2:50","15:42","32:35","50:00","1:11:56","2:30:36"],
+  [67,"4:03","3:31","3:21","3:05","2:45","15:29","32:11","49:22","1:11:00","2:28:40"],
+  [68,"4:01","3:29","3:19","3:03","2:45","15:18","31:46","48:44","1:10:05","2:26:47"],
+  [69,"3:58","3:26","3:16","3:01","2:40","15:06","31:23","48:08","1:09:12","2:24:57"],
+  [70,"3:55","3:24","3:14","2:59","2:40","14:55","31:00","47:32","1:08:21","2:23:10"],
+  [71,"3:52","3:21","3:12","2:57","2:35","14:44","30:38","46:58","1:07:31","2:21:26"],
+  [72,"3:50","3:19","3:10","2:55","2:35","14:33","30:16","46:24","1:06:42","2:19:44"],
+  [73,"3:47","3:16","3:08","2:53","2:30","14:23","29:55","45:51","1:05:54","2:18:05"],
+  [74,"3:45","3:14","3:06","2:51","2:30","14:13","29:34","45:19","1:05:08","2:16:29"],
+  [75,"3:42","3:12","3:04","2:49","2:25","14:03","29:14","44:48","1:04:23","2:14:55"],
+  [76,"3:40","3:10","3:02","2:48","2:25","13:54","28:55","44:18","1:03:39","2:13:23"],
+  [77,"3:37","3:08","3:00","2:46","2:25","13:44","28:36","43:49","1:02:56","2:11:54"],
+  [78,"3:35","3:05","2:58","2:44","2:20","13:35","28:17","43:20","1:02:15","2:10:27"],
+  [79,"3:33","3:03","2:56","2:42","2:20","13:26","27:59","42:52","1:01:34","2:09:02"],
+  [80,"3:31","3:01","2:54","2:41","2:20","13:18","27:41","42:25","1:00:54","2:07:38"],
+  [81,"3:28","3:00","2:53","2:39","2:15","13:09","27:24","41:58","1:00:15","2:06:17"],
+  [82,"3:26","2:58","2:51","2:38","2:15","13:01","27:07","41:32","59:38","2:04:57"],
+  [83,"3:25","2:56","2:49","2:36","2:15","12:53","26:51","41:06","59:01","2:03:24"],
+  [84,"3:23","2:54","2:48","2:35","2:15","12:45","26:34","40:42","58:25","2:02:24"],
+  [85,"3:20","2:52","2:46","2:33","2:15","12:37","26:19","40:17","57:50","2:01:10"]
+];
+
+function mileSecsToVDOT(s) {
+  const t = s / 60;
+  const v = 1609.34 / s * 60;
+  const vo2 = -4.60 + 0.182258 * v + 0.000104 * v * v;
+  const pct = 0.8 + 0.1894393 * Math.exp(-0.012778 * t) + 0.2989558 * Math.exp(-0.1932605 * t);
+  return Math.round(vo2 / pct);
+}
+
+function findRow(vdot) {
+  return VDOT_TABLE.reduce((best, row) =>
+    Math.abs(row[0] - vdot) < Math.abs(best[0] - vdot) ? row : best
+  );
+}
+
+function getFitnessLevel(v) {
+  if (v < 35) return ["You're at the start line.", "Every run from here is progress. Build the aerobic engine first and the speed comes later."];
+  if (v < 45) return ["Solid recreational level.", "You've got a base. Consistent structured training moves this number fast."];
+  if (v < 55) return ["Properly trained runner.", "Half marathons are well within your wheelhouse. Now it's about precision."];
+  if (v < 65) return ["Competitive runner.", "Strong aerobic fitness. You're racing seriously now — every detail matters."];
+  if (v < 75) return ["Elite age-grouper.", "Very high fitness. Sub-3 marathon territory."];
+  return ["Elite level.", "World-class fitness. Less than 1% of runners ever reach this."];
+}
+
+function estimateMHR(v) {
+  return Math.max(165, Math.min(215, Math.round(175 + (v - 40) * 0.6)));
+}
+
+// VDOT-tiered plan recommendation. Returns { name, rationale, headline, body }
+function getPlanRecommendation(v) {
+  if (v < 38) {
+    return {
+      name: "Run Faster in 30 Days",
+      rationale: "Your biggest gains come from building an aerobic engine first. Run Faster in 30 Days is four runs a week, mostly easy, with a 5K time trial at each end. Skip the easy work and you'll plateau in 6 months.",
+      headline: 'your engine is <span>under-built.</span>',
+      body: "At your level, the win isn't more speed work — it's building the aerobic base that lets speed work actually pay off later. Run Faster in 30 Days is four runs a week, mostly easy, with a time trial at each end to prove it worked. <strong>Do this once, properly, and everything else gets easier.</strong>"
+    };
+  }
+  if (v < 50) {
+    return {
+      name: "5K Blueprint — 6 weeks of speed work",
+      rationale: "You've got base fitness. The next jump comes from intervals, threshold sessions, and learning to suffer at race pace. The 5K Blueprint is built for runners exactly at your level — fast enough to handle the work, hungry enough to want the PR.",
+      headline: 'you have the base. now you need the <span>sharp end.</span>',
+      body: "VDOT in your range means you've already done the slow work. What you're missing is structured intensity — the threshold reps, the VO2 sessions, the race-pace work that turns base fitness into actual race times. <strong>The 5K Blueprint lays that out, session by session.</strong>"
+    };
+  }
+  if (v < 62) {
+    return {
+      name: "10K Blueprint or The 21K Bible",
+      rationale: "You're a properly trained runner. The gains from here come from precision — pacing discipline, knowing when to push vs sit on easy, and a real periodised plan rather than running by feel.",
+      headline: 'good runners <span>train precisely.</span>',
+      body: "You can already finish a half marathon. Whether you go faster depends on whether your training has the structure to keep stacking gains. A proper plan gives every session a job, so you stop guessing. <strong>The difference between a 1:35 and a 1:25 lives in the details.</strong>"
+    };
+  }
+  return {
+    name: "The 21K Bible or Marathon",
+    rationale: "At your level the marginal gains live in pacing discipline, recovery management, and a real coach watching your data. You don't need more volume — you need smarter structure.",
+    headline: 'fast runners <span>plateau without structure.</span>',
+    body: "VDOT in your range means you're competing seriously. The difference between a good season and a great one isn't more kilometres — it's running every session at exactly the right intensity. <strong>Add voice feedback and I set your paces and check in every week.</strong>"
+  };
+}
+
+function calculate() {
+  const minsRaw = document.getElementById('mins').value;
+  const secsRaw = document.getElementById('secs').value;
+  const mins = parseInt(minsRaw) || 0;
+  const secs = parseInt(secsRaw) || 0;
+  const total = mins * 60 + secs;
+  const err = document.getElementById('errorMsg');
+
+  if (total < 210 || total > 1200 || mins === 0) {
+    err.style.display = 'block';
+    err.textContent = 'Please enter a valid mile time between 3:30 and 20:00.';
+    return;
+  }
+  if (secs > 59) {
+    err.style.display = 'block';
+    err.textContent = 'Seconds must be between 0 and 59.';
+    return;
+  }
+  err.style.display = 'none';
+
+  const vdot = Math.max(30, Math.min(85, mileSecsToVDOT(total)));
+  const row = findRow(vdot);
+
+  document.getElementById('vdotDisplay').textContent = vdot;
+  const [lvl, desc] = getFitnessLevel(vdot);
+  document.getElementById('fitnessLevel').textContent = lvl;
+  document.getElementById('fitnessDesc').textContent = desc;
+
+  document.getElementById('paceEasy').textContent      = row[1];
+  document.getElementById('paceMarathon').textContent  = row[2];
+  document.getElementById('paceThreshold').textContent = row[3];
+  document.getElementById('paceInterval').textContent  = row[4];
+  document.getElementById('paceRep').textContent       = row[5];
+  document.getElementById('race5k').textContent        = row[6];
+  document.getElementById('race10k').textContent       = row[7];
+  document.getElementById('race15k').textContent       = row[8];
+  document.getElementById('raceHalf').textContent      = row[9];
+  document.getElementById('raceFull').textContent      = row[10];
+
+  const mhr = estimateMHR(vdot);
+  document.getElementById('mhrDisplay').textContent = mhr;
+  [[.5,.6],[.6,.7],[.7,.8],[.8,.9],[.9,1]].forEach((z,i) => {
+    document.getElementById(`z${i+1}`).textContent = `${Math.round(mhr*z[0])}–${Math.round(mhr*z[1])}`;
+  });
+
+  // VDOT-tailored CTA
+  const rec = getPlanRecommendation(vdot);
+  document.getElementById('ctaHeadline').innerHTML = rec.headline;
+  document.getElementById('ctaBody').innerHTML = rec.body;
+  document.getElementById('recommendPlanName').textContent = rec.name;
+  document.getElementById('recommendRationale').textContent = rec.rationale;
+  document.getElementById('recommendBox').style.display = 'block';
+
+  trackUse(vdot);
+
+  const results = document.getElementById('results');
+  results.style.display = 'block';
+  results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function reset() {
+  document.getElementById('mins').value = '';
+  document.getElementById('secs').value = '';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('errorMsg').style.display = 'none';
+  document.getElementById('recommendBox').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.activeElement.tagName === 'INPUT') calculate();
+});
+document.getElementById('mins').addEventListener('input', function() {
+  if (this.value.length >= 2) document.getElementById('secs').focus();
+});
+</script>
+</body>
+</html>
