@@ -301,6 +301,41 @@ footer{padding-block:60px 44px}
 main.page>section:first-child{padding-block:44px 0}
 .nav-links a[aria-current="page"]{color:var(--fg)}
 
+/* full-bleed hero: photo edge to edge, words on the left, face clear on the right */
+.bleed{position:relative;isolation:isolate;display:flex;min-height:min(86svh,820px);overflow:hidden;background:#111;color:#fff}
+.bleed>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:66% 30%;z-index:-2}
+.bleed::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(0,0,0,.8) 0%,rgba(0,0,0,.5) 36%,rgba(0,0,0,0) 60%),linear-gradient(180deg,rgba(0,0,0,.4) 0%,rgba(0,0,0,0) 18%,rgba(0,0,0,0) 70%,rgba(0,0,0,.55) 100%)}
+.bleed-in{display:flex;flex-direction:column;justify-content:space-between;gap:40px;width:100%;padding-block:28px 52px}
+.bleed-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.bleed-top .mono{color:rgba(255,255,255,.85)}
+.bleed-body{max-width:min(620px,50%);display:flex;flex-direction:column;gap:18px;align-items:flex-start}
+.bleed h1{font-size:clamp(52px,6.4vw,104px)}
+.bleed-body>p{font-size:19.5px;line-height:1.42;color:rgba(255,255,255,.86)}
+.stats-row{grid-template-columns:1.6fr repeat(4,1fr);margin-top:var(--gap)}
+.stats-row .stat-wide{flex-direction:column;align-items:flex-start;justify-content:space-between}
+
+/* landing: the photo says who, the row below asks why */
+.bleed-home{min-height:min(68svh,700px)}
+.bleed-home .bleed-in{padding-block:24px 44px}
+.bleed-home .brand .mark{width:38px;height:33px}
+.bleed-home .brand .word{width:156px;height:31px}
+.bleed-home .socials a{background:rgba(0,0,0,.45);backdrop-filter:blur(6px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.bleed-home h1{font-size:clamp(60px,7.4vw,124px)}
+.bleed-home .bleed-body{max-width:min(640px,50%);gap:16px}
+.bleed-home .bleed-body .mono{color:rgba(255,255,255,.8)}
+.bleed-home .sign{font-size:16px!important;color:rgba(255,255,255,.66)!important}
+.why{padding-block:30px 40px}
+.why-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 30px;flex-wrap:wrap;margin-bottom:18px}
+.why-head h2{font-size:clamp(36px,4vw,64px)}
+.why-hi{text-decoration:none;font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:14.5px;color:var(--mute);padding-bottom:6px}
+.why-hi:hover{color:var(--volt)}
+.why-doors{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap)}
+.why-doors .sdoor{min-height:240px;padding:26px 60px 26px 26px}
+.why-doors .sdoor .mono{left:26px}
+.why-doors .sdoor b{font-size:clamp(30px,2.7vw,44px)}
+.stats-row .num{white-space:nowrap}
+.stats-row .stat .num{font-size:clamp(38px,3.4vw,56px)}
+
 @media (max-width:1020px){
   .splash{grid-template-columns:1fr;min-height:0}
   .splash-photo{min-height:360px}
@@ -310,6 +345,12 @@ main.page>section:first-child{padding-block:44px 0}
   .hero,.head,.coach,.about,.contact,.plan-hero{grid-template-columns:1fr}
   .hero-photo{min-height:600px}
   .g3,.club{grid-template-columns:1fr 1fr}
+  .bleed-body{max-width:68%}
+  .bleed-home .bleed-body{max-width:72%}
+  .why-doors{grid-template-columns:1fr}
+  .why-doors .sdoor{min-height:170px}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .stats-row .stat-wide{grid-column:span 2}
   .hub{grid-template-columns:1fr}
   .club-photo{grid-column:span 2;grid-row:auto;min-height:440px}
   .kit{grid-template-columns:1fr 1fr}
@@ -322,6 +363,24 @@ main.page>section:first-child{padding-block:44px 0}
   .coach-photo{min-height:420px}
 }
 @media (max-width:640px){
+  .bleed{min-height:660px}
+  .bleed>img{object-position:63% 22%}
+  .bleed::after{background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 16%,rgba(0,0,0,0) 38%,rgba(0,0,0,.88) 72%,rgba(0,0,0,.95) 100%)}
+  .bleed-in{padding-block:20px 28px}
+  .bleed-top>.mono{display:none}
+  .bleed-top{justify-content:flex-end}
+  .bleed-body{max-width:100%}
+  .bleed-home{min-height:600px}
+  .bleed-home .bleed-body{max-width:100%}
+  .bleed-home .socials{display:none}
+  .bleed-home .bleed-top{justify-content:flex-start}
+  .bleed-home h1{font-size:56px}
+  .why{padding-block:22px 28px}
+  .why-head h2{font-size:34px}
+  .why-doors .sdoor{min-height:0;padding:44px 56px 18px 20px}
+  .why-doors .sdoor .mono{left:20px}
+  .why-doors .sdoor b{font-size:30px}
+  .bleed-body>p{font-size:17.5px}
   .splash-photo{min-height:300px;padding:22px}
   .splash-copy p{font-size:17.5px}
   .splash-copy .sign{font-size:15px}
