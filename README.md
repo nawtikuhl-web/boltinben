@@ -17,8 +17,15 @@ this folder is served as-is, so editing a page and pushing is all it takes.
 | `/bolt-vdot-calc`, `/zone2`, `/find-my-zone-two`, `/scorecard`, `/recovery`, `/macro` | The free tools |
 | `/half-marathon-blueprint` | Members-only blueprint (Supabase login) |
 
-Old WordPress addresses (`/rate-card`, `/sponsors`, `/about`, `/contact`,
-`/sparkies`, `/find-my-zones`, `/links`) redirect to their new homes; see `_redirects`.
+Every address the old WordPress site used still works, with or without a
+trailing slash. The free tools keep their exact old paths (`/macro`, `/zone2`,
+`/recovery` and so on). Pages that moved (`/rate-card`, `/sponsors`, `/about`,
+`/contact`, `/sparkies`, `/find-my-zones`, the `?page_id=` links) redirect to
+their new homes, and the old WordPress logo image points at `assets/logo.png`.
+It's all in `_redirects`.
+
+Internal links use clean root paths (`/plans`, `/assets/...`), so pages work
+at any depth.
 
 ## Common edits
 

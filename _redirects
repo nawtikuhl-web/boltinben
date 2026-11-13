@@ -1,8 +1,49 @@
-/rate-card   /brands#rates   301
-/sponsors    /brands    301
-/links       /          301
-/about       /coaching#about  301
-/contact     /coaching#contact 301
-/sparkies    /community  301
-/half-marathon  /21k  301
-/find-my-zones  /bolt-vdot-calc  301
+# Every address the old WordPress site used still works.
+# Netlify treats /page and /page/ the same in these rules.
+
+# Old pages that moved
+/rate-card               /brands#rates        301
+/sponsors                /brands              301
+/about                   /coaching#about      301
+/contact                 /coaching#contact    301
+/sparkies                /community           301
+/find-my-zones           /bolt-vdot-calc      301
+/test                    /                    301
+/links                   /                    301
+/half-marathon           /21k                 301
+
+# Old WordPress page ids (the old menu linked to these)
+/  page_id=64            /coaching#about      301
+/  page_id=67            /community           301
+/  page_id=71            /brands              301
+/  page_id=94            /coaching#contact    301
+
+# WordPress leftovers that may be linked or bookmarked
+/wp-content/uploads/2026/04/BoltinBen_Logo.png          /assets/logo.png   301
+/wp-content/uploads/2026/04/BoltinBen_Logo-300x63.png   /assets/logo.png   301
+/wp-content/uploads/2026/04/Logo_transparent.webp       /assets/logo.png   301
+/wp-content/*            /                    301
+/wp-admin/*              /                    301
+/wp-login.php            /                    301
+/feed                    /                    301
+/feed/*                  /                    301
+
+# Every page answers at /name and /name/
+/coaching                /coaching.html               200
+/plans                   /plans.html                  200
+/zero-to-runner          /zero-to-runner.html         200
+/run-faster              /run-faster.html             200
+/5k                      /5k.html                     200
+/10k                     /10k.html                    200
+/21k                     /21k.html                    200
+/marathon                /marathon.html               200
+/community               /community.html              200
+/brands                  /brands.html                 200
+/free                    /free.html                   200
+/bolt-vdot-calc          /bolt-vdot-calc.html         200
+/zone2                   /zone2.html                  200
+/find-my-zone-two        /find-my-zone-two.html       200
+/scorecard               /scorecard.html              200
+/recovery                /recovery.html               200
+/macro                   /macro.html                  200
+/half-marathon-blueprint /half-marathon-blueprint.html 200
