@@ -314,6 +314,13 @@ main.page>section:first-child{padding-block:44px 0}
 .stats-row{grid-template-columns:1.6fr repeat(4,1fr);margin-top:var(--gap)}
 .stats-row .stat-wide{flex-direction:column;align-items:flex-start;justify-content:space-between}
 
+/* social icons */
+.socials a.soc{display:grid;place-items:center;width:44px;height:44px;padding:0;border-radius:50%}
+.socials a.soc svg{width:20px;height:20px}
+.foot-soc{order:3}
+.foot-soc a.soc{width:38px;height:38px;background:var(--tile)}
+.foot-soc a.soc svg{width:17px;height:17px}
+
 /* landing: the photo says who, the row below asks why */
 .bleed-home{min-height:min(68svh,700px)}
 .bleed-home .bleed-in{padding-block:24px 44px}
@@ -372,8 +379,9 @@ main.page>section:first-child{padding-block:44px 0}
   .bleed-body{max-width:100%}
   .bleed-home{min-height:600px}
   .bleed-home .bleed-body{max-width:100%}
-  .bleed-home .socials{display:none}
-  .bleed-home .bleed-top{justify-content:flex-start}
+  .bleed-home .socials a.soc{width:38px;height:38px}
+  .bleed-home .socials a.soc svg{width:17px;height:17px}
+  .bleed-home .bleed-top{justify-content:space-between;flex-wrap:nowrap}
   .bleed-home h1{font-size:56px}
   .why{padding-block:22px 28px}
   .why-head h2{font-size:34px}
