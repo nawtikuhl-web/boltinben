@@ -1,21 +1,219 @@
-/* Shared Boltin Ben look for the free tools. Loaded after each tool's own styles:
-   it swaps their colours and type for the brand's and adds the site bar on top. */
-html.tool body,html.tool body *:not(svg):not(svg *){font-family:'Barlow',system-ui,-apple-system,'Segoe UI',sans-serif!important;letter-spacing:.01em}
-html.tool h1,html.tool h2,html.tool h3,html.tool .display,html.tool button,html.tool .btn,html.tool .cta{text-transform:uppercase}
-html.tool h1,html.tool h2,html.tool .display{font-weight:600!important;letter-spacing:-.01em!important;line-height:.96!important}
-html.tool h1 em,html.tool h1 span,html.tool h2 em{font-style:normal}
-html.tool body{background:#000!important;background-image:none!important;margin-top:62px!important}
-html.tool input,html.tool select,html.tool textarea,html.tool button{border-radius:8px}
-.bb-bar{position:fixed;top:0;left:0;right:0;z-index:1000;height:62px;display:flex;align-items:center;gap:10px;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));background:rgba(0,0,0,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #1c1c1c}
-.bb-bar img{height:24px;width:auto;display:block}
-.bb-bar a{text-decoration:none;font-weight:600;font-size:13.5px;text-transform:uppercase;letter-spacing:.06em;color:#fff;padding:9px 13px;border-radius:8px;white-space:nowrap}
-.bb-bar a.bb-logo{padding:0;margin-right:auto}
-.bb-bar a.bb-alt{box-shadow:inset 0 0 0 1.5px #343434}
-.bb-bar a.bb-cta{background:#F5E215;color:#000}
-@media (max-width:480px){.bb-bar a.bb-alt{display:none}}
-:root.tool-bolt{--bg:#000;--s:#1e1e1e;--s2:#262626;--s3:#2b2b2b;--b:#343434;--y:#F5E215;--yd:rgba(245,226,21,.12);--w:#fff;--m:#a8a8a8;--m2:#444;--easy:#8BFBB4;--hard:#A78BFA;--z1:#8BFBB4;--z3:#F5E215}
-:root.tool-zone2{--black:#000;--dark:#0d0d0d;--card:#1e1e1e;--card-2:#262626;--border:#343434;--white:#fff;--dim:#a8a8a8;--accent:#F5E215;--accent-dim:#d6c50f}
-:root.tool-scorecard{--bg:#000;--bg-elev:#141414;--bg-card:#1e1e1e;--line:#343434;--line-bright:#444;--text:#fff;--text-dim:#a8a8a8;--text-mute:#777;--accent:#F5E215;--accent-dim:#d6c50f;--green:#8BFBB4}
-:root.tool-recovery{--bg:#000;--ink:#fff;--yellow:#F5E215;--muted:#a8a8a8;--surface:#1e1e1e;--surface-hover:#2b2b2b;--line:#343434}
-:root.tool-macro{--ink:#000;--surface:#1e1e1e;--raised:#2b2b2b;--line:#343434;--yellow:#F5E215;--bone:#fff;--ash:#a8a8a8;--ember:#A78BFA}
-.tool-bolt .brand-row,.tool-bolt .logo-row,.tool-recovery .brand-logo,.tool-scorecard .header .brand{display:none!important}
+/* Boltin Ben look for the free tools.
+   Loaded after each tool's own styles. It gives every tool the site header and
+   footer, the site type (Barlow, DM Mono labels), and turns each tool's boxes,
+   buttons, inputs and options into the site's tiles, buttons and fields. The
+   tools' own markup and scripts are untouched. */
+
+:root{
+  --bb-bg:#000; --bb-tile:#1e1e1e; --bb-tile-2:#2b2b2b; --bb-line:#343434;
+  --bb-fg:#fff; --bb-mute:#a8a8a8; --bb-volt:#F5E215; --bb-mint:#8BFBB4; --bb-purple:#A78BFA;
+  --bb-r:18px; --bb-r-btn:8px;
+  --bb-display:'Barlow','Arial Narrow',system-ui,sans-serif;
+  --bb-mono:'DM Mono',ui-monospace,'SF Mono',Menlo,monospace;
+  color-scheme:dark;
+}
+
+/* ---------- base ---------- */
+html.tool{scroll-behavior:smooth}
+html.tool body{background:var(--bb-bg)!important;background-image:none!important;color:var(--bb-fg);
+  display:block!important;padding:0!important;margin:0!important;min-height:0!important;letter-spacing:.01em}
+html.tool body::before,html.tool body::after{display:none!important}
+html.tool body,html.tool body *:not(svg):not(svg *){font-family:var(--bb-display)!important}
+html.tool h1,html.tool h2,html.tool h3,html.tool h4,html.tool .display,html.tool button,html.tool .btn{text-transform:uppercase}
+html.tool h1 em,html.tool h1 span,html.tool h2 em,html.tool h2 span{font-style:normal;color:var(--bb-volt)}
+html.tool ::selection{background:var(--bb-volt);color:#000}
+html.tool :focus-visible{outline:3px solid var(--bb-volt);outline-offset:3px}
+
+/* ---------- page width: same column as the rest of the site ---------- */
+html.tool .container,html.tool header .header-inner{max-width:1080px!important;margin-left:auto!important;margin-right:auto!important;
+  padding-left:max(18px,env(safe-area-inset-left,0px))!important;padding-right:max(18px,env(safe-area-inset-right,0px))!important}
+html.tool.tool-scorecard .wrap{max-width:860px!important;padding:28px max(18px,env(safe-area-inset-right,0px)) 72px max(18px,env(safe-area-inset-left,0px))!important;min-height:0!important}
+html.tool.tool-recovery .app{max-width:760px!important;margin:0 auto!important;padding:28px max(18px,env(safe-area-inset-right,0px)) 72px max(18px,env(safe-area-inset-left,0px))!important}
+html.tool.tool-macro .wrap{max-width:860px!important;margin:0 auto!important;padding:28px max(18px,env(safe-area-inset-right,0px)) 72px max(18px,env(safe-area-inset-left,0px))!important}
+
+/* ---------- the tools' own chrome goes; the site's replaces it ---------- */
+html.tool footer:not(.bbf),html.tool .footer,html.tool .mark,
+html.tool .brand-row,html.tool .logo-row,html.tool .brand-logo,html.tool .brand-tag,
+html.tool.tool-scorecard .header,html.tool.tool-zone2 .logo{display:none!important}
+html.tool header,html.tool .header{border:0!important;background:none!important}
+html.tool header::before,html.tool header::after{display:none!important}
+
+/* ---------- headlines ---------- */
+html.tool h1,html.tool .intro-head{font-family:var(--bb-display)!important;font-weight:600!important;
+  font-size:clamp(50px,6.4vw,104px)!important;line-height:.94!important;letter-spacing:-.012em!important;
+  text-transform:uppercase;text-wrap:balance;margin:0 0 20px!important;color:var(--bb-fg)}
+html.tool.tool-zone2 h1,html.tool.tool-scorecard h1{font-size:clamp(46px,5.8vw,92px)!important}
+html.tool h2,html.tool .plan-cta-headline,html.tool .cta-headline,html.tool .solution-title,html.tool .result-summary h2,
+html.tool .section-intro,html.tool .upsell h2,html.tool .res-head{font-family:var(--bb-display)!important;font-weight:600!important;
+  text-transform:uppercase;letter-spacing:-.005em!important;line-height:.98!important}
+html.tool .section-intro{font-size:clamp(30px,3.4vw,52px)!important;max-width:22em}
+html.tool .header-sub,html.tool .lede,html.tool .sub,html.tool .intro-sub{font-size:19px!important;line-height:1.45!important;color:var(--bb-mute)!important;max-width:34em}
+html.tool header,html.tool .header{padding-top:44px!important}
+
+/* ---------- labels: DM Mono, upper case, like the site ---------- */
+html.tool .eyebrow,html.tool .section-label,html.tool .time-label,html.tool .step-num,html.tool .plan-cta-eyebrow,
+html.tool .recommend-label,html.tool .cta-eyebrow,html.tool .testing-card-tag,html.tool .testing-label,html.tool .player-num,
+html.tool .q-num,html.tool .progress-meta,html.tool .q-count,html.tool .result-eyebrow,html.tool .score-label,html.tool .verdict-label,
+html.tool .breakdown-title,html.tool .solution-eyebrow,html.tool .label,html.tool .gauge-kicker,html.tool .c-kick,html.tool .hr-label,
+html.tool .macro-tag,html.tool .micro-day-label,html.tool .disclaimer-label,html.tool .stat-label,html.tool .meta,html.tool .watch-ey,
+html.tool .vdot-label,html.tool .zone-label,html.tool .card-title,html.tool .nowatch,html.tool .usage,html.tool .credential-bar,
+html.tool .gauge-range,html.tool .cta-note,html.tool .m-meta,html.tool .res-line,html.tool .hr-result-title,html.tool .z2-highlight-label{
+  font-family:var(--bb-mono)!important;font-size:12.5px!important;font-weight:400!important;letter-spacing:.12em!important;
+  text-transform:uppercase!important;color:var(--bb-mute)!important}
+html.tool .eyebrow::before,html.tool .eyebrow::after,html.tool .section-label::after{display:none!important}
+html.tool .credential-bar{border:1px solid var(--bb-line)!important;border-radius:6px!important;padding:8px 13px!important;background:transparent!important}
+html.tool .credential-bar .dot,html.tool .usage-dot{background:var(--bb-volt)!important;border-radius:0!important}
+
+/* ---------- tiles: every box becomes a site tile ---------- */
+html.tool .step,html.tool .disclaimer,html.tool .input-card,html.tool .result-card,html.tool .hr-card,html.tool .result-hero,
+html.tool .recommend-box,html.tool .story-block,html.tool .player-card,html.tool .pullquote,html.tool .testing-card,html.tool .principle,
+html.tool .micro-day,html.tool .macro-block,html.tool .z2-highlight,html.tool .bookmark-banner,html.tool .meso-visual,html.tool .micro-disclaimer,
+html.tool .stats,html.tool .score-block,html.tool .verdict,html.tool .breakdown,html.tool .watch,html.tool .caveat,
+html.tool.tool-macro .card,html.tool .gauge-card,html.tool .cell,html.tool .blurb{
+  background:var(--bb-tile)!important;border:0!important;border-radius:var(--bb-r)!important;box-shadow:none!important;background-image:none!important}
+html.tool .step,html.tool .result-card,html.tool .hr-card,html.tool .player-card,html.tool .testing-card,html.tool .principle,
+html.tool .story-block,html.tool .score-block,html.tool .verdict,html.tool .breakdown,html.tool.tool-macro .card,html.tool .gauge-card{padding:24px!important}
+html.tool .input-card{padding:30px!important}
+html.tool .disclaimer{border-left:0!important;padding:20px 24px!important}
+html.tool .disclaimer-label{color:var(--bb-volt)!important}
+html.tool .score-block::before,html.tool .score-block::after,html.tool .testing-card::before,html.tool .macro-block::before{display:none!important}
+html.tool .stats{gap:0!important;overflow:hidden}
+html.tool .stat{background:transparent!important;border-color:var(--bb-line)!important}
+html.tool .micro-day.quality,html.tool .micro-day.long{box-shadow:inset 0 0 0 1.5px var(--bb-volt)!important}
+html.tool .micro-day.rest{opacity:.75}
+html.tool .macro-block.active{background:var(--bb-mint)!important}
+html.tool .macro-block.active *{color:#000!important}
+html.tool .macro-block.locked{background:var(--bb-tile)!important;opacity:.85}
+html.tool .testing-card--app{background:var(--bb-purple)!important}
+html.tool .testing-card--app *{color:#000!important}
+html.tool .pullquote{padding:28px 30px!important}
+html.tool .pullquote p{font-family:var(--bb-display)!important;font-weight:600!important;text-transform:uppercase;font-size:clamp(24px,2.4vw,34px)!important;line-height:1.05!important;color:var(--bb-fg)!important}
+html.tool .pullquote p:last-child{font-weight:400!important;font-size:16px!important;line-height:1.5!important;letter-spacing:.01em!important;text-transform:none!important;color:var(--bb-mute)!important;margin-top:10px!important}
+html.tool .bookmark-banner{max-width:1080px;margin:0 auto 12px!important;padding:14px 20px!important}
+html.tool .bookmark-emoji{display:none!important}
+
+/* rows inside tiles keep their lines, in the site's line colour */
+html.tool .pace-row,html.tool .hr-zone,html.tool .breakdown-row,html.tool .player-row,html.tool .zone-bar{border-color:var(--bb-line)!important}
+html.tool .pace-row:hover{background:var(--bb-tile-2)!important}
+
+/* the big result numbers */
+html.tool .vdot-num,html.tool .score-num,html.tool .hero-num,html.tool .bucket-val,html.tool .stat-num{font-family:var(--bb-display)!important;font-weight:600!important;font-variant-numeric:tabular-nums;letter-spacing:-.02em!important;color:var(--bb-volt)!important}
+html.tool .pace-value,html.tool .c-num,html.tool .zone-bpm,html.tool .zone-range{font-family:var(--bb-display)!important;font-weight:600!important;font-variant-numeric:tabular-nums}
+
+/* ---------- the closing pitch becomes a yellow band ---------- */
+html.tool .plan-cta,html.tool .cta-card,html.tool .solution,html.tool .upsell{background:var(--bb-volt)!important;background-image:none!important;
+  border:0!important;border-radius:var(--bb-r)!important;box-shadow:none!important;padding:36px!important}
+html.tool .plan-cta::before,html.tool .plan-cta::after,html.tool .cta-card::before,html.tool .cta-card::after,html.tool .solution::before,html.tool .solution::after{display:none!important}
+html.tool .plan-cta *,html.tool .cta-card *,html.tool .solution *,html.tool .upsell *{color:#000!important;border-color:rgba(0,0,0,.2)!important}
+html.tool .plan-cta .plan-include::before,html.tool .solution .feat::before{background:#000!important;border-radius:0!important}
+html.tool .plan-cta .recommend-box,html.tool .solution .feat{background:rgba(0,0,0,.08)!important;border:0!important;border-radius:12px!important}
+html.tool .plan-cta .btn-cta,html.tool .cta-card .cta-link,html.tool .solution .btn,html.tool .upsell .cta{background:#000!important;color:#fff!important}
+html.tool .plan-cta .btn-cta *,html.tool .solution .btn *,html.tool .upsell .cta *{color:#fff!important}
+html.tool .cta-card .cta-link.secondary{background:transparent!important;color:#000!important;box-shadow:inset 0 0 0 1.5px #000!important}
+
+/* ---------- buttons ---------- */
+html.tool .btn-calculate,html.tool .btn-cta,html.tool .hr-btn,html.tool .bookmark-btn,html.tool.tool-scorecard .btn,html.tool.tool-recovery .btn,
+html.tool .cta,html.tool .cta-link,html.tool .res-cta,html.tool .intro-cta{
+  display:inline-flex!important;align-items:center;justify-content:center;gap:10px;
+  background:var(--bb-volt)!important;color:#000!important;border:0!important;border-radius:var(--bb-r-btn)!important;box-shadow:none!important;
+  font-weight:600!important;font-size:15.5px!important;text-transform:uppercase!important;letter-spacing:.06em!important;
+  padding:16px 24px!important;text-decoration:none!important;cursor:pointer;transition:transform .15s ease,background .15s ease}
+html.tool .btn-calculate:hover,html.tool .btn-cta:hover,html.tool .hr-btn:hover,html.tool.tool-scorecard .btn:hover,html.tool.tool-recovery .btn:hover,
+html.tool .res-cta:hover,html.tool .intro-cta:hover{background:#fff!important;transform:translateY(-1px)}
+html.tool .btn-calculate *,html.tool .hr-btn *{color:#000!important;fill:currentColor}
+html.tool .bookmark-btn{padding:10px 16px!important;font-size:13.5px!important}
+html.tool .bookmark-btn.saved{background:var(--bb-mint)!important}
+html.tool .btn-reset,html.tool .btn-secondary,html.tool .btn-ghost,html.tool .retake,html.tool .restart button,html.tool .q-back button{
+  background:transparent!important;color:var(--bb-fg)!important;border:0!important;box-shadow:inset 0 0 0 1.5px var(--bb-line)!important;
+  border-radius:var(--bb-r-btn)!important;font-weight:600!important;text-transform:uppercase!important;letter-spacing:.06em!important;padding:13px 20px!important;cursor:pointer}
+html.tool .btn-reset:hover,html.tool .btn-secondary:hover,html.tool .btn-ghost:hover,html.tool .retake:hover,html.tool .restart button:hover,html.tool .q-back button:hover{box-shadow:inset 0 0 0 1.5px var(--bb-fg)!important}
+
+/* ---------- fields ---------- */
+html.tool .time-group input,html.tool .hr-input-wrap input,html.tool .weight-input,html.tool .mini input,html.tool .mini select{
+  background:var(--bb-tile-2)!important;color:var(--bb-fg)!important;border:1.5px solid transparent!important;border-radius:var(--bb-r-btn)!important;box-shadow:none!important}
+html.tool .time-group input:focus,html.tool .hr-input-wrap input:focus,html.tool .weight-input:focus,html.tool .mini input:focus,html.tool .mini select:focus{border-color:var(--bb-volt)!important;outline:0}
+html.tool .unit-toggle{background:var(--bb-tile-2)!important;border:0!important;border-radius:var(--bb-r-btn)!important}
+html.tool .unit-toggle button{border-radius:6px!important}
+html.tool .unit-toggle button[aria-pressed="true"]{background:var(--bb-volt)!important;color:#000!important}
+
+/* ---------- choices: quiz answers and run types ---------- */
+html.tool .option,html.tool .opt,html.tool .mode{background:var(--bb-tile)!important;border:1.5px solid transparent!important;
+  border-radius:14px!important;box-shadow:none!important;color:var(--bb-fg)!important;transition:background .12s ease,border-color .12s ease}
+html.tool .option:hover,html.tool .opt:hover,html.tool .mode:hover{background:var(--bb-tile-2)!important}
+html.tool .opt.sel,html.tool .mode[aria-pressed="true"]{background:var(--bb-volt)!important;border-color:var(--bb-volt)!important}
+html.tool .opt.sel *,html.tool .mode[aria-pressed="true"] *{color:#000!important}
+html.tool .option-key{background:var(--bb-tile-2)!important;border:0!important;border-radius:6px!important;color:var(--bb-fg)!important;font-family:var(--bb-mono)!important}
+html.tool .option:hover .option-key{background:var(--bb-volt)!important;color:#000!important}
+html.tool .opt .dot{border-color:var(--bb-line)!important}
+html.tool .progress-bar,html.tool .bar{background:var(--bb-tile-2)!important;border-radius:99px!important}
+html.tool .progress-fill,html.tool .bar-fill,html.tool .gauge-fill{background:var(--bb-volt)!important}
+
+/* ---------- section rhythm for the long guides ---------- */
+html.tool section.container,html.tool section.block{border-color:var(--bb-line)!important;padding-top:72px!important;padding-bottom:16px!important}
+
+/* ---------- text inside tiles at site sizes ---------- */
+html.tool .step-title,html.tool .input-card-title,html.tool .card-title-big,html.tool .player-title,html.tool .testing-card-title,
+html.tool .principle h4,html.tool .micro-day-title,html.tool .macro-title,html.tool .result-summary h2,html.tool .recommend-plan-name,
+html.tool .q-text,html.tool .verdict-text,html.tool .res-head{font-family:var(--bb-display)!important;font-weight:600!important;text-transform:uppercase;letter-spacing:0!important;line-height:1.05!important}
+html.tool .step-title{font-size:20px!important;margin:6px 0 8px!important}
+html.tool .input-card-title{font-size:clamp(24px,2.4vw,32px)!important}
+html.tool .player-title,html.tool .testing-card-title{font-size:24px!important}
+html.tool .principle h4,html.tool .micro-day-title,html.tool .macro-title{font-size:20px!important}
+html.tool .result-summary h2,html.tool .recommend-plan-name{font-size:clamp(22px,2.2vw,30px)!important}
+html.tool .q-text{font-size:clamp(28px,3.2vw,44px)!important;line-height:1!important}
+html.tool .step-desc,html.tool .input-card-sub,html.tool .disclaimer,html.tool .hr-note,html.tool .result-summary p,html.tool .player-row-body,
+html.tool .testing-card-body,html.tool .testing-card-rec,html.tool .principle p,html.tool .micro-day-body,html.tool .story-block p,html.tool .macro-body,
+html.tool .recommend-rationale,html.tool .z2-highlight-note,html.tool .citation,html.tool .breakdown-text,html.tool .res-body,html.tool .bridge,
+html.tool .blurb,html.tool .c-note,html.tool .hero-sub,html.tool .pace-sub,html.tool .extra-note,html.tool .bookmark-text{font-size:15.5px!important;line-height:1.5!important;color:var(--bb-mute)!important}
+html.tool .story-block p,html.tool .res-body,html.tool .verdict-text{font-size:17px!important}
+html.tool .verdict-text{font-size:clamp(20px,2vw,26px)!important;line-height:1.2!important}
+html.tool .step-desc strong,html.tool .story-block p strong,html.tool .player-row-body strong,html.tool .principle p strong,html.tool .res-body strong,html.tool .breakdown-text strong{color:var(--bb-fg)!important}
+html.tool .pace-name,html.tool .zone-name,html.tool .option,html.tool .opt,html.tool .m-name{font-size:16.5px!important}
+html.tool .nowatch{border-radius:6px!important;border-color:var(--bb-line)!important}
+html.tool.tool-macro .mode{background:var(--bb-tile-2)!important}
+html.tool.tool-macro .mode:hover{background:var(--bb-line)!important}
+html.tool.tool-macro .mode[aria-pressed="true"]{background:var(--bb-volt)!important}
+html.tool .result-hero{padding:24px 28px!important}
+
+/* ---------- site header ---------- */
+.bbn{position:sticky;top:0;z-index:50;background:rgba(0,0,0,.84);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #161616}
+.bbn-in{max-width:1280px;margin:0 auto;height:66px;display:flex;align-items:center;gap:20px;
+  padding:0 max(18px,env(safe-area-inset-right,0px)) 0 max(18px,env(safe-area-inset-left,0px))}
+.bbn-logo{display:flex;align-items:center;margin-right:auto}
+.bbn-logo img{height:24px;width:auto;display:block}
+html.tool .bbn-links{display:flex;gap:2px}
+html.tool .bbn a{text-decoration:none!important;font-weight:500;font-size:15px!important;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+html.tool .bbn-links a{padding:8px 12px;border-radius:6px;color:var(--bb-mute)!important}
+html.tool .bbn-links a:hover,html.tool .bbn-links a[aria-current="page"]{color:var(--bb-fg)!important}
+html.tool .bbn-alt{padding:10px 16px;border-radius:var(--bb-r-btn);box-shadow:inset 0 0 0 1.5px var(--bb-line);color:var(--bb-fg)!important;font-weight:600!important;font-size:14.5px!important}
+html.tool .bbn-cta{padding:10px 16px;border-radius:var(--bb-r-btn);background:var(--bb-volt);color:#000!important;font-weight:600!important;font-size:14.5px!important}
+html.tool .bbn-cta:hover{background:#fff}
+.bbn-crumb{max-width:1080px;margin:0 auto;padding:22px max(18px,env(safe-area-inset-right,0px)) 0 max(18px,env(safe-area-inset-left,0px))}
+html.tool .bbn-crumb,html.tool .bbn-crumb a{font-family:var(--bb-mono)!important;font-size:12.5px!important;letter-spacing:.12em;text-transform:uppercase;color:var(--bb-mute)!important}
+html.tool .bbn-crumb a{text-decoration:underline!important;text-underline-offset:3px}
+
+/* ---------- site footer ---------- */
+.bbf{max-width:1280px;margin:72px auto 0;padding:26px max(18px,env(safe-area-inset-right,0px)) 44px max(18px,env(safe-area-inset-left,0px));
+  border-top:1px solid var(--bb-line);display:flex;justify-content:space-between;align-items:center;gap:18px 30px;flex-wrap:wrap}
+html.tool .bbf,html.tool .bbf span{font-size:14.5px!important;color:var(--bb-mute)!important}
+.bbf-nav{display:flex;gap:20px;flex-wrap:wrap}
+html.tool .bbf-nav a{text-decoration:none!important;text-transform:uppercase;letter-spacing:.06em;font-size:13.5px!important;color:var(--bb-mute)!important}
+html.tool .bbf-nav a:hover{color:var(--bb-fg)!important}
+.bbf-soc{display:flex;gap:8px}
+.bbf-soc a{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--bb-tile);color:var(--bb-fg)}
+.bbf-soc a:hover{background:var(--bb-volt);color:#000}
+.bbf-soc svg{width:17px;height:17px}
+
+@media (max-width:1020px){
+  html.tool .bbn-links{display:none}
+}
+@media (max-width:640px){
+  html.tool .bbn-alt{display:none}
+  .bbn-logo img{height:21px}
+  html.tool h1,html.tool .intro-head{font-size:clamp(44px,12vw,60px)!important}
+  html.tool header,html.tool .header{padding-top:28px!important}
+  html.tool .plan-cta,html.tool .cta-card,html.tool .solution,html.tool .upsell{padding:24px!important}
+  html.tool .input-card{padding:22px!important}
+  html.tool section.container,html.tool section.block{padding-top:52px!important}
+}
+@media (prefers-reduced-motion:reduce){html.tool *{transition:none!important;animation:none!important}}
