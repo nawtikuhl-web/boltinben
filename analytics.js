@@ -1,8 +1,7 @@
 // Plausible analytics, shared by every Boltin Ben page.
-// This is the Sparkies script. Once boltin.io has its own site in Plausible,
-// paste that site's script address here.
+// This is the boltin.io site in Plausible.
 (function(){
-  var SRC = 'https://plausible.io/js/pa-98X1YuiWMY3xZAni0PKyD.js';
+  var SRC = 'https://plausible.io/js/pa-t-PnqSSR8su9Sm4mDzvVH.js';
   window.plausible = window.plausible || function(){ (plausible.q = plausible.q || []).push(arguments); };
   plausible.init = plausible.init || function(i){ plausible.o = i || {}; };
   plausible.init();

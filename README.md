@@ -30,8 +30,7 @@ Old WordPress addresses (`/rate-card`, `/sponsors`, `/about`, `/contact`,
   is at the top of `site.js`.
 - **Analytics:** Plausible, loaded by `analytics.js`. Any link with
   `data-track="Event Name"` and `data-what="detail"` sends a named event.
-  The script address currently points at the Sparkies site in Plausible;
-  swap it for a boltin.io site when you create one.
+  It reports into the boltin.io site in Plausible.
 
 ## Hosting
 
