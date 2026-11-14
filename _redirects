@@ -31,6 +31,7 @@
 # Every page answers at /name and /name/
 /fuel/guide              /fuel-guide.html             200
 /fuel                    /fuel.html                   200
+/api/subscribe-status    /.netlify/functions/subscribe-status 200
 /api/subscribe           /.netlify/functions/subscribe 200
 /coaching                /coaching.html               200
 /plans                   /plans.html                  200

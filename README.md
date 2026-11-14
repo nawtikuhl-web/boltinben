@@ -59,6 +59,9 @@ up automatically. Then point boltin.io at the Netlify site.
 - **Plausible events:** `fuel_signup`, `fuel_guide_view`, `rf30_click`. The Run
   Faster button carries `utm_source=fuel&utm_medium=guide&utm_campaign=fuel`.
 
+To check the setup, open `https://boltin.io/api/subscribe-status`: it says
+whether the Sender settings are present and accepted, without showing them.
+
 Environment variables (Netlify > Site configuration > Environment variables):
 
 | Name | Value |
