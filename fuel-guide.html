@@ -115,7 +115,14 @@
   }).join('') + '<a href="#calculator">how much?</a>';
   document.getElementById('fuel-list').innerHTML = sections.map(function (s) {
     var items = (s.fuels || []).map(function (f) {
-      return '<li class="card"><b>' + esc(f.name) + '</b>' + (f.note ? '<span>' + esc(f.note) + '</span>' : '') + '</li>';
+      var has = typeof f.carbs === 'number';
+      return '<li class="card">' +
+        '<div class="fi-main"><b>' + esc(f.name) + '</b>' +
+          (f.portion || f.note ? '<span>' + esc([f.portion, f.note].filter(Boolean).join(' \u00b7 ')) + '</span>' : '') +
+          (has ? '<span class="fi-more">' + f.protein + 'g protein \u00b7 ' + f.fat + 'g fat \u00b7 ' + f.fibre + 'g fibre</span>' : '') +
+        '</div>' +
+        (has ? '<div class="fi-carbs"><b>' + f.carbs + 'g</b><span>carbs</span><span class="fi-cal">' + f.cal + ' cal</span></div>' : '') +
+        '</li>';
     }).join('');
     return '<section class="fuel-sec" id="' + s.id + '">' +
       '<div class="fuel-sec-head"><h2 class="display">' + esc(s.heading) + '</h2>' + (s.line ? '<p>' + esc(s.line) + '</p>' : '') + '</div>' +

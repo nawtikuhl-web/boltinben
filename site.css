@@ -507,10 +507,16 @@ form.fuel-form{display:flex;flex-direction:column;gap:14px;padding:24px;max-widt
 .fuel-sec-head{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
 .fuel-sec-head h2{font-size:clamp(32px,3.6vw,54px)}
 .fuel-sec-head p{color:var(--mute);font-size:17px;max-width:34em}
-.fuel-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:var(--gap)}
-.fuel-items li{display:flex;flex-direction:column;gap:4px;padding:16px 18px}
-.fuel-items b{font-size:17px;font-weight:600}
-.fuel-items span{font-size:15px;color:var(--mute);line-height:1.4}
+.fuel-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:var(--gap)}
+.fuel-items li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;padding:16px 18px;align-items:start}
+.fi-main{display:flex;flex-direction:column;gap:4px;min-width:0}
+.fi-main b{font-size:17px;font-weight:600;line-height:1.2}
+.fi-main span{font-size:14.5px;color:var(--mute);line-height:1.4}
+.fi-main .fi-more{font-size:13px;color:#7d7d7d}
+.fi-carbs{display:flex;flex-direction:column;align-items:flex-end;text-align:right;font-variant-numeric:tabular-nums}
+.fi-carbs b{font-family:var(--display);font-size:26px;font-weight:600;line-height:1;color:var(--volt)}
+.fi-carbs span{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.fi-carbs .fi-cal{margin-top:8px;color:var(--fg)}
 .fuel-soon{color:var(--mute)}
 .fuel-calc-sec{scroll-margin-top:130px}
 .fuel-calc{padding:0;overflow:hidden}
@@ -539,10 +545,9 @@ form.fuel-form{display:flex;flex-direction:column;gap:14px;padding:24px;max-widt
   form.fuel-form input{padding:12px 14px}
   .fuel-points b{font-size:22px}
   .fuel-jump{top:66px}
-  .fuel-items{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .fuel-items li{padding:12px 14px}
-  .fuel-items b{font-size:15.5px}
-  .fuel-items span{font-size:13.5px}
+  .fuel-items{grid-template-columns:minmax(0,1fr);gap:8px}
+  .fuel-items li{padding:14px 16px}
+  .fi-main b{font-size:16px}
   .fuel-bridge-card{padding:24px}
   .fuel-buy .num{font-size:44px}
 }

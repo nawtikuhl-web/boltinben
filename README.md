@@ -52,8 +52,9 @@ up automatically. Then point boltin.io at the Netlify site.
 - **Sign-ups** go to `POST /api/subscribe` (`netlify/functions/subscribe.js`),
   which adds the person to a Sender group. The provider code is all in
   `netlify/functions/_subscribe.js`; swap that file to change provider.
-- **The fuels list** lives in `fuel-data.js`, five sections, each fuel a
-  `{ name, note }`.
+- **The fuels list** lives in `fuel-data.js`: Ben's four groups of 25 from the
+  100 Pre-Run Fuels guide, each fuel with its portion, when to have it, and its
+  carbs, protein, fat, fibre and calories.
 - **The calculator** on the guide is `/macro` in embed mode (`/macro?embed=1`).
 - **Plausible events:** `fuel_signup`, `fuel_guide_view`, `rf30_click`. The Run
   Faster button carries `utm_source=fuel&utm_medium=guide&utm_campaign=fuel`.
@@ -63,8 +64,12 @@ Environment variables (Netlify > Site configuration > Environment variables):
 | Name | Value |
 | --- | --- |
 | `SENDER_API_TOKEN` | Sender > Settings > API access tokens |
-| `SENDER_GROUP_FUEL` | id of the "fuel" group in Sender |
+| `SENDER_GROUP_FUEL` | `aO2oEE`, the "Fuel" group in Sender |
 | `SENDER_GROUP_FUEL_STAN` | id of the "fuel-stan" group (optional, for the Stan import) |
+
+The email sequence is the Sender automation "FUEL: 100 pre-run fuels sequence",
+triggered when someone joins the Fuel group. It skips the two Run Faster emails
+for anyone in the "RF30 buyer" group, which the Sparkies purchase webhook fills.
 
 ManyChat can add people too: an External Request action that POSTs JSON
 `{"email": "{{email}}", "firstName": "{{first_name}}", "tag": "fuel"}` to
