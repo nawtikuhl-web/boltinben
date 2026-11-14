@@ -67,7 +67,7 @@ Environment variables (Netlify > Site configuration > Environment variables):
 | Name | Value |
 | --- | --- |
 | `SENDER_API_TOKEN` | Sender > Settings > API access tokens |
-| `SENDER_GROUP_FUEL` | `aO2oEE`, the "Fuel" group in Sender |
+| `SENDER_GROUP_FUEL` | optional: the code defaults to `aO2oEE`, the "Fuel" group |
 | `SENDER_GROUP_FUEL_STAN` | id of the "fuel-stan" group (optional, for the Stan import) |
 
 The email sequence is the Sender automation "FUEL: 100 pre-run fuels sequence",

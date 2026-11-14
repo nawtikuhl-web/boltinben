@@ -10,14 +10,18 @@
 //
 // Environment variables (Netlify > Site configuration > Environment variables):
 //   SENDER_API_TOKEN        Sender > Settings > API access tokens
-//   SENDER_GROUP_FUEL       the id of the "Fuel" group (aO2oEE)
+//   SENDER_GROUP_FUEL       optional; defaults to the "Fuel" group (aO2oEE)
 //   SENDER_GROUP_<TAG>      one per extra tag, upper case, e.g. SENDER_GROUP_FUEL_STAN
 
 const API = 'https://api.sender.net/v2';
 
+// Group ids are not secret, so the known ones live here as defaults; an
+// environment variable of the same name still wins if it is set.
+const DEFAULT_GROUPS = { SENDER_GROUP_FUEL: 'aO2oEE' };   // the "Fuel" group
+
 function groupFor(tag) {
   const key = 'SENDER_GROUP_' + String(tag || '').toUpperCase().replace(/[^A-Z0-9]+/g, '_');
-  return process.env[key] || '';
+  return process.env[key] || DEFAULT_GROUPS[key] || '';
 }
 
 async function call(method, path, body) {

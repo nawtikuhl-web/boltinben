@@ -15,10 +15,10 @@ function reply(body) {
 
 exports.handler = async () => {
   const token = process.env.SENDER_API_TOKEN || '';
-  const group = process.env.SENDER_GROUP_FUEL || '';
+  const group = process.env.SENDER_GROUP_FUEL || 'aO2oEE';   // same default as _subscribe.js
   const out = {
     SENDER_API_TOKEN: token ? 'set' : 'MISSING: add it in Netlify, then redeploy',
-    SENDER_GROUP_FUEL: group ? 'set (' + group + ')' : 'MISSING: add it in Netlify (aO2oEE), then redeploy',
+    SENDER_GROUP_FUEL: (process.env.SENDER_GROUP_FUEL ? 'set' : 'using the built-in default') + ' (' + group + ')',
     sender_token: 'not checked',
     fuel_group: 'not checked'
   };
