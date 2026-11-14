@@ -321,6 +321,21 @@ main.page>section:first-child{padding-block:44px 0}
 .foot-soc a.soc{width:38px;height:38px;background:var(--tile)}
 .foot-soc a.soc svg{width:17px;height:17px}
 
+/* landing: portrait on the left, hello on the right */
+.hello{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:var(--gap);padding-top:12px}
+.hello-photo{min-height:min(80svh,780px);background:#5b5c60}
+.hello-photo>img{object-position:50% 12%}
+.hello-photo::after{display:none}
+.hello-card{display:flex;flex-direction:column;justify-content:space-between;gap:40px;padding:34px 40px 40px}
+.hello-top{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.hello-top .socials{flex-wrap:nowrap}
+.hello .brand .mark{width:38px;height:33px}
+.hello .brand .word{width:156px;height:31px}
+.hello-body{display:flex;flex-direction:column;gap:12px;max-width:36em}
+.hello-body h1{font-size:clamp(60px,6.6vw,116px);margin-bottom:6px}
+.hello-body>p{font-size:19px;line-height:1.45;color:#d6d6d6}
+.hello-body>p.sign{font-size:16px;color:var(--mute);margin-top:4px}
+
 /* landing: the photo says who, the row below asks why */
 .bleed-home{min-height:min(76svh,760px)}
 .bleed-home .bleed-in{padding-block:24px 44px}
@@ -356,6 +371,13 @@ main.page>section:first-child{padding-block:44px 0}
   .g3,.club{grid-template-columns:1fr 1fr}
   .bleed-body{max-width:68%}
   .bleed-home .bleed-body{max-width:72%}
+  .hello{grid-template-columns:1fr 1fr}
+  .hello-photo{min-height:560px}
+  .hello-top .socials{gap:6px}
+  .hello-top .socials a.soc{width:36px;height:36px}
+  .hello-top .socials a.soc svg{width:16px;height:16px}
+  .hello .brand .word{width:124px;height:25px}
+  .hello .brand .mark{width:30px;height:26px}
   .why-doors{grid-template-columns:1fr}
   .why-doors .sdoor{min-height:170px}
   .stats-row{grid-template-columns:1fr 1fr}
@@ -380,6 +402,14 @@ main.page>section:first-child{padding-block:44px 0}
   .bleed-top{justify-content:flex-end}
   .bleed-body{max-width:100%}
   .bleed-home{min-height:600px}
+  .hello{grid-template-columns:minmax(0,1fr)}
+  .hello-photo{min-height:0;aspect-ratio:4/4.4;max-width:100%}
+  .hello-photo>img{object-position:50% 8%}
+  .hello-card{padding:24px;gap:28px}
+  .hello .brand .word{width:124px;height:25px}
+  .hello .brand .mark{width:30px;height:26px}
+  .hello-body h1{font-size:56px}
+  .hello-body>p{font-size:17.5px}
   .bleed-home .bleed-body{max-width:100%}
   .bleed-home .socials a.soc{width:38px;height:38px}
   .bleed-home .socials a.soc svg{width:17px;height:17px}
@@ -439,4 +469,8 @@ main.page>section:first-child{padding-block:44px 0}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *{transition:none!important}
+}
+@media (max-width:380px){
+  .hello .brand .word{width:104px;height:21px}
+  .hello-top .socials a.soc{width:34px;height:34px}
 }
