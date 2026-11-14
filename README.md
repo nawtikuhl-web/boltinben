@@ -16,6 +16,8 @@ this folder is served as-is, so editing a page and pushing is all it takes.
 | `/free` | Free tools list |
 | `/bolt-vdot-calc`, `/zone2`, `/find-my-zone-two`, `/scorecard`, `/recovery`, `/macro` | The free tools |
 | `/half-marathon-blueprint` | Members-only blueprint (Supabase login) |
+| `/fuel` | FUEL lead magnet sign-up (first name, email) |
+| `/fuel/guide` | The 100 pre-run fuels, the calculator and the Run Faster bridge (noindex) |
 
 Every address the old WordPress site used still works, with or without a
 trailing slash. The free tools keep their exact old paths (`/macro`, `/zone2`,
@@ -44,3 +46,26 @@ at any depth.
 Set up for Netlify: connect this repo, leave the build command empty and the
 publish directory as the repo root. `netlify.toml` and `_redirects` are picked
 up automatically. Then point boltin.io at the Netlify site.
+
+## FUEL funnel
+
+- **Sign-ups** go to `POST /api/subscribe` (`netlify/functions/subscribe.js`),
+  which adds the person to a Sender group. The provider code is all in
+  `netlify/functions/_subscribe.js`; swap that file to change provider.
+- **The fuels list** lives in `fuel-data.js`, five sections, each fuel a
+  `{ name, note }`.
+- **The calculator** on the guide is `/macro` in embed mode (`/macro?embed=1`).
+- **Plausible events:** `fuel_signup`, `fuel_guide_view`, `rf30_click`. The Run
+  Faster button carries `utm_source=fuel&utm_medium=guide&utm_campaign=fuel`.
+
+Environment variables (Netlify > Site configuration > Environment variables):
+
+| Name | Value |
+| --- | --- |
+| `SENDER_API_TOKEN` | Sender > Settings > API access tokens |
+| `SENDER_GROUP_FUEL` | id of the "fuel" group in Sender |
+| `SENDER_GROUP_FUEL_STAN` | id of the "fuel-stan" group (optional, for the Stan import) |
+
+ManyChat can add people too: an External Request action that POSTs JSON
+`{"email": "{{email}}", "firstName": "{{first_name}}", "tag": "fuel"}` to
+`https://boltin.io/api/subscribe`.

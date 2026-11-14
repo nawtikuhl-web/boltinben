@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="tool tool-macro">
 <head>
+<script>if(/[?&]embed=1/.test(location.search))document.documentElement.classList.add("embed");</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>runner fuel calculator · boltin ben</title>
@@ -450,5 +451,12 @@
   </div>
   <nav class="bbf-nav" aria-label="Footer"><a href="/plans">Plans</a><a href="/community">Community</a><a href="/coaching">Coaching</a><a href="/free">Free tools</a><a href="/brands">Advertise</a></nav>
 </div>
+<script>
+// in embed mode (the /fuel/guide page) tell the parent page how tall we are
+(function(){if(!document.documentElement.classList.contains('embed')||window.parent===window)return;
+var box=document.querySelector('.wrap')||document.body;
+function send(){var r=box.getBoundingClientRect();window.parent.postMessage({bbFrame:'macro',h:r.bottom+window.scrollY+4},location.origin);}
+try{new ResizeObserver(send).observe(box);}catch(e){setInterval(send,800);}send();})();
+</script>
 </body>
 </html>
