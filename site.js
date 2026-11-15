@@ -1,5 +1,5 @@
 (function(){
-  var FORM_ENDPOINT = 'https://formspree.io/f/mgopgenw';
+  var FORM_ENDPOINT = '/api/contact';   // netlify/functions/contact.js, emails Ben through Resend
   var form = document.getElementById('enquiry');
   var topic = document.getElementById('f-topic');
   var status = document.getElementById('f-status');
@@ -47,9 +47,11 @@
     }
     send.disabled = true;
     say('Sending…');
-    fetch(FORM_ENDPOINT, { method: 'POST', headers: { 'Accept': 'application/json' }, body: data })
-      .then(function(res){
-        if (!res.ok) throw new Error('bad status');
+    var payload = {}; data.forEach(function(v, k){ payload[k] = v; });
+    payload.page = location.pathname;
+    fetch(FORM_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(payload) })
+      .then(function(res){ return res.json().catch(function(){ return {}; }).then(function(b){ if (!res.ok || !b.ok) throw new Error('bad status'); }); })
+      .then(function(){
         try { window.plausible('Enquiry Sent', { props: { what: topic.value, page: location.pathname } }); } catch (err) {}
         form.reset();
         say("Got it. I'll be in touch within 2 business days.", 'ok');

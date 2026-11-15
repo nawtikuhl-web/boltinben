@@ -33,6 +33,7 @@
 /fuel                    /fuel.html                   200
 /api/subscribe-status    /.netlify/functions/subscribe-status 200
 /api/subscribe           /.netlify/functions/subscribe 200
+/api/contact             /.netlify/functions/contact  200
 /coaching                /coaching.html               200
 /plans                   /plans.html                  200
 /zero-to-runner          /zero-to-runner.html         200

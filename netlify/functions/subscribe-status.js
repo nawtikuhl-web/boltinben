@@ -20,7 +20,8 @@ exports.handler = async () => {
     SENDER_API_TOKEN: token ? 'set' : 'MISSING: add it in Netlify, then redeploy',
     SENDER_GROUP_FUEL: (process.env.SENDER_GROUP_FUEL ? 'set' : 'using the built-in default') + ' (' + group + ')',
     sender_token: 'not checked',
-    fuel_group: 'not checked'
+    fuel_group: 'not checked',
+    RESEND_API_KEY: process.env.RESEND_API_KEY ? 'set (contact forms)' : 'MISSING: contact forms cannot send until it is added'
   };
   if (!token) return reply(out);
 

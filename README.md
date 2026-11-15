@@ -35,8 +35,10 @@ at any depth.
   link into `checkout.js`. An empty link shows "Join the waitlist"; a filled one
   shows "Buy now".
 - **Look and feel:** `site.css` for the main pages, `tool.css` for the free tools.
-- **Forms:** contact, enquiry and waitlist forms post to Formspree. The endpoint
-  is at the top of `site.js`.
+- **Forms:** the contact, brand enquiry and waitlist forms post to `/api/contact`
+  (`netlify/functions/contact.js`), which emails ben@sparkies.app through Resend
+  with the person as reply-to. Needs `RESEND_API_KEY` in Netlify; `CONTACT_TO`
+  changes the inbox.
 - **Analytics:** Plausible, loaded by `analytics.js`. Any link with
   `data-track="Event Name"` and `data-what="detail"` sends a named event.
   It reports into the boltin.io site in Plausible.
