@@ -9,6 +9,7 @@ this folder is served as-is, so editing a page and pushing is all it takes.
 | --- | --- |
 | `/` | Landing menu: Coaching, Community, Advertise with Ben |
 | `/coaching` | Coaching hub, 1:1 coaching, about, contact form |
+| `/1on1` | 1:1 coaching interest page with a short application |
 | `/plans` | Every training plan |
 | `/zero-to-runner`, `/run-faster`, `/5k`, `/10k`, `/21k`, `/marathon` | One page per plan, three options each |
 | `/community` | Sparkies, the free club (the only place that links to sparkies.app) |
@@ -79,3 +80,13 @@ for anyone in the "RF30 buyer" group, which the Sparkies purchase webhook fills.
 ManyChat can add people too: an External Request action that POSTs JSON
 `{"email": "{{email}}", "firstName": "{{first_name}}", "tag": "fuel"}` to
 `https://boltin.io/api/subscribe`.
+
+## 1:1 coaching applications
+
+`/1on1` takes a short application (goal, current running, start date, and
+whether $249 a month works). `POST /api/apply` (`netlify/functions/apply.js`)
+emails every answer to ben@sparkies.app through Resend, with "Hot lead" in the
+subject when someone says yes to the price and wants to start within a month.
+Set `SENDER_GROUP_COACHING` to a Sender group id to also collect applicants in
+Sender. Plausible events: `coaching_view`, `coaching_apply` (with start, price
+and goal), `coaching_apply_click`.

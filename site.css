@@ -551,3 +551,10 @@ form.fuel-form{display:flex;flex-direction:column;gap:14px;padding:24px;max-widt
   .fuel-bridge-card{padding:24px}
   .fuel-buy .num{font-size:44px}
 }
+
+/* ---------- 1:1 application ---------- */
+.apply-done{grid-column:1/-1;display:flex;flex-direction:column;gap:12px;padding:8px 0}
+.apply-done h3{font-size:clamp(30px,3.4vw,48px)}
+.apply-done p{color:#d6d6d6;font-size:17px;max-width:34em}
+.apply-done a{color:var(--volt)}
+#fit .ticks a{color:var(--fg);text-underline-offset:3px}
