@@ -560,19 +560,25 @@ form.fuel-form{display:flex;flex-direction:column;gap:14px;padding:24px;max-widt
 #fit .ticks a{color:var(--fg);text-underline-offset:3px}
 
 /* ---------- client story on /1on1 ---------- */
-.proof{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);grid-template-rows:repeat(3,auto)}
-.proof-quote{grid-row:span 3;display:flex;flex-direction:column;justify-content:space-between;gap:24px;margin:0;padding:34px}
+.proof{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}
+.proof-photo{min-height:440px}
+.proof-photo>img{object-position:50% 30%}
+.proof-photo::after{display:none}
+.proof-quote{display:flex;flex-direction:column;justify-content:space-between;gap:24px;margin:0;padding:34px}
 .proof-quote blockquote{margin:0;display:flex;flex-direction:column;gap:14px}
 .proof-quote blockquote p{font-size:clamp(19px,1.7vw,24px);line-height:1.4;color:var(--fg)}
 .proof-quote figcaption{font-family:var(--mono);font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
 .proof-quote figcaption a{color:var(--volt);text-decoration:none}
-.proof .stat{min-height:0}
+.proof-stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:var(--gap)}
+.proof-stats .stat{min-height:0}
+.proof-stats .stat p{font-size:15px}
+.proof-stats .t-volt p{color:rgba(0,0,0,.72)}
 @media (max-width:1020px){
-  .proof{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto}
-  .proof-quote{grid-column:1/-1;grid-row:auto}
+  .proof{grid-template-columns:minmax(0,1fr)}
+  .proof-photo{min-height:0;aspect-ratio:685/725;max-height:560px}
+  .proof-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:640px){
-  .proof{grid-template-columns:minmax(0,1fr)}
   .proof-quote{padding:24px}
   .proof-quote blockquote p{font-size:18px}
 }
