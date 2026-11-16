@@ -84,7 +84,7 @@ ManyChat can add people too: an External Request action that POSTs JSON
 ## 1:1 coaching applications
 
 `/1on1` takes a short application (goal, current running, start date, and
-whether $249 a month works). `POST /api/apply` (`netlify/functions/apply.js`)
+whether the $149 founding price works). `POST /api/apply` (`netlify/functions/apply.js`)
 emails every answer to ben@sparkies.app through Resend, with "Hot lead" in the
 subject when someone says yes to the price and wants to start within a month.
 Set `SENDER_GROUP_COACHING` to a Sender group id to also collect applicants in

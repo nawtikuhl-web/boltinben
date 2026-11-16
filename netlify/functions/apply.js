@@ -20,7 +20,7 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const QUESTIONS = [
   ['firstName', 'First name'], ['email', 'Email'], ['instagram', 'Instagram'],
   ['goal', 'Main goal'], ['race', 'Race and date'], ['weekly', 'Running now'],
-  ['start', 'Would start'], ['price', '$249 a month'], ['extra', 'Anything else'], ['source', 'Came from']
+  ['start', 'Would start'], ['price', '$149 works'], ['extra', 'Anything else'], ['source', 'Came from']
 ];
 
 function reply(code, body) {
