@@ -582,3 +582,49 @@ form.fuel-form{display:flex;flex-direction:column;gap:14px;padding:24px;max-widt
   .proof-quote{padding:24px}
   .proof-quote blockquote p{font-size:18px}
 }
+
+/* ---------- 1:1 onboarding (/1on1/onboarding) ---------- */
+main.ob{max-width:680px;margin:0 auto;padding:0 max(14px,env(safe-area-inset-right,0px)) 40px max(14px,env(safe-area-inset-left,0px))}
+.ob-progress{position:sticky;top:66px;z-index:10;height:6px;background:var(--tile-2);border-radius:99px;margin:18px 0 14px;overflow:hidden}
+.ob-bar{height:100%;width:0;background:var(--volt);border-radius:99px;transition:width .3s ease}
+.ob-card{padding:28px;display:flex;flex-direction:column;gap:18px}
+.ob-step{display:flex;flex-direction:column;gap:16px;padding:0!important}
+.ob-step[hidden]{display:none}
+.ob-step h1{font-size:clamp(40px,7vw,64px)}
+.ob-step h2{font-size:clamp(32px,5.4vw,48px)}
+.ob-lede{font-size:18px;line-height:1.45;color:#d6d6d6}
+.ob-hint{font-size:14px;color:var(--mute);line-height:1.45}
+.ob .f{display:grid;gap:8px;min-width:0}
+.ob .opt{opacity:.6;text-transform:none;letter-spacing:.04em}
+.ob-label{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.ob-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ob textarea{min-height:96px}
+.ob-chips{display:flex;flex-wrap:wrap;gap:8px}
+.ob-chip{position:relative;cursor:pointer}
+.ob-chip input{position:absolute;opacity:0;width:1px;height:1px}
+.ob-chip span{display:inline-flex;align-items:center;min-height:46px;padding:10px 16px;border-radius:var(--r-btn);background:var(--tile-2);font-weight:600;font-size:15.5px;border:1.5px solid transparent;transition:background .12s ease,border-color .12s ease}
+.ob-chip:hover span{border-color:var(--line)}
+.ob-chip input:checked+span{background:var(--volt);color:var(--ink)}
+.ob-chip input:focus-visible+span{outline:3px solid var(--volt);outline-offset:2px}
+.ob-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.ob-days .ob-chip span{justify-content:center;width:100%;padding:10px 0}
+.ob-check{display:flex;gap:12px;align-items:flex-start;padding:16px;border-radius:12px;background:var(--tile-2);cursor:pointer;font-size:16px;line-height:1.45}
+.ob-check input{width:22px;height:22px;flex:none;margin-top:1px;accent-color:var(--volt)}
+.ob-other{display:grid;grid-template-columns:1fr 150px;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.ob-other label{font-size:17px;font-weight:600;font-family:var(--body);letter-spacing:.01em;text-transform:none;color:var(--fg)}
+.ob-hp{position:absolute;left:-9999px;width:1px;height:1px;padding:0;border:0}
+.ob .form-msg:empty{display:none}
+.ob .form-msg.bad{color:var(--volt)}
+.ob-nav{display:flex;gap:10px;justify-content:space-between}
+.ob-nav[hidden]{display:none}
+.ob-nav #ob-next{margin-left:auto}
+@media (max-width:640px){
+  .ob-card{padding:20px;gap:16px}
+  .ob-row{grid-template-columns:1fr}
+  .ob-nav .btn{flex:1}
+  .ob-chip span{font-size:15px;padding:10px 14px}
+  .ob-days .ob-chip span{font-size:13.5px}
+}
+/* answer buttons and the health tick are labels, but read as normal text */
+.ob label.ob-chip,.ob label.ob-check{font-family:var(--body);text-transform:none;letter-spacing:.01em;color:var(--fg)}
+.ob label.ob-check{font-size:16px}

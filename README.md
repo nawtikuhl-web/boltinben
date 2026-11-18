@@ -10,6 +10,7 @@ this folder is served as-is, so editing a page and pushing is all it takes.
 | `/` | Landing menu: Coaching, Community, Advertise with Ben |
 | `/coaching` | Coaching hub, 1:1 coaching, about, contact form |
 | `/1on1` | 1:1 coaching interest page with a short application |
+| `/1on1/onboarding` | Onboarding for new 1:1 clients (noindex); prefill with `?email=&name=` |
 | `/plans` | Every training plan |
 | `/zero-to-runner`, `/run-faster`, `/5k`, `/10k`, `/21k`, `/marathon` | One page per plan, three options each |
 | `/community` | Sparkies, the free club (the only place that links to sparkies.app) |
@@ -90,3 +91,21 @@ subject when someone says yes to the price and wants to start within a month.
 Set `SENDER_GROUP_COACHING` to a Sender group id to also collect applicants in
 Sender. Plausible events: `coaching_view`, `coaching_apply` (with start, price
 and goal), `coaching_apply_click`.
+
+## 1:1 onboarding
+
+Send a new client `https://boltin.io/1on1/onboarding?email=jess@example.com&name=Jessica`
+and their name and email are already filled in. Ten short screens; answers are
+kept on their phone as they go, so they can come back to it.
+
+`POST /api/onboarding` (`netlify/functions/onboarding.js`):
+- saves the answers to the Supabase table `coaching_onboarding` (status "new";
+  the table is created by `_supabase_migrations/coaching_onboarding.sql` in the
+  Sparkies repo),
+- emails Ben "Onboarding: {name} ({start})" with every answer, reply-to the client,
+- emails the client a short confirmation from Ben.
+
+Needs `SUPABASE_SERVICE_KEY` (the Sparkies service role key) and
+`RESEND_API_KEY` in Netlify. If Supabase is not set up, Ben is still emailed and
+the client still sees the thank-you screen. Plausible events: `onboarding_start`,
+`onboarding_step`, `onboarding_submit`.

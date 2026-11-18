@@ -21,7 +21,8 @@ exports.handler = async () => {
     SENDER_GROUP_FUEL: (process.env.SENDER_GROUP_FUEL ? 'set' : 'using the built-in default') + ' (' + group + ')',
     sender_token: 'not checked',
     fuel_group: 'not checked',
-    RESEND_API_KEY: process.env.RESEND_API_KEY ? 'set (contact forms)' : 'MISSING: contact forms cannot send until it is added'
+    RESEND_API_KEY: process.env.RESEND_API_KEY ? 'set (contact forms)' : 'MISSING: contact forms cannot send until it is added',
+    SUPABASE_SERVICE_KEY: process.env.SUPABASE_SERVICE_KEY ? 'set (1:1 onboarding saves to Supabase)' : 'MISSING: 1:1 onboarding cannot save to Supabase (Ben is still emailed)'
   };
   if (!token) return reply(out);
 
