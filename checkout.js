@@ -15,6 +15,6 @@ window.BB_CHECKOUT = {
   // pdf = the Stripe link for every buy button. watch = the TrainingPeaks
   // upsell on the thank-you page, watchPrice its label, e.g. 'US$29'.
   // Empty links fall back to an email to Ben.
-  'base-builder': { pdf: '', watch: '', watchPrice: '' },
+  'base-builder': { pdf: 'https://buy.stripe.com/8x214gbpf86uaXs0NFaZi0F', watch: '', watchPrice: '' },
   'marathon': { pdf: 'https://buy.stripe.com/6oU14ggJz4Ui8Pk7c3aZi0D', plan: '', voice: '' }
 };
