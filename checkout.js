@@ -1,9 +1,10 @@
 // Stripe payment links for every plan and option.
-// Paste a link between the quotes to switch that button from "Join the waitlist"
-// to "Buy now". Leave it empty and the button collects a waitlist sign-up instead.
-//   pdf   = The PDF
-//   plan  = PDF + Training Plan
-//   voice = PDF + Training Plan + Voice Feedback
+// One option per plan for now (Ben, 24 Nov 2026): the PDF, with the
+// Ultimate Running Bible free. plan and voice are kept for the TrainingPeaks
+// upsell later; nothing on the pages links to them at the moment.
+//   pdf   = The PDF (+ the Ultimate Running Bible, sent by the Sparkies webhook)
+//   plan  = PDF + Training Plan (not shown)
+//   voice = PDF + Training Plan + Voice Feedback (not shown)
 window.BB_CHECKOUT = {
   'zero-to-runner': { pdf: 'https://buy.stripe.com/14A5kw1OF4Ui8PkaofaZi0v', plan: '', voice: '' },
   'run-faster': { pdf: 'https://buy.stripe.com/6oU5kw8d33Qe3v03ZRaZi0w', plan: 'https://buy.stripe.com/3cI14gctj4UighMcwnaZi0x', voice: 'https://buy.stripe.com/bJe4gsdxn9ay0iOcwnaZi0y' },
