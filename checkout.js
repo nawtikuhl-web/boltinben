@@ -11,5 +11,10 @@ window.BB_CHECKOUT = {
   '5k': { pdf: 'https://buy.stripe.com/9B6dR20KBeuS1mS0NFaZi0B', plan: '', voice: '' },
   '10k': { pdf: 'https://buy.stripe.com/dRmcMYeBraeCaXs8g7aZi0C', plan: '', voice: '' },
   '21k': { pdf: 'https://buy.stripe.com/3cI14g2SJ86u4z40NFaZi0u', plan: '', voice: '' },
+  // The Base Builder Bible at /base-builder (US$19, success URL /base-builder/thanks).
+  // pdf = the Stripe link for every buy button. watch = the TrainingPeaks
+  // upsell on the thank-you page, watchPrice its label, e.g. 'US$29'.
+  // Empty links fall back to an email to Ben.
+  'base-builder': { pdf: '', watch: '', watchPrice: '' },
   'marathon': { pdf: 'https://buy.stripe.com/6oU14ggJz4Ui8Pk7c3aZi0D', plan: '', voice: '' }
 };
