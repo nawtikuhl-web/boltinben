@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Run Faster in 30 Days · Boltin Ben</title>
-<meta name="description" content="Get fit again without getting wrecked. A 30-day plan built around work and kids. Four runs a week and a 5K time trial at each end, so there is one number that tells you it worked.">
+<meta name="description" content="Get fit again without getting wrecked. Four runs a week, three of them easy and one properly hard, and a 5K time trial at each end. A$29, with The Ultimate Running Bible free.">
 <meta property="og:title" content="Run Faster in 30 Days · Boltin Ben">
-<meta property="og:description" content="Get fit again without getting wrecked. A 30-day plan built around work and kids. Four runs a week and a 5K time trial at each end, so there is one number that tells you it worked.">
-<meta property="og:image" content="https://boltin.io/assets/og.jpg">
+<meta property="og:description" content="Get fit again without getting wrecked. Four runs a week, three of them easy and one properly hard, and a 5K time trial at each end. A$29, with The Ultimate Running Bible free.">
+<meta property="og:image" content="https://boltin.io/assets/rf-og.jpg">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#000000">
@@ -17,6 +17,268 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="/site.css">
 <script src="/analytics.js" defer></script>
+<style>
+/* Base Builder pages: no all-caps labels (Ben's brief, 24 Nov 2026) */
+/* Ben's brand guide (25 Nov): headlines are uppercase Barlow semibold; eyebrows are Barlow medium;
+   mono is for numbers and graphs only. Labels and buttons stay sentence case (his brief for this page). */
+.bb .mono,.bb .btn,.bb .chip,.bb .stat-top span,.bb .proof-quote figcaption{text-transform:none}
+.bb .mono,.bb .stat-top span,.bb .proof-quote figcaption{font-family:var(--body);font-weight:500}
+.bb h3{text-transform:uppercase}
+.bb .mono{letter-spacing:.01em;font-size:15px}
+.nav .brand{cursor:default}
+.nav-in{justify-content:space-between}
+.bb-foot{justify-content:center}
+.nav-links a,.nav-alt,.nav-cta,.foot nav a{text-transform:none;letter-spacing:.01em}
+.bb .btn{letter-spacing:.01em;font-size:16.5px}
+.bb .display{letter-spacing:-.012em;line-height:.96}
+.bb p+p{margin-top:12px}
+.bb .card p{color:var(--mute)}
+.bb .card b{color:var(--fg)}
+.bb .t-volt p,.bb .t-mint p{color:rgba(0,0,0,.76)}
+.bb .t-volt b,.bb .t-mint b{color:var(--ink)}
+.bb-hero-grid{align-items:stretch}
+.bb-intro{padding:44px;display:flex;flex-direction:column;justify-content:center}
+.bb-intro h1{font-size:clamp(46px,6vw,92px);margin-bottom:26px}
+.bb-intro .lede{font-size:21px;color:var(--fg)}
+.bb-side{display:grid;gap:var(--gap)}
+.bb-pace{padding:34px}
+.bb-pace-was{font-family:var(--mono);font-size:20px;color:var(--mute)}
+.bb-pace-was s{text-decoration-thickness:2px;text-decoration-color:var(--volt)}
+.bb-pace-now{font-family:var(--display);font-weight:600;font-size:clamp(84px,10vw,140px);line-height:.9;color:var(--volt);font-variant-numeric:tabular-nums;margin:6px 0 16px}
+.bb-pace-now small{font-family:var(--mono);font-size:20px;color:var(--mute);font-weight:400}
+.bb-bar{height:10px;border-radius:10px;background:var(--tile-2);overflow:hidden;margin-bottom:20px}
+.bb-bar i{display:block;height:100%;width:100%;background:var(--volt);border-radius:10px}
+.bb-pace-cap{font-size:19px}
+/* the heart rate stays put while the pace drops (Ben, 26 Nov) */
+.bb-hr{display:flex;align-items:center;gap:10px;color:var(--purple);margin-bottom:22px;overflow:hidden}
+.bb-hr-heart{width:26px;height:26px;flex:none;transform-origin:50% 55%;animation:bb-beat .94s ease-in-out infinite}
+.bb-hr-num{font-family:var(--mono);font-size:26px;font-weight:500;color:var(--fg);font-variant-numeric:tabular-nums}
+.bb-hr-unit{font-family:var(--mono);font-size:15px;color:var(--mute);margin-right:6px}
+.bb-hr-line{flex:1 1 0;width:0;min-width:0;height:34px}
+.bb-hr-line path{stroke-dasharray:100;stroke-dashoffset:100;animation:bb-ecg 1.88s linear infinite}
+@keyframes bb-beat{0%,100%{transform:scale(1)}12%{transform:scale(1.22)}24%{transform:scale(1)}36%{transform:scale(1.14)}48%{transform:scale(1)}}
+@keyframes bb-ecg{0%{stroke-dashoffset:100;opacity:1}70%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
+@media (prefers-reduced-motion:reduce){.bb-hr-heart{animation:none}.bb-hr-line path{animation:none;stroke-dashoffset:0}}
+.bb-mi{font-family:var(--mono);font-size:18px;color:var(--fg)!important;margin:0 0 16px!important}
+.bb-mi s{color:var(--mute);text-decoration-color:var(--volt)}
+.bb-mi-in{display:block;font-family:var(--body);font-weight:400;font-size:17px;color:var(--mute);margin-top:8px}
+.bb-buy{padding:28px;display:grid;grid-template-columns:150px 1fr;gap:26px;align-items:center}
+.bb-buy-cover{width:150px;height:auto;border-radius:8px;box-shadow:0 18px 40px rgba(0,0,0,.45);transform:rotate(-2deg)}
+.bb-buy-body{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+.bb-pages{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 0 18px;margin-bottom:var(--gap);scrollbar-width:thin}
+.bb-pages img{flex:none;width:210px;height:auto;border-radius:10px;scroll-snap-align:start;box-shadow:0 0 0 1px var(--line)}
+.bb-buy h2{font-size:clamp(36px,3.8vw,56px)}
+.bb-buy p{font-size:17px}
+.bb-buy .btn{margin-top:4px}
+.bb-small{font-size:14.5px!important;line-height:1.45}
+.bb-story h2{font-size:clamp(38px,4.4vw,66px);margin-bottom:8px}
+.bb-text{padding:40px}
+.bb-text h2{font-size:clamp(38px,4.4vw,64px);margin-bottom:22px}
+.bb-text .lede{font-size:21px;color:var(--fg)}
+.bb-list{padding:40px}
+.bb-list .ticks li{font-size:17.5px;color:var(--fg)}
+.bb-after{margin-top:24px!important;color:var(--fg)!important;font-size:19px}
+.bb-note{font-size:15.5px;margin-top:20px!important}
+.bb-test-row{display:flex;align-items:center;gap:14px;margin-bottom:24px}
+.bb-test-wk{display:flex;flex-direction:column;gap:4px;padding:14px 18px;border-radius:12px;background:var(--tile-2)}
+.bb-test-wk b{font-size:19px}
+.bb-test-wk.on{background:var(--volt)}
+.bb-test-wk.on b,.bb-test-wk.on .mono{color:var(--ink)}
+.bb-test-line{flex:1;height:2px;background:repeating-linear-gradient(90deg,var(--volt) 0 8px,transparent 8px 14px)}
+.bb-plan{padding:32px;display:flex;flex-direction:column;gap:18px}
+.bb-plan-no{font-family:var(--display);font-weight:600;font-size:54px;line-height:1;color:var(--volt)}
+.bb-plan h3{font-family:var(--display);font-size:32px;font-weight:600;line-height:1}
+.bb-plan .mono{display:block;margin-bottom:6px}
+.bb-plan p{font-size:16.5px}
+.bb-plan div p{color:var(--fg)}
+.bb-plan-foot{margin-top:auto!important}
+.bb-all{margin-top:var(--gap);padding:30px 34px;display:flex;justify-content:space-between;align-items:center;gap:20px 40px;flex-wrap:wrap}
+.bb-all h3{font-family:var(--display);font-size:clamp(30px,3vw,42px);font-weight:600;line-height:1;margin-bottom:8px}
+.bb-all-aside{max-width:22em;font-size:18px}
+.bb .feat h3{font-size:27px;line-height:1.02}
+.bb-fine{font-size:18px;color:var(--fg)}
+.bb-weeks{list-style:none;margin:0 0 var(--gap);padding:0;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px}
+.bb-weeks li{position:relative;background:var(--tile);border-radius:12px;padding:12px 12px 14px;font-family:var(--display);font-weight:600;font-size:40px;line-height:1;min-height:110px;display:flex;flex-direction:column;justify-content:flex-start;gap:8px}
+.bb-weeks li span{font-family:var(--body);font-size:13.5px;font-weight:500;color:var(--mute)}
+.bb-weeks li i{position:absolute;left:12px;bottom:12px;font-style:normal;font-family:var(--body);font-size:13px;font-weight:500}
+.bb-weeks li.rec{background:transparent;box-shadow:inset 0 0 0 1.5px var(--mint);color:var(--mint)}
+.bb-weeks li.rec{justify-content:flex-start;gap:8px}
+.bb-weeks li.hi{background:var(--volt);color:var(--ink)}
+.bb-weeks li.hi span{color:rgba(0,0,0,.7)}
+.bb-weeks li.hi{justify-content:flex-start;gap:8px}
+.bb-phases{grid-template-columns:repeat(4,minmax(0,1fr))}
+.bb-phases .feat{justify-content:flex-start;min-height:0;padding:28px}
+.bb-phases .feat p{margin:0}
+.bb-bonus{padding:44px;display:grid;grid-template-columns:1.1fr 1fr;gap:30px 60px;align-items:end;box-shadow:inset 0 0 0 1.5px var(--volt)}
+.bb-bonus .mono{display:block;margin-bottom:14px;color:var(--volt)}
+.bb-bonus h2{font-size:clamp(40px,5vw,76px);margin-bottom:16px}
+.bb-bonus-price{font-size:19px;color:var(--fg)!important}
+.bb-bonus-price s{text-decoration-color:var(--volt);text-decoration-thickness:2px}
+.bb-bonus-body p{font-size:19px}
+.bb-bonus-body .btn{margin-top:24px}
+.bb-promise{padding:44px;display:grid;grid-template-columns:1fr 1fr;gap:24px 60px;align-items:start}
+.bb-promise h2{font-size:clamp(40px,5vw,76px);color:var(--ink)}
+.bb-promise-sub{font-size:22px;margin-top:16px;color:var(--ink)!important}
+.bb-promise-body p{font-size:18.5px}
+.bb-faq{display:grid;gap:8px}
+.bb-faq details{background:var(--tile);border-radius:14px}
+.bb-faq summary{cursor:pointer;list-style:none;padding:22px 60px 22px 26px;font-size:20px;font-weight:600;position:relative}
+.bb-faq summary::-webkit-details-marker{display:none}
+.bb-faq summary::after{content:"+";position:absolute;right:26px;top:50%;transform:translateY(-50%);font-size:28px;font-weight:400;color:var(--volt);line-height:1}
+.bb-faq details[open] summary::after{content:"−"}
+.bb-faq details>div{padding:0 26px 24px;max-width:46em}
+.bb-faq details p{color:var(--mute);font-size:17.5px}
+.bb-final{padding:56px 44px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.bb-final h2{font-size:clamp(48px,7vw,110px);margin-bottom:26px}
+.bb-final p{font-size:19px;max-width:34em}
+.bb-final-big{font-family:var(--display);font-weight:600;font-size:clamp(28px,3vw,40px)!important;color:var(--fg)!important;margin:26px 0 22px!important}
+.bb-final .bb-small{margin-top:18px!important}
+.bb-sign{margin-top:34px!important;color:var(--fg)!important}
+.bb-ben{display:inline-flex;align-items:center;gap:6px;font-weight:600;white-space:nowrap}
+.bb-ben svg{width:18px;height:16px;color:var(--volt)}
+@media (max-width:900px){
+  .bb-phases{grid-template-columns:1fr 1fr}
+  .bb-weeks{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .bb-bonus,.bb-promise{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .bb-buy{grid-template-columns:1fr}
+  .bb-buy-cover{width:130px}
+  .bb-pages img{width:170px}
+  .bb-intro,.bb-pace,.bb-buy,.bb-text,.bb-list,.bb-plan,.bb-bonus,.bb-promise,.bb-final{padding:24px}
+  .bb-final{padding:36px 22px}
+  .bb-phases{grid-template-columns:1fr}
+  .bb-weeks li{min-height:84px;font-size:32px}
+  .bb .btn{white-space:normal;text-align:center;width:100%}
+  .bb-faq summary{font-size:18px;padding:18px 52px 18px 20px}
+  .bb-faq summary::after{right:20px}
+  .bb-faq details>div{padding:0 20px 20px}
+}
+/* visuals pass (25 Nov) */
+.bb .photo{position:relative;overflow:hidden;border-radius:var(--r)}
+.bb .photo>img{width:100%;height:100%;object-fit:cover;display:block}
+.bb-hero-photo{height:min(78vh,720px);min-height:460px;margin-bottom:var(--gap)}
+.bb-hero-photo>img{object-position:50% 46%}
+.bb-hero-photo::after,.bb-over::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 30%,rgba(0,0,0,.82) 100%)}
+.bb-hero-photo h1{color:var(--volt);position:absolute;left:44px;right:44px;bottom:40px;z-index:1;font-size:clamp(50px,8.4vw,132px);max-width:9em}
+.bb-intro h1{display:none}
+.bb-pull{font-family:var(--display);font-weight:600;font-size:clamp(24px,2.3vw,32px)!important;line-height:1.12;color:var(--fg)!important;margin:22px 0 10px!important}
+.bb-pull-volt{color:var(--volt)!important;font-size:clamp(28px,3vw,42px)!important}
+.bb-loop{list-style:none;padding:0;margin:14px 0 6px;display:flex;flex-wrap:wrap;gap:8px;counter-reset:lp}
+.bb-loop li{counter-increment:lp;background:var(--tile-2);border-radius:10px;padding:10px 14px;font-size:16px;color:var(--fg);display:flex;gap:10px;align-items:baseline}
+.bb-loop li::before{content:counter(lp);font-family:var(--mono);font-size:12.5px;color:var(--volt)}
+.bb-loop li:last-child{background:var(--volt);color:var(--ink);font-weight:600}
+.bb-loop li:last-child::before{content:none}
+.bb-band-sec{padding-block:0!important}
+.bb-band{display:grid;grid-template-columns:repeat(6,1fr);gap:var(--gap);padding:0 var(--gap)}
+.bb-band img{width:100%;aspect-ratio:3/4.4;object-fit:cover;border-radius:var(--r)}
+.bb-band img:nth-child(even){margin-top:36px}
+.bb-over{min-height:560px;display:flex;align-items:flex-end}
+.bb-over>img{position:absolute;inset:0}
+.bb-over>div{position:relative;z-index:1;padding:40px}
+.bb-over h2{font-size:clamp(38px,4.4vw,64px);margin-bottom:18px}
+.bb-over p{color:rgba(255,255,255,.86);font-size:18px}
+.bb-over .lede{font-size:21px;color:#fff}
+.bb-nums{counter-reset:n;gap:0!important}
+.bb-nums li{counter-increment:n;padding:14px 0 14px 58px!important;font-size:19px!important}
+.bb-nums li::before{content:counter(n,decimal-leading-zero)!important;background:none!important;width:auto!important;height:auto!important;top:14px!important;font-family:var(--display);font-weight:600;font-size:26px;color:var(--volt)}
+.bb-same{list-style:none;padding:0;margin:16px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bb-same li{background:var(--tile-2);border-radius:12px;padding:16px 14px;font-weight:600;color:var(--fg);font-size:17px}
+.bb-nos{list-style:none;padding:0;margin:16px 0;display:flex;flex-wrap:wrap;gap:8px}
+.bb-nos li{border-radius:100px;padding:9px 16px;font-size:15.5px;color:var(--fg);box-shadow:inset 0 0 0 1.5px var(--line)}
+.bb-plan{padding:0!important;overflow:hidden;gap:0!important}
+.bb-plan>*:not(.bb-plan-ph){margin-inline:28px}
+.bb-plan>h3{margin-top:24px}
+.bb-plan>div:not(.bb-plan-ph):not(.bb-min),.bb-plan>p{margin-top:18px}
+.bb-plan-ph{height:230px;border-radius:0!important}
+.bb-plan-ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(30,30,30,1) 100%)}
+.bb-plan-ph .bb-plan-no{position:absolute;left:28px;bottom:6px;z-index:1;font-size:72px}
+.bb-min{margin-top:auto!important;padding:22px 0 26px}
+.bb-plan .bb-plan-foot{margin-top:18px!important}
+.bb-min-bars{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;align-items:end;height:110px;margin-top:26px}
+.bb-min-bars i{position:relative;display:block;background:var(--volt);border-radius:5px 5px 2px 2px;min-height:8px}
+.bb-min-bars i.lt{background:var(--purple)}
+.bb-min-bars b{position:absolute;left:0;right:0;top:-19px;text-align:center;font-family:var(--mono);font-size:11.5px;font-weight:400;color:var(--mute)!important}
+
+.bb-bonus-cover{width:150px;height:auto;border-radius:8px;transform:rotate(3deg);box-shadow:0 18px 40px rgba(0,0,0,.5)}
+.bb-promise-grid{grid-template-columns:.7fr 1.3fr}
+.bb-promise-grid .bb-ph{min-height:340px}
+.bb-promise{grid-template-columns:1fr!important;align-content:center}
+.bb-final{position:relative;overflow:hidden}
+.bb-final>*{position:relative;z-index:1}
+.bb-final-bg{position:absolute!important;inset:0;width:100%;height:100%;object-fit:cover;opacity:.34;z-index:0!important}
+.bb-final-cover{width:150px;height:auto;border-radius:8px;transform:rotate(-3deg);box-shadow:0 20px 50px rgba(0,0,0,.6);margin-bottom:30px}
+.bb-final p{color:rgba(255,255,255,.86)!important}
+@media (max-width:900px){
+  .bb-band{grid-template-columns:repeat(3,1fr)}
+  .bb-bonus{grid-template-columns:1fr!important}
+  .bb-promise-grid{grid-template-columns:1fr}
+  .bb-promise-grid .bb-ph{min-height:0;aspect-ratio:16/10}
+}
+@media (max-width:640px){
+  .bb-hero-photo{height:70vh;min-height:420px}
+  .bb-hero-photo h1{left:22px;right:22px;bottom:24px}
+  .bb-over{min-height:480px}
+  .bb-over>div{padding:24px}
+  .bb-same{grid-template-columns:1fr}
+  .bb-band img:nth-child(even){margin-top:18px}
+  .bb-plan>*:not(.bb-plan-ph){margin-inline:22px}
+  .bb-plan-ph .bb-plan-no{left:22px}
+  .bb-bonus-cover{width:120px}
+}
+/* 25 Nov, Ben's notes: icons on the feature cards, crops that keep his head in frame, a three-up hero on desktop */
+.bb-ic{width:34px;height:34px;color:var(--volt);flex:none;margin-bottom:6px}
+.bb .feat{justify-content:flex-start;gap:12px}
+.bb-plan-ph{height:300px}
+.bb-plan-ph img[src*="zero"]{object-position:50% 30%}
+.bb-plan-ph img[src*="going"]{object-position:50% 34%}
+.bb-plan-ph img[src*="engine"]{object-position:30% 6%}
+.bb-over>img[src*="tree"]{object-position:50% 78%}
+.bb-over>img[src*="reflect"]{object-position:50% 88%}
+.bb-over>img[src*="steps"]{object-position:50% 66%}
+.bb-over{min-height:640px}
+.bb-promise-grid img{object-position:50% 40%}
+@media (min-width:1100px){
+  .bb-hero-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .bb-side{display:contents}
+  .bb-intro{padding:34px;justify-content:flex-start}
+  .bb-intro .lede{font-size:24px;line-height:1.25}
+  .bb-intro p{font-size:18px}
+  .bb-pace{display:flex;flex-direction:column;justify-content:center}
+  .bb-pace-now{font-size:clamp(84px,8.4vw,124px)}
+  .bb-buy{grid-template-columns:1fr;align-content:center;gap:20px}
+  .bb-buy-cover{width:120px}
+  .bb-buy h2{font-size:clamp(34px,3.2vw,46px)}
+}
+/* Run Faster in 30 Days, in the Base Builder layout (26 Nov) */
+.rf-hero-photo>img{object-position:50% 22%!important}
+.rf-week .mono{display:block;margin-bottom:6px}
+.rf-bars{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-items:end;height:170px;margin:26px 0 34px}
+.rf-bars i{position:relative;display:block;background:var(--purple);border-radius:8px 8px 3px 3px}
+.rf-bars i.hard{background:var(--volt)}
+.rf-bars b{position:absolute;left:0;right:0;bottom:-24px;text-align:center;font-family:var(--body);font-size:14px;font-weight:500;color:var(--mute)!important}
+.rf .bb-plan h3{margin-top:10px}
+.rf .bb-plan>div:not(.bb-plan-ph){margin-top:22px}
+.rf .bb-plan>p:last-child{margin-bottom:28px}
+.rf-weeks{grid-template-columns:repeat(4,minmax(0,1fr))}
+.rf .bb-nums li b{color:var(--fg)}
+.rf-vs{display:grid;gap:8px}
+.rf-vs-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rf-vs-row>*{background:var(--tile);border-radius:14px;padding:20px 22px;margin:0!important;font-size:17px;line-height:1.45;color:var(--mute)}
+.rf-vs-row>*:last-child{background:var(--tile-2);color:var(--fg)}
+.rf-vs-row b{display:block;color:var(--fg);font-size:18.5px;margin-bottom:4px}
+.rf-vs-head>*{background:none!important;padding:0 22px 4px;font-family:var(--body);font-weight:500;font-size:15px;color:var(--mute)!important}
+.rf-vs-head>*:last-child{color:var(--volt)!important}
+.rf-not{font-family:var(--display);font-weight:600;font-size:24px;margin:28px 0 14px}
+.rf .bb-list a{color:var(--volt)}
+.rf .bb-over .lede{margin-bottom:8px}
+@media (max-width:640px){
+  .rf-vs-row{grid-template-columns:1fr;gap:4px;margin-bottom:8px}
+  .rf-vs-head{display:none}
+  .rf-vs-row>*:first-child{text-decoration:line-through;text-decoration-color:rgba(255,255,255,.25)}
+  .rf-vs-row>*:first-child b{text-decoration:line-through;text-decoration-color:rgba(255,255,255,.35)}
+}
+</style>
 </head>
 <body>
 
@@ -30,108 +292,319 @@
 
 <header class="nav">
   <div class="wrap nav-in">
-    <a class="brand" href="/" aria-label="Boltin Ben, home"><svg class="mark"><use href="#i-mark"/></svg><svg class="word"><use href="#i-word"/></svg></a>
-    <nav class="nav-links" aria-label="Pages">
-      <a href="/plans" aria-current="page">Plans</a>
-      <a href="/community">Community</a>
-      <a href="/coaching">Coaching</a>
-      <a href="/free">Free tools</a>
-    </nav>
-    <a class="nav-alt" href="/">Menu</a>
-    <a class="nav-cta m-hide" href="/plans">Get a plan <span class="ar" aria-hidden="true">→</span></a>
+    <span class="brand" aria-label="Boltin Ben"><svg class="mark"><use href="#i-mark"/></svg><svg class="word"><use href="#i-word"/></svg></span>
+    <a class="nav-cta" href="#buy">Get the plan <span class="ar" aria-hidden="true">→</span></a>
   </div>
 </header>
 
-<main id="top" class="page">
+<main id="top" class="page bb rf">
+
+<section class="bb-hero">
+  <div class="wrap">
+    <div class="photo bb-hero-photo rf-hero-photo">
+      <img src="/assets/bb-ph-city.webp" alt="Ben running through the city in the morning sun" fetchpriority="high">
+      <h1 class="display">Run faster in 30 days.</h1>
+    </div>
+    <div class="grid g2 bb-hero-grid">
+      <div class="card bb-intro">
+        <p class="lede">You can run 5K. You have been able to for years.</p>
+        <p>You are just not getting any faster.</p>
+        <p>Tuesday, Thursday, Saturday. Same loop, every run at the effort that feels like it counts. Same calf.</p>
+        <p class="bb-pull">Nobody told you the slow runs are the ones that make you fast.</p>
+        <p>So you push, you get wrecked in week three, and you start again when work calms down.</p>
+        <p><b>This is 30 days of asking your body for something else.</b></p>
+      </div>
+      <div class="bb-side">
+        <div class="card bb-pace rf-week">
+          <span class="mono">Your week, on a chart</span>
+          <div class="rf-bars" role="img" aria-label="Four runs a week: three easy, one properly hard">
+            <i style="height:34%"><b>Easy</b></i><i style="height:34%"><b>Easy</b></i><i class="hard" style="height:100%"><b>Session</b></i><i style="height:34%"><b>Easy</b></i>
+          </div>
+          <p class="bb-pace-cap"><b>Every run has a job. Most of them are easy.</b></p>
+          <p>Four runs a week around work and the kids. Three of them easy, one properly hard, and a 5K time trial at each end so there is one number that tells you it worked.</p>
+        </div>
+        <div class="card t-volt bb-buy">
+          <img class="bb-buy-cover" src="/assets/rf-cover.webp" alt="Run Faster in 30 Days cover" width="620" height="879">
+          <div class="bb-buy-body">
+          <span class="mono">Run Faster in 30 Days</span>
+          <h2 class="display">Get fit again without getting wrecked.</h2>
+          <p>30 days. 17 sessions. 2 time trials.</p>
+          <a class="btn btn-dark" href="https://buy.stripe.com/6oU5kw8d33Qe3v03ZRaZi0w" data-checkout data-what="hero">Get the plan · $29 <span class="ar" aria-hidden="true">→</span></a>
+          <p class="bb-small">One payment of A$29. Includes The Ultimate Running Bible (worth $19) for free. Money back if day 30 is not faster than day 1.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section>
   <div class="wrap">
-    <div class="grid plan-hero">
-      <div class="photo plan-hero-photo">
-        <img src="/assets/p-faster.webp" alt="" fetchpriority="high">
-        <span class="chip">Most popular</span>
-        <div>
-          <span class="plan-hero-dist display">30 Days</span>
-          <h1 class="display">Run Faster in 30 Days</h1>
-        </div>
+    <div class="head">
+      <div>
+        <h2 class="display">Get fit again without getting <em>wrecked.</em></h2>
       </div>
-      <div class="card plan-hero-card">
-        <span class="mono"><a href="/plans">Training plans</a> · 30 Days</span>
-        <h2 class="display">Get fit again without getting wrecked.</h2>
-        <p class="lede">A 30-day plan built around work and kids. Four runs a week and a 5K time trial at each end, so there is one number that tells you it worked.</p>
-        <ul class="rows">
-          <li><b>Length</b><span>30 days</span></li>
-          <li><b>Sessions</b><span>4 runs a week</span></li>
-          <li><b>The test</b><span>5K time trial, day 1 and day 30</span></li>
-          <li><b>Guarantee</b><span>Money back if day 30 is not faster</span></li>
-        </ul>
-        <div><a class="btn btn-volt" href="#options">Get the plan <span class="ar" aria-hidden="true">→</span></a></div>
+      <p>No theory, no zone-2 lecture, no sixteen-week block you won't finish. Four runs a week, and a number.</p>
+    </div>
+    <div class="grid g3">
+      <div class="card bb-plan">
+        <div class="photo bb-plan-ph"><img src="/assets/rf-beat-1.webp" alt="Ben catching his breath after a hard effort" loading="lazy"><span class="bb-plan-no">01.</span></div>
+        <div><span class="mono">First</span></div>
+        <h3>Find out what you actually run</h3>
+        <p>Day 1 is a 5K at the pace you can just hold. It hurts more than you expected and the time is worse than the one you've been telling people. Good. Now there's a number.</p>
+        <p>Then you spend a week running so easy it makes you self-conscious, which is the hardest week of the plan, because every part of you wants to speed up.</p>
+      </div>
+      <div class="card bb-plan">
+        <div class="photo bb-plan-ph"><img src="/assets/rf-beat-2.webp" alt="Ben's stride, mid-run" loading="lazy"><span class="bb-plan-no">02.</span></div>
+        <div><span class="mono">Then</span></div>
+        <h3>Get the speed back</h3>
+        <p>Strides in week two. Twenty seconds fast, walk back, again. Your legs remember a gear they haven't used since you played sport, and nothing hurts, because twenty seconds isn't enough to hurt.</p>
+        <p>Then the session. Rep one you think it's a mistake. Rep four, it clicks.</p>
+      </div>
+      <div class="card bb-plan">
+        <div class="photo bb-plan-ph"><img src="/assets/rf-beat-3.webp" alt="Ben checking his time after a run" loading="lazy"><span class="bb-plan-no">03.</span></div>
+        <div><span class="mono">Finally</span></div>
+        <h3>Run the number</h3>
+        <p>Week four is lighter on purpose. You'll hate it, and it's the week the fitness shows up.</p>
+        <p>Day 30 is the same loop with legs that feel like someone else's. You stop the watch, look down, and it's a number you haven't seen on that route in years.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section id="options">
+<section>
   <div class="wrap">
     <div class="head">
       <div>
-        <span class="mono">One payment, yours to keep</span>
-        <h2 class="display">Get the <em>plan.</em></h2>
+        <h2 class="display">You've spent a year running one pace. This is 30 days of running <em>four.</em></h2>
       </div>
-      <p>The full plan as a PDF, with my Ultimate Running Bible thrown in free.</p>
+      <p>Four weeks, four jobs.</p>
     </div>
-    <div class="grid g2">
-      <div class="card rate pick">
-        <span class="mono">The plan</span>
-        <h3>Run Faster in 30 Days</h3>
-        <div class="num">$29<small> one payment</small></div>
-        <p>The full plan, every session written out.</p>
-        <ul>
-          <li>Instant download by email</li>
-          <li>Yours to keep</li>
-          <li>Print it, stick it on the fridge</li>
-          <li>The Ultimate Running Bible, free</li>
-        </ul>
-        <a class="btn btn-dark" href="#options" data-buy="pdf" data-plan="run-faster" data-name="Run Faster in 30 Days">Buy now <span class="ar" aria-hidden="true">→</span></a>
-      </div>
-      <div class="card rate">
-        <span class="mono">Free with your plan</span>
-        <h3>The Ultimate Running Bible</h3>
-        <div class="num">$0<small> valued at $19</small></div>
-        <p>My Ultimate Running Bible comes with every plan, at no extra cost.</p>
-        <ul>
-          <li>Lands in the same email as your plan</li>
-          <li>Yours to keep</li>
-          <li>Nothing extra to buy</li>
-        </ul>
-      </div>
+    <ol class="bb-weeks rf-weeks" aria-label="The four weeks">
+      <li><span>Week</span>1</li><li><span>Week</span>2</li><li><span>Week</span>3</li><li class="hi"><span>Week</span>4<i>Day 30</i></li>
+    </ol>
+    <div class="grid bb-phases">
+      <div class="card feat"><span class="mono">Week 1</span><h3>Slow down.</h3><p>Day 1 time trial, then three runs at a pace you've been too proud to run.</p><p><b>Easy is a skill. You learn it here.</b></p></div>
+      <div class="card feat"><span class="mono">Week 2</span><h3>Get the speed back.</h3><p>Short, fast, fully recovered.</p><p>The turnover you had at 25 without the volume that wrecked you at 35.</p></div>
+      <div class="card feat"><span class="mono">Week 3</span><h3>The session.</h3><p>The one properly hard run.</p><p>Everything else exists so this one can be fast.</p></div>
+      <div class="card feat t-volt"><span class="mono">Week 4</span><h3>Fresh legs.</h3><p>Less running, on purpose. You've never once arrived at a start line fresh.</p><p>Then day 30, same loop, the number.</p></div>
     </div>
-    <p class="fine">Money back if day 30 is not faster than day 1. Prices in AUD.</p>
   </div>
 </section>
 
+<section>
+  <div class="wrap">
+    <div class="grid g2">
+      <div class="photo bb-over">
+        <img src="/assets/bb-ph-palms.webp" alt="Ben running easy along a road lined with palm trees" loading="lazy">
+        <div>
+          <h2 class="display">Nobody told you the slow runs make you <em>fast.</em></h2>
+          <p>Your mates on Strava didn't. The watch didn't. The last three plans you didn't finish didn't. Here's what changes when someone does.</p>
+        </div>
+      </div>
+      <div class="card list-card bb-list">
+        <ul class="ticks bb-nums">
+          <li><b>Easy stops being embarrassing.</b> You'll run past people, slowly, and not care, because you know what Thursday is for.</li>
+          <li><b>Your calf stops running your calendar.</b> Three easy days a week is the injury prevention plan. There isn't another one.</li>
+          <li><b>Strava stops being a scoreboard.</b> The only number that matters is on your fridge, next to a blank one.</li>
+          <li><b>The comeback stops ending in week three.</b> You're not asking a 38-year-old body for what it did at 25. You're asking it for 30 days.</li>
+          <li><b>Your kids see you run.</b> Not from the sideline. On the loop, on a Sunday, with a time to tell them about.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <h2 class="display">What every other plan says. What this one <em>does.</em></h2>
+      </div>
+    </div>
+    <div class="rf-vs">
+      <div class="rf-vs-row rf-vs-head"><span>Everything else you've tried</span><span>Run Faster in 30 Days</span></div>
+      <div class="rf-vs-row"><p><b>Push yourself every run.</b> Every run at 80 percent. Never recover, never adapt.</p><p><b>Three runs you could talk through.</b> Easy is a pace. It's the one that makes the hard day possible.</p></div>
+      <div class="rf-vs-row"><p><b>Tempo run, comfortably hard.</b> Whatever that means on a Thursday at lunch.</p><p><b>One session a week, to the minute.</b> Reps, recoveries, pace off your own day 1.</p></div>
+      <div class="rf-vs-row"><p><b>Volume for the 25-year-old you were.</b> Six runs, a long one, and the achilles in week three.</p><p><b>Volume for a 38-year-old with a job.</b> Four runs, 30 to 45 minutes. Nothing long enough to break a calf.</p></div>
+      <div class="rf-vs-row"><p><b>Sixteen weeks you won't finish.</b> Built for someone with no job, no kids and a sports science degree.</p><p><b>30 days around a 9 to 5 and the kids.</b> Before the house wakes up, at lunch, when your partner has them.</p></div>
+      <div class="rf-vs-row"><p><b>Your mates' splits in your feed.</b> Run harder to keep up. Get wrecked. Repeat.</p><p><b>A number on the fridge, next to a blank one.</b> The only comparison is you, four weeks ago.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="client">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <span class="mono">From someone I coach</span>
+        <h2 class="display">16 minutes off <em>his half.</em></h2>
+      </div>
+      <p>Igor trains with me from Ubud, where none of the routes are flat. His first half marathon was 1:58:57. His second was 1:42:30.</p>
+    </div>
+    <div class="grid proof">
+      <div class="photo proof-photo">
+        <img src="/assets/igor-maybank.webp" alt="Igor running the Maybank Marathon half in Bali, past a temple gate" width="685" height="725" loading="lazy">
+      </div>
+      <figure class="card proof-quote">
+        <blockquote>
+          <p>&ldquo;Two months in Ubud that changed how I run.</p>
+          <p>In December I ran my first half marathon in 1:58:57. This weekend, I crossed the finish line of my second @maybankmarathon in 1:42:30. 16-minute improvement, ~ 14% faster, and a new pace of 4:50/km compared to 5:38/km. Big thanks to my running coach @boltinben for guiding me with the right structure and mindset.&rdquo;</p>
+        </blockquote>
+        <figcaption>@igor.nowhere &middot; Maybank Marathon half</figcaption>
+      </figure>
+    </div>
+    <div class="grid proof-stats">
+      <div class="card stat t-volt"><div class="stat-top"><span>Half marathon</span></div><div class="num">1:42:30</div><p>Down from 1:58:57</p></div>
+      <div class="card stat"><div class="stat-top"><span>Faster</span></div><div class="num">16<small>min</small></div><p>About 14% quicker</p></div>
+      <div class="card stat"><div class="stat-top"><span>Race pace</span></div><div class="num">4:50<small>/km</small></div><p>Was 5:38 /km. In miles, 7:47 from 9:04.</p></div>
+      <div class="card stat"><div class="stat-top"><span>Ubud MelancaRun 11K</span></div><div class="num">1st</div><p>Run as an easy day, mid marathon block</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <h2 class="display">What's <em>inside?</em></h2>
+      </div>
+    </div>
+    <div class="grid g3">
+      <div class="card feat"><svg class="bb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4M7.500 13.500h3M7.500 16.500h3M13.500 13.500h3"/></svg><h3>17 session cards</h3><p>30 days, written to the minute. Every card fits in 30 to 45 minutes.</p></div>
+      <div class="card feat"><svg class="bb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.500" r="7.500"/><path d="M12 13.500V9.500M9.500 2.500h5M12 2.500V6M18.500 7l1.500-1.500"/></svg><h3>Two time trials</h3><p>Day 1 and day 30 instructions, so progress is measured rather than felt.</p></div>
+      <div class="card feat"><svg class="bb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17.500l5-5 4 3 8.500-9"/><path d="M15.500 6.500h5v5"/></svg><h3>Your own paces</h3><p>Paces for every rep, set from your own day 1.</p></div>
+      <div class="card feat"><svg class="bb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.500h16v10H9l-5 4z"/><path d="M8 9.500h8M8 12.500h5"/></svg><h3>The talk test</h3><p>So you know what easy actually is.</p></div>
+      <div class="card feat"><svg class="bb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.500 6.500h11M9.500 12h11M9.500 17.500h11"/><path d="M3.500 6.500l1.300 1.300L7 5.500M3.500 12l1.300 1.300L7 11M3.500 17.500l1.300 1.300L7 16.500"/></svg><h3>When life gets in the way</h3><p>What to do when you miss a run, when the calf twinges, when it's raining.</p></div>
+      <div class="card feat"><svg class="bb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3.500h10l4 4v13H5z"/><path d="M15 3.500v4h4M8.500 12h7M8.500 15.500h7"/></svg><h3>The playbook and the fridge sheet</h3><p>The Run Faster 4 Longer playbook, the book behind the plan. Plus one page, 30 boxes, two blank times.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="card bb-bonus">
+      <div>
+        <span class="mono">A little extra for your running education.</span>
+        <h2 class="display">Free: The Ultimate Running <em>Bible</em></h2>
+        <p class="bb-bonus-price">Normally <s>$19</s>. Yours free with Run Faster in 30 Days.</p>
+      </div>
+      <div class="bb-bonus-body">
+        <p>The guide I wish someone had handed me when I started running.</p>
+        <p>Because there's only so much you should have to learn through personal suffering and questionable Google searches.</p>
+        <a class="btn btn-volt" href="https://buy.stripe.com/6oU5kw8d33Qe3v03ZRaZi0w" data-checkout data-what="bonus">Get the plan and the Bible · $29 <span class="ar" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="grid g2">
+      <div class="photo bb-over">
+        <img src="/assets/bb-ph-road.webp" alt="Ben running down a quiet road towards the sea" loading="lazy">
+        <div>
+          <h2 class="display">Who it's <em>for.</em></h2>
+          <p class="lede">You used to play sport. You still think of yourself as fit.</p>
+          <p>Every run is too hard because easy feels embarrassingly slow, and you're always wrecked, slower than you were, slower than your mates on Strava, and it bothers you more than you say.</p>
+        </div>
+      </div>
+      <div class="card list-card bb-list">
+        <p class="bb-after" style="margin-top:0!important">Or: you want to be a runner, you've started and stopped more times than you'd admit, every run feels hard, and somewhere along the way you decided you're just not one.</p>
+        <p><b>You are. You've been running at the wrong effort.</b></p>
+        <h3 class="rf-not">Who it's not for</h3>
+        <ul class="ticks">
+          <li>You can't run 5K yet. <a href="/base-builder">The Base Builder Bible</a> first.</li>
+          <li>You want a marathon plan. This is what you do before one so it doesn't break you.</li>
+          <li>You want every run to hurt. Three of the four won't.</li>
+          <li>You're carrying an injury right now. Get it looked at first.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="grid bb-promise-grid">
+    <div class="photo bb-ph"><img src="/assets/bb-ph-park.webp" alt="Ben running across a park at golden hour" loading="lazy"></div>
+    <div class="card t-mint bb-promise">
+      <div>
+        <h2 class="display">Money back if day 30 is not faster than day 1.</h2>
+      </div>
+      <div class="bb-promise-body">
+        <p>Do the 17 sessions, run both time trials.</p>
+        <p>If the second number is not smaller than the first, email me your two times and the price comes back.</p>
+        <p>No form, no interrogation. I would rather know.</p>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <h2 class="display">The ones people <em>ask.</em></h2>
+      </div>
+    </div>
+    <div class="bb-faq">
+      <details><summary>What if I'm slower than I think I am?</summary><div><p>You are. Everyone is on day 1. That's why day 1 exists. The number is the starting line, not a verdict, and in 30 days it's the one you beat.</p></div></details>
+      <details><summary>Will the easy runs feel like a waste of time?</summary><div><p>Yes, for about a week. Then the session comes and you'll understand what they were for. Easy days are the injury prevention plan. There isn't a separate one.</p></div></details>
+      <details><summary>I'm 40. Am I too old to get faster?</summary><div><p>No. You're too old to do the volume you did at 25, which is why every comeback has ended in a calf. This plan doesn't ask for that volume.</p></div></details>
+      <details><summary>I can't run 5K yet.</summary><div><p>Then this one isn't for you yet, and I'd rather tell you now. The Base Builder Bible starts from zero. Finish that and this is day 31.</p></div></details>
+      <details><summary>Do I need a watch?</summary><div><p>No. The plan is cards and a phone timer.</p></div></details>
+      <details><summary>What if I miss a session? I have kids.</summary><div><p>Skip it. Don't stack it onto the next day. Missing an easy run changes nothing. Missing the session, do that one next and drop an easy. The plan is built for a week where something goes wrong.</p></div></details>
+      <details><summary>Is it safe for me?</summary><div><p>If you can run 5K now and aren't carrying an injury, yes. The session is hard but short, and three of the four runs are easier than what you do now. If you have a condition or aren't sure, check with your doctor first.</p></div></details>
+      <details><summary>Why 30 days?</summary><div><p>Long enough for a real adaptation, short enough that work and family don't get a chance to cancel it. And it's what you do before a 10K or half block so the block doesn't break you.</p></div></details>
+      <details><summary>How do I receive the plan?</summary><div><p>PDF by email the moment you pay, with the playbook, the fridge sheet and The Ultimate Running Bible. Day 1 is whenever you lace up.</p></div></details>
+    </div>
+  </div>
+</section>
+
+<section id="buy">
+  <div class="wrap">
+    <div class="card bb-final">
+      <img class="bb-final-bg" src="/assets/bb-ph-sun.webp" alt="" loading="lazy">
+      <img class="bb-final-cover" src="/assets/rf-cover.webp" alt="Run Faster in 30 Days cover" width="620" height="879" loading="lazy">
+      <h2 class="display">Stop starting <em>over.</em></h2>
+      <p>Every comeback so far has ended in week three.</p>
+      <p>Thirty days is long enough to work and short enough that life does not get a vote.</p>
+      <p class="bb-final-big">Your next comeback is the one that does not end in week three.</p>
+      <a class="btn btn-volt" href="https://buy.stripe.com/6oU5kw8d33Qe3v03ZRaZi0w" data-checkout data-what="final">Get Run Faster in 30 Days · $29 <span class="ar" aria-hidden="true">→</span></a>
+      <p class="bb-small">30 days. 17 sessions. 2 time trials. The playbook, the fridge sheet and The Ultimate Running Bible included. One payment of A$29. Money back if day 30 is not faster than day 1.</p>
+      <p class="bb-sign">Do the sessions. Then send me your two times. <span class="bb-ben">Ben <svg aria-hidden="true"><use href="#i-mark"/></svg></span></p>
+    </div>
+  </div>
+</section>
 
 </main>
 
+
+
 <footer>
-  <div class="wrap foot">
+  <div class="wrap foot bb-foot">
     <span>© <span id="yr">2026</span> Boltin Ben · Sydney</span>
-    <div class="socials foot-soc">
-          <a class="soc" href="https://www.instagram.com/boltinben/" target="_blank" rel="noopener" aria-label="Boltin Ben on Instagram" data-track="Footer Social" data-what="Instagram"><svg aria-hidden="true"><use href="#i-ig"/></svg></a>
-          <a class="soc" href="https://www.tiktok.com/@boltinben" target="_blank" rel="noopener" aria-label="Boltin Ben on TikTok" data-track="Footer Social" data-what="TikTok"><svg aria-hidden="true"><use href="#i-tt"/></svg></a>
-          <a class="soc" href="https://www.youtube.com/@boltinben/videos" target="_blank" rel="noopener" aria-label="Boltin Ben on YouTube" data-track="Footer Social" data-what="YouTube"><svg aria-hidden="true"><use href="#i-yt"/></svg></a>
-    </div>
-    <nav aria-label="Footer">
-      <a href="/plans">Plans</a>
-      <a href="/community">Community</a>
-      <a href="/coaching">Coaching</a>
-      <a href="/free">Free tools</a>
-      <a href="/brands">Advertise</a>
-    </nav>
   </div>
 </footer>
 
 <script src="/checkout.js"></script>
 <script src="/site.js"></script>
+<script>
+// Run Faster in 30 Days: every buy button goes to the Stripe link in checkout.js.
+(function(){
+  var cfg = (window.BB_CHECKOUT || {})['run-faster'] || {};
+  document.querySelectorAll('a[data-checkout]').forEach(function(a){
+    a.setAttribute('data-track', 'Add to Cart');
+    a.setAttribute('data-what', 'Run Faster in 30 Days · ' + a.getAttribute('data-what'));
+    if (cfg.pdf) a.href = cfg.pdf;
+  });
+  document.querySelectorAll('.bb-faq details').forEach(function(d){
+    d.addEventListener('toggle', function(){ if (d.open) try { window.plausible('FAQ Opened', { props: { what: d.querySelector('summary').textContent } }); } catch (e) {} });
+  });
+})();
+</script>
+
 </body>
 </html>
