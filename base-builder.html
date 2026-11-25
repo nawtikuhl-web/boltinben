@@ -49,6 +49,16 @@
 .bb-bar{height:10px;border-radius:10px;background:var(--tile-2);overflow:hidden;margin-bottom:20px}
 .bb-bar i{display:block;height:100%;width:100%;background:var(--volt);border-radius:10px}
 .bb-pace-cap{font-size:19px}
+/* the heart rate stays put while the pace drops (Ben, 26 Nov) */
+.bb-hr{display:flex;align-items:center;gap:10px;color:var(--purple);margin-bottom:22px;overflow:hidden}
+.bb-hr-heart{width:26px;height:26px;flex:none;transform-origin:50% 55%;animation:bb-beat .94s ease-in-out infinite}
+.bb-hr-num{font-family:var(--mono);font-size:26px;font-weight:500;color:var(--fg);font-variant-numeric:tabular-nums}
+.bb-hr-unit{font-family:var(--mono);font-size:15px;color:var(--mute);margin-right:6px}
+.bb-hr-line{flex:1 1 0;width:0;min-width:0;height:34px}
+.bb-hr-line path{stroke-dasharray:100;stroke-dashoffset:100;animation:bb-ecg 1.88s linear infinite}
+@keyframes bb-beat{0%,100%{transform:scale(1)}12%{transform:scale(1.22)}24%{transform:scale(1)}36%{transform:scale(1.14)}48%{transform:scale(1)}}
+@keyframes bb-ecg{0%{stroke-dashoffset:100;opacity:1}70%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
+@media (prefers-reduced-motion:reduce){.bb-hr-heart{animation:none}.bb-hr-line path{animation:none;stroke-dashoffset:0}}
 .bb-mi{font-family:var(--mono);font-size:18px;color:var(--fg)!important;margin:0 0 16px!important}
 .bb-mi s{color:var(--mute);text-decoration-color:var(--volt)}
 .bb-mi-in{display:block;font-family:var(--body);font-weight:400;font-size:17px;color:var(--mute);margin-top:8px}
@@ -278,6 +288,11 @@
       </div>
       <div class="bb-side">
         <div class="card bb-pace" id="bb-pace">
+          <div class="bb-hr" role="img" aria-label="Heart rate steady at 128 beats per minute">
+            <svg class="bb-hr-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-8.5-5-8.5-11.2A4.8 4.8 0 0 1 12 6.6a4.8 4.8 0 0 1 8.5 3.2C20.500 16 12 21 12 21z"/></svg>
+            <span class="bb-hr-num">128</span><span class="bb-hr-unit">BPM</span>
+            <svg class="bb-hr-line" viewBox="0 0 240 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="100" d="M0 22h34l5-4 5 4h10l4 6 7-24 7 30 5-12h13l6-5 6 5h28l5-4 5 4h10l4 6 7-24 7 30 5-12h13l6-5 6 5h21" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
           <div class="bb-pace-was"><s>7:00</s> /km</div>
           <div class="bb-pace-now"><span id="bb-pace-num">5:00</span> <small>/km</small></div>
           <div class="bb-bar" aria-hidden="true"><i id="bb-bar"></i></div>
