@@ -192,7 +192,7 @@
 
 <section>
   <div class="wrap">
-    <div class="card t-volt bb-up">
+    <div class="card t-volt bb-up" id="watch">
       <div>
         <span class="mono">A little less thinking on your runs.</span>
         <h2 class="display">Want the workouts on your running watch?</h2>
@@ -241,6 +241,8 @@
   if (cfg.watchLocal && window.fetch) fetch('/api/geo').then(function(r){ return r.json(); }).then(function(g){ localise(g && g.tier); }).catch(function(){});
   // once per visit, after analytics.js (deferred) has set up plausible
   document.addEventListener('DOMContentLoaded', function(){
+    // arriving from the delivery email's watch button is not a new purchase
+    if (/[?&]from=email/.test(location.search)) { try { window.plausible && plausible('Email Upsell Visit'); } catch (e) {} return; }
     try {
       if (sessionStorage.getItem('bb_purchase')) return;
       sessionStorage.setItem('bb_purchase', '1');
