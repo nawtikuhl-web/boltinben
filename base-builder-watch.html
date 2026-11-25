@@ -243,6 +243,10 @@
 // Watch setup: send the TrainingPeaks details to Ben (netlify/functions/watch-setup.js).
 (function(){
   var paid = /[?&]paid=1/.test(location.search);
+  // The set-up email sent after a watch purchase links here with the buyer's
+  // email (and name) on it, so those boxes are already filled in.
+  var qs = new URLSearchParams(location.search), fromEmail = qs.get('from') === 'email';
+  ['email', 'name'].forEach(function(k){ var v = qs.get(k), el = document.getElementById('w-' + k); if (v && el && !el.value) el.value = v.slice(0, 200); });
   document.addEventListener('DOMContentLoaded', function(){
     if (!paid) return;
     try { if (sessionStorage.getItem('bb_watch_purchase')) return; sessionStorage.setItem('bb_watch_purchase', '1'); } catch (e) {}
@@ -261,7 +265,7 @@
   form.addEventListener('submit', function(e){
     e.preventDefault();
     var d = {}; new FormData(form).forEach(function(v, k){ d[k] = v; });
-    d.attached = document.getElementById('w-att').checked; d.paid = paid;
+    d.attached = document.getElementById('w-att').checked; d.paid = paid || fromEmail;
     var ok = /^\S+@\S+\.\S+$/;
     if (d.day1 && new Date(d.day1 + 'T12:00:00').getDay() !== 1) { say('Pick a Monday to start on.', true); return; }
     if (!String(d.name).trim() || !ok.test(d.email) || !ok.test(d.tp_email) || !d.start || !d.watch || !d.day1) { say('Fill in every box, then send it again.', true); return; }
