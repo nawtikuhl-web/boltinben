@@ -213,6 +213,30 @@
   .bb-plan-ph .bb-plan-no{left:22px}
   .bb-bonus-cover{width:120px}
 }
+/* 25 Nov, Ben's notes: icons on the feature cards, crops that keep his head in frame, a three-up hero on desktop */
+.bb-ic{width:34px;height:34px;color:var(--volt);flex:none;margin-bottom:6px}
+.bb .feat{justify-content:flex-start;gap:12px}
+.bb-plan-ph{height:300px}
+.bb-plan-ph img[src*="zero"]{object-position:50% 30%}
+.bb-plan-ph img[src*="going"]{object-position:50% 34%}
+.bb-plan-ph img[src*="engine"]{object-position:30% 6%}
+.bb-over>img[src*="tree"]{object-position:50% 78%}
+.bb-over>img[src*="reflect"]{object-position:50% 88%}
+.bb-over>img[src*="steps"]{object-position:50% 66%}
+.bb-over{min-height:640px}
+.bb-promise-grid img{object-position:50% 40%}
+@media (min-width:1100px){
+  .bb-hero-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .bb-side{display:contents}
+  .bb-intro{padding:34px;justify-content:flex-start}
+  .bb-intro .lede{font-size:24px;line-height:1.25}
+  .bb-intro p{font-size:18px}
+  .bb-pace{display:flex;flex-direction:column;justify-content:center}
+  .bb-pace-now{font-size:clamp(84px,8.4vw,124px)}
+  .bb-buy{grid-template-columns:1fr;align-content:center;gap:20px}
+  .bb-buy-cover{width:120px}
+  .bb-buy h2{font-size:clamp(34px,3.2vw,46px)}
+}
 </style>
 </head>
 <body>
@@ -292,12 +316,6 @@
         <p><b>That’s what I want for you.</b></p>
       </div>
     </div>
-  </div>
-</section>
-
-<section class="bb-band-sec" aria-hidden="true">
-  <div class="bb-band">
-    <img src="/assets/bb-ph-fog.webp" alt="" loading="lazy"><img src="/assets/bb-ph-bridge.webp" alt="" loading="lazy"><img src="/assets/bb-ph-city.webp" alt="" loading="lazy"><img src="/assets/bb-ph-sun.webp" alt="" loading="lazy"><img src="/assets/bb-ph-palms.webp" alt="" loading="lazy"><img src="/assets/bb-ph-trail.webp" alt="" loading="lazy">
   </div>
 </section>
 
@@ -443,12 +461,12 @@
       <img src="/assets/bb-p-week1.webp" alt="Start 1, week 1: find your easy" width="619" height="1100" loading="lazy">
     </div>
     <div class="grid g3">
-      <div class="card feat"><h3>Three complete training plans</h3><p>Every session mapped out, including how long to run, how hard it should feel and why you’re doing it. No pace targets.</p></div>
-      <div class="card feat"><h3>Finding your Zone 2</h3><p>Learn how to estimate your easy running range, use your heart rate and recognise what easy actually feels like. With or without a running watch.</p></div>
-      <div class="card feat t-volt"><h3>The Base Test</h3><p>A starting benchmark and a final test to measure your progress.</p></div>
-      <div class="card feat"><h3>Building your running efficiency</h3><p>Learn how to introduce relaxed strides as your fitness develops, without turning your easy runs into speed sessions.</p></div>
-      <div class="card feat"><h3>The rules of easy running</h3><p>When to walk, when to slow down, what to do when your heart rate creeps up and how to adjust when it’s hot, hilly or you’ve slept like absolute rubbish.</p></div>
-      <div class="card feat"><h3>Recovery and progression</h3><p>When to build, when to back off and what to do when life inevitably gets in the way.</p></div>
+      <div class="card feat"><svg class="bb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4M7.5 13.5h3M7.5 16.5h3M13.5 13.5h3"/></svg><h3>Three complete training plans</h3><p>Every session mapped out, including how long to run, how hard it should feel and why you’re doing it. No pace targets.</p></div>
+      <div class="card feat"><svg class="bb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.5s-8-4.6-8-10.4A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 3.1c0 5.8-8 10.4-8 10.4z"/><path d="M6.5 12.5h3l1.5-3 2 5 1.5-2h3"/></svg><h3>Finding your Zone 2</h3><p>Learn how to estimate your easy running range, use your heart rate and recognise what easy actually feels like. With or without a running watch.</p></div>
+      <div class="card feat"><svg class="bb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 13.5V9.5M9.5 2.5h5M12 2.5V6M18.5 7l1.5-1.5"/></svg><h3>The Base Test</h3><p>A starting benchmark and a final test to measure your progress.</p></div>
+      <div class="card feat"><svg class="bb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17.5l5-5 4 3 8.5-9"/><path d="M15.5 6.5h5v5"/></svg><h3>Building your running efficiency</h3><p>Learn how to introduce relaxed strides as your fitness develops, without turning your easy runs into speed sessions.</p></div>
+      <div class="card feat"><svg class="bb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6.5h11M9.5 12h11M9.5 17.5h11"/><path d="M3.5 6.5l1.3 1.3L7 5.5M3.5 12l1.3 1.3L7 11M3.5 17.5l1.3 1.3L7 16.5"/></svg><h3>The rules of easy running</h3><p>When to walk, when to slow down, what to do when your heart rate creeps up and how to adjust when it’s hot, hilly or you’ve slept like absolute rubbish.</p></div>
+      <div class="card feat"><svg class="bb-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20.5v-5M9.3 20.5v-9M14.6 20.5v-6M20 20.5V4.5"/></svg><h3>Recovery and progression</h3><p>When to build, when to back off and what to do when life inevitably gets in the way.</p></div>
     </div>
     <p class="fine bb-fine">No complicated spreadsheets. No ridiculous workouts. Just open the book and know what you’re doing.</p>
   </div>
