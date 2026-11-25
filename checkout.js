@@ -18,6 +18,7 @@ window.BB_CHECKOUT = {
   // local: the book's price by country tier (netlify/functions/geo.js picks
   // the tier from the visitor's IP). Tier 1 is pdf, the full US$19.
   'base-builder': { pdf: 'https://buy.stripe.com/8x214gbpf86uaXs0NFaZi0F',
-    local: { 2: { price: 11, link: 'https://buy.stripe.com/9B66oAgJz5Ym9To9kbaZi0H' }, 3: { price: 8, link: 'https://buy.stripe.com/4gM3co2SJ4UiaXs67ZaZi0I' } }, watch: 'https://buy.stripe.com/aFabIU0KBaeC0iO0NFaZi0G', watchPrice: '$29' },
+    local: { 2: { price: 11, link: 'https://buy.stripe.com/9B66oAgJz5Ym9To9kbaZi0H' }, 3: { price: 8, link: 'https://buy.stripe.com/4gM3co2SJ4UiaXs67ZaZi0I' } }, watch: 'https://buy.stripe.com/aFabIU0KBaeC0iO0NFaZi0G', watchPrice: '$29',
+    watchLocal: { 2: { price: 17, link: 'https://buy.stripe.com/bJe6oA2SJ72qaXs0NFaZi0J' }, 3: { price: 12, link: 'https://buy.stripe.com/9B69AM64VeuSc1w67ZaZi0K' } } },
   'marathon': { pdf: 'https://buy.stripe.com/6oU14ggJz4Ui8Pk7c3aZi0D', plan: '', voice: '' }
 };

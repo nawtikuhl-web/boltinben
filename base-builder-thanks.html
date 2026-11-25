@@ -229,6 +229,16 @@
   if (!a) return;
   a.href = cfg.watch || ('mailto:ben@sparkies.app?subject=' + encodeURIComponent('Base Builder watch version'));
   if (cfg.watchPrice) a.firstChild.nodeValue = 'Add the watch version · ' + cfg.watchPrice + ' ';
+  // Local pricing, the same tiers as the book (netlify/functions/geo.js).
+  // ?tier=2 or 3 comes from the delivery email, which already knows the tier.
+  function localise(tier, country){
+    var t = (cfg.watchLocal || {})[tier];
+    if (!t || !t.link) return;
+    a.href = t.link;
+    a.firstChild.nodeValue = 'Add the watch version · $' + t.price + ' ';
+    a.setAttribute('data-what', 'Base Builder watch version · tier ' + tier);
+  }
+  if (cfg.watchLocal && window.fetch) fetch('/api/geo').then(function(r){ return r.json(); }).then(function(g){ localise(g && g.tier); }).catch(function(){});
   // once per visit, after analytics.js (deferred) has set up plausible
   document.addEventListener('DOMContentLoaded', function(){
     try {
