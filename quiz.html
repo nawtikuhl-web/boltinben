@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why does running feel so hard? · Boltin Ben</title>
+<meta name="description" content="A free 2-minute quiz. Find out where your running is at right now, and the 3 things making it feel harder than it needs to.">
+<meta property="og:title" content="Why does running feel so hard? · Boltin Ben">
+<meta property="og:description" content="A free 2-minute quiz. Find out where your running is at right now, and the 3 things making it feel harder than it needs to.">
+<meta property="og:image" content="https://boltin.io/assets/og.jpg">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#000000">
+<link rel="icon" type="image/svg+xml" href="/assets/mark.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/site.css">
+<script src="/analytics.js" defer></script>
+<style>
+/* /quiz. Voice is lowercase (Ben's quiz brief); headlines stay uppercase Barlow
+   semibold and eyebrows Barlow medium, per the brand guide in CLAUDE.md. */
+.nav-in{justify-content:space-between}
+.nav .brand{cursor:default}
+.qz-foot{justify-content:center}
+.qz section{padding-block:28px 60px}
+.qz-wrap{max-width:680px}
+.qz .photo{position:relative;overflow:hidden;border-radius:var(--r)}
+.qz .photo>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 70%}
+.qz-hero{min-height:min(40vh,330px);display:flex;align-items:flex-end;margin-bottom:var(--gap)}
+.qz-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 25%,rgba(0,0,0,.86) 100%)}
+.qz-hero>div{position:relative;z-index:1;padding:28px}
+.qz-hero h1{font-size:clamp(44px,9vw,76px);color:var(--volt)}
+.qz-hero h1 em{color:#fff}
+.qz-eye{display:block;font-family:var(--body);font-weight:500;font-size:15px;color:var(--mute);margin-bottom:12px}
+.qz-hero .qz-eye{color:rgba(255,255,255,.86)}
+.qz-card{padding:28px}
+.qz-card p{font-size:18.5px;line-height:1.45;color:var(--mute)}
+.qz-card p+p{margin-top:6px}
+.qz-lede{font-size:22px!important;color:var(--fg)!important;margin-bottom:10px!important}
+.qz .btn{text-transform:none;letter-spacing:.01em;font-size:17.5px}
+.qz-go{width:100%;margin-top:24px;padding:19px 22px}
+.qz-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;min-height:44px}
+.qz-back,.qz-skip{background:none;border:0;color:var(--mute);font:inherit;font-size:16px;padding:12px 0;cursor:pointer}
+.qz-back[disabled]{visibility:hidden}
+.qz-count{font-family:var(--mono);font-size:14px;color:var(--mute)}
+.qz-bar{height:10px;border-radius:10px;background:var(--tile);overflow:hidden;margin-bottom:var(--gap)}
+.qz-bar i{display:block;height:100%;width:0;background:var(--volt);border-radius:10px;transition:width .25s ease}
+.qz-question{font-family:var(--display);font-weight:600;font-size:clamp(27px,6.4vw,36px);line-height:1.08;margin:0 0 22px;outline:0}
+.qz-opts{display:grid;gap:10px}
+.qz-opt{display:block;width:100%;text-align:left;background:var(--tile-2);color:var(--fg);border:0;border-radius:12px;padding:19px 20px;font:inherit;font-size:18.5px;line-height:1.3;cursor:pointer;transition:background .12s ease,color .12s ease}
+.qz-opt:hover{background:#383838}
+.qz-opt.on{background:var(--volt);color:var(--ink);font-weight:600}
+.qz-opt:focus-visible,.qz-back:focus-visible,.qz-skip:focus-visible{outline:2px solid var(--volt);outline-offset:2px}
+.qz-form{display:block}
+.qz-form .f{margin-top:18px}
+.qz-form label{text-transform:none;font-family:var(--body);font-weight:500;font-size:15px;letter-spacing:.01em}
+.qz-form input{font-size:18px}
+.qz-msg{min-height:1.4em;font-size:16px!important;color:var(--volt)!important;margin-top:12px!important}
+.qz-skip{display:block;margin:6px auto 0;text-decoration:underline;text-underline-offset:4px}
+.qz-where h1{font-size:clamp(46px,11vw,84px);color:var(--volt);margin-bottom:16px}
+.qz-things{margin:34px 0 var(--gap)}
+.qz-things>.qz-eye{padding-left:4px}
+.qz-thing{background:var(--tile);border-radius:var(--r);padding:26px 28px;display:grid;grid-template-columns:auto 1fr;gap:6px 18px;margin-bottom:var(--gap)}
+.qz-thing-no{font-family:var(--display);font-weight:600;font-size:44px;line-height:1;color:var(--volt);grid-row:span 3}
+.qz-thing h3{font-family:var(--display);font-weight:600;font-size:25px;line-height:1.1;margin:4px 0 6px}
+.qz-thing p{font-size:17.5px;line-height:1.45;color:var(--mute);margin:0}
+.qz-thing p+p{margin-top:8px;color:var(--fg)}
+.qz-fix .qz-eye{color:rgba(0,0,0,.7)}
+.qz-fix h2{font-size:clamp(34px,8vw,52px);color:var(--ink);margin-bottom:16px}
+.qz-fix p{color:rgba(0,0,0,.78)}
+.qz-fix b{color:var(--ink)}
+.qz-price{margin-top:16px!important;font-family:var(--display);font-weight:600;font-size:40px!important;line-height:1;color:var(--ink)!important}
+.qz-price small{font-family:var(--body);font-weight:400;font-size:16px}
+.qz-permission{font-family:var(--display);font-weight:600;font-size:clamp(26px,6vw,34px);line-height:1.12;text-align:center;margin:44px 12px 0}
+.qz-safety{font-size:14px;line-height:1.5;color:#8a8a8a;text-align:center;max-width:30em;margin:26px auto 4px}
+@media (max-width:640px){
+  .qz section{padding-block:16px 48px}
+  .qz-card{padding:24px 22px}
+  .qz-thing{padding:22px}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-mark" viewBox="0 0 69 59" fill="currentColor"><path d="M6.8136 23L0 34.799H13.6296L20.4432 23H6.8136Z" /><path d="M61.3032 0.0143949V0H34.0728L20.4432 23.6005H34.0728L40.8864 11.799H54.5016L47.688 23.5861V23.6005H34.0728L27.2592 35.3995H40.872L34.0584 47.201H20.4432L27.2592 35.3995H13.6296L6.8136 47.201L0 59H40.872L54.5016 35.3995V35.3851L47.7024 23.6005H61.3176L68.1168 11.8158V11.799L61.3032 0.0143949Z" /></symbol>
+<symbol id="i-word" viewBox="0 0 229 45" fill="currentColor"><path d="M23.622 31.992C23.622 35.7947 22.506 38.7293 20.274 40.796C18.0833 42.8627 15.2107 43.896 11.656 43.896H0.744C0.537333 43.896 0.351333 43.834 0.186 43.71C0.062 43.5447 0 43.3587 0 43.152V1.24C0 1.03333 0.062 0.867999 0.186 0.743998C0.351333 0.578664 0.537333 0.495997 0.744 0.495997H10.54C14.4667 0.495997 17.546 1.488 19.778 3.472C22.01 5.456 23.126 8.34933 23.126 12.152C23.126 16.4093 21.6173 19.4473 18.6 21.266C18.3933 21.39 18.352 21.514 18.476 21.638C20.088 22.6713 21.3487 24.056 22.258 25.792C23.1673 27.528 23.622 29.5947 23.622 31.992ZM7.502 6.696C7.29533 6.696 7.192 6.79933 7.192 7.006V18.538C7.192 18.7447 7.29533 18.848 7.502 18.848H10.664C12.3587 18.848 13.6813 18.3313 14.632 17.298C15.5827 16.2647 16.058 14.7973 16.058 12.896C16.058 10.912 15.5827 9.38267 14.632 8.308C13.6813 7.23333 12.3587 6.696 10.664 6.696H7.502ZM11.098 37.634C12.7513 37.634 14.0533 37.0553 15.004 35.898C15.9547 34.7407 16.43 33.108 16.43 31C16.43 28.8507 15.9547 27.1767 15.004 25.978C14.0533 24.738 12.7513 24.118 11.098 24.118H7.502C7.29533 24.118 7.192 24.2213 7.192 24.428V37.324C7.192 37.5307 7.29533 37.634 7.502 37.634H11.098Z" /><path d="M39.7367 44.392C36.182 44.392 33.3093 43.3173 31.1187 41.168C28.9693 39.0187 27.8947 36.1667 27.8947 32.612V11.78C27.8947 8.22533 28.9693 5.37333 31.1187 3.224C33.3093 1.07467 36.182 0 39.7367 0C43.2913 0 46.164 1.07467 48.3547 3.224C50.5453 5.37333 51.6407 8.22533 51.6407 11.78V32.612C51.6407 36.1667 50.5453 39.0187 48.3547 41.168C46.164 43.3173 43.2913 44.392 39.7367 44.392ZM39.7367 38.192C41.142 38.192 42.2787 37.7167 43.1467 36.766C44.0147 35.774 44.4487 34.4927 44.4487 32.922V11.47C44.4487 9.89933 44.0147 8.63866 43.1467 7.688C42.2787 6.696 41.142 6.2 39.7367 6.2C38.3313 6.2 37.1947 6.696 36.3267 7.688C35.5 8.63866 35.0867 9.89933 35.0867 11.47V32.922C35.0867 34.4927 35.5 35.774 36.3267 36.766C37.1947 37.7167 38.3313 38.192 39.7367 38.192Z" /><path d="M58.3241 43.896C58.1174 43.896 57.9314 43.834 57.7661 43.71C57.6421 43.5447 57.5801 43.3587 57.5801 43.152V1.24C57.5801 1.03333 57.6421 0.867999 57.7661 0.743998C57.9314 0.578664 58.1174 0.495997 58.3241 0.495997H64.0281C64.2347 0.495997 64.4001 0.578664 64.5241 0.743998C64.6894 0.867999 64.7721 1.03333 64.7721 1.24V37.386C64.7721 37.5927 64.8754 37.696 65.0821 37.696H78.4741C78.6807 37.696 78.8461 37.7787 78.9701 37.944C79.1354 38.068 79.2181 38.2333 79.2181 38.44V43.152C79.2181 43.3587 79.1354 43.5447 78.9701 43.71C78.8461 43.834 78.6807 43.896 78.4741 43.896H58.3241Z" /><path d="M100.908 0.495997C101.115 0.495997 101.28 0.578664 101.404 0.743998C101.57 0.867999 101.652 1.03333 101.652 1.24V5.952C101.652 6.15866 101.57 6.34466 101.404 6.51C101.28 6.634 101.115 6.696 100.908 6.696H93.0344C92.8277 6.696 92.7244 6.79933 92.7244 7.006V43.152C92.7244 43.3587 92.6417 43.5447 92.4764 43.71C92.3524 43.834 92.1871 43.896 91.9804 43.896H86.2764C86.0697 43.896 85.8837 43.834 85.7184 43.71C85.5944 43.5447 85.5324 43.3587 85.5324 43.152V7.006C85.5324 6.79933 85.4291 6.696 85.2224 6.696H77.7824C77.5757 6.696 77.3897 6.634 77.2244 6.51C77.1004 6.34466 77.0384 6.15866 77.0384 5.952V1.24C77.0384 1.03333 77.1004 0.867999 77.2244 0.743998C77.3897 0.578664 77.5757 0.495997 77.7824 0.495997H100.908Z" /><path d="M107.428 43.896C107.221 43.896 107.035 43.834 106.87 43.71C106.746 43.5447 106.684 43.3587 106.684 43.152V1.24C106.684 1.03333 106.746 0.867999 106.87 0.743998C107.035 0.578664 107.221 0.495997 107.428 0.495997H113.132C113.338 0.495997 113.504 0.578664 113.628 0.743998C113.793 0.867999 113.876 1.03333 113.876 1.24V43.152C113.876 43.3587 113.793 43.5447 113.628 43.71C113.504 43.834 113.338 43.896 113.132 43.896H107.428Z" /><path d="M138.157 1.24C138.157 1.03333 138.219 0.867999 138.343 0.743998C138.508 0.578664 138.694 0.495997 138.901 0.495997H144.543C144.749 0.495997 144.915 0.578664 145.039 0.743998C145.204 0.867999 145.287 1.03333 145.287 1.24V43.152C145.287 43.3587 145.204 43.5447 145.039 43.71C144.915 43.834 144.749 43.896 144.543 43.896H138.033C137.62 43.896 137.351 43.6893 137.227 43.276L127.989 16.988C127.947 16.864 127.865 16.8227 127.741 16.864C127.658 16.864 127.617 16.926 127.617 17.05L127.679 43.152C127.679 43.3587 127.596 43.5447 127.431 43.71C127.307 43.834 127.141 43.896 126.935 43.896H121.293C121.086 43.896 120.9 43.834 120.735 43.71C120.611 43.5447 120.549 43.3587 120.549 43.152V1.24C120.549 1.03333 120.611 0.867999 120.735 0.743998C120.9 0.578664 121.086 0.495997 121.293 0.495997H127.679C128.092 0.495997 128.361 0.702664 128.485 1.116L137.785 27.218C137.826 27.342 137.888 27.404 137.971 27.404C138.095 27.3627 138.157 27.28 138.157 27.156V1.24Z" /><path d="M174.293 32.116C174.334 35.836 173.342 38.7293 171.317 40.796C169.291 42.8627 166.584 43.896 163.195 43.896H153.709C153.295 43.896 153.089 43.6893 153.089 43.276V1.116C153.089 0.702664 153.295 0.495997 153.709 0.495997H162.637C166.191 0.495997 168.981 1.488 171.007 3.472C173.032 5.41467 174.045 8.20467 174.045 11.842C174.045 16.4713 172.329 19.6333 168.899 21.328C168.816 21.3693 168.775 21.4107 168.775 21.452C168.775 21.4933 168.795 21.5347 168.837 21.576C172.474 23.684 174.293 27.1973 174.293 32.116ZM157.739 4.34C157.573 4.34 157.491 4.42267 157.491 4.588V19.53C157.491 19.6953 157.573 19.778 157.739 19.778H162.637C164.869 19.778 166.605 19.1167 167.845 17.794C169.085 16.4713 169.705 14.6113 169.705 12.214C169.705 9.734 169.085 7.812 167.845 6.448C166.605 5.04267 164.869 4.34 162.637 4.34H157.739ZM162.885 39.99C165.075 39.99 166.791 39.2667 168.031 37.82C169.271 36.332 169.891 34.2653 169.891 31.62C169.891 28.9333 169.271 26.846 168.031 25.358C166.791 23.87 165.075 23.126 162.885 23.126H157.739C157.573 23.126 157.491 23.2087 157.491 23.374V39.742C157.491 39.9073 157.573 39.99 157.739 39.99H162.885Z" /><path d="M200.17 3.72C200.17 4.13333 199.964 4.34 199.55 4.34H185.166C185.001 4.34 184.918 4.42267 184.918 4.588V19.964C184.918 20.1293 185.001 20.212 185.166 20.212H194.218C194.632 20.212 194.838 20.4187 194.838 20.832V23.498C194.838 23.9113 194.632 24.118 194.218 24.118H185.166C185.001 24.118 184.918 24.2007 184.918 24.366V39.804C184.918 39.9693 185.001 40.052 185.166 40.052H199.55C199.964 40.052 200.17 40.2587 200.17 40.672V43.276C200.17 43.6893 199.964 43.896 199.55 43.896H181.136C180.723 43.896 180.516 43.6893 180.516 43.276V1.116C180.516 0.702664 180.723 0.495997 181.136 0.495997H199.55C199.964 0.495997 200.17 0.702664 200.17 1.116V3.72Z" /><path d="M224.456 1.116C224.456 0.702664 224.663 0.495997 225.076 0.495997H228.176C228.59 0.495997 228.796 0.702664 228.796 1.116V43.276C228.796 43.6893 228.59 43.896 228.176 43.896H224.518C224.188 43.896 223.96 43.7307 223.836 43.4L211.746 11.346C211.705 11.222 211.643 11.1807 211.56 11.222C211.478 11.222 211.436 11.284 211.436 11.408L211.498 43.276C211.498 43.6893 211.292 43.896 210.878 43.896H207.716C207.303 43.896 207.096 43.6893 207.096 43.276V1.116C207.096 0.702664 207.303 0.495997 207.716 0.495997H211.312C211.643 0.495997 211.87 0.661331 211.994 0.991998L224.146 33.108C224.188 33.232 224.25 33.294 224.332 33.294C224.415 33.2527 224.456 33.17 224.456 33.046V1.116Z" /></symbol>
+<symbol id="i-ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-tt" viewBox="0 0 24 24" fill="currentColor"><path d="M12.53.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></symbol>
+<symbol id="i-yt" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.5A3.02 3.02 0 0 0 .5 6.19C0 8.07 0 12 0 12s0 3.93.5 5.81a3.02 3.02 0 0 0 2.12 2.14c1.88.5 9.38.5 9.38.5s7.5 0 9.38-.5a3.02 3.02 0 0 0 2.12-2.14C24 15.93 24 12 24 12s0-3.93-.5-5.81zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></symbol>
+</defs></svg>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <span class="brand" aria-label="Boltin Ben"><svg class="mark"><use href="#i-mark"/></svg><svg class="word"><use href="#i-word"/></svg></span>
+  </div>
+</header>
+
+<main id="top" class="page qz">
+<section>
+  <div class="wrap qz-wrap">
+
+    <!-- intro -->
+    <div class="qz-screen" id="qz-intro">
+      <div class="photo qz-hero">
+        <img src="/assets/bb-ph-tree.webp" alt="Ben running easy through a park at dawn" fetchpriority="high">
+        <div>
+          <span class="qz-eye">free 2-minute quiz</span>
+          <h1 class="display">Why does running feel so <em>hard?</em></h1>
+        </div>
+      </div>
+      <div class="card qz-card">
+        <p class="qz-lede">out of breath after two minutes?</p>
+        <p>12 quick questions.</p>
+        <p>you'll find out where you're at right now.</p>
+        <p>and the 3 things making running feel harder than it needs to.</p>
+        <button class="btn btn-volt qz-go" type="button" id="qz-start">start the quiz <span class="ar" aria-hidden="true">→</span></button>
+      </div>
+    </div>
+
+    <!-- questions -->
+    <div class="qz-screen" id="qz-q" hidden>
+      <div class="qz-top">
+        <button type="button" class="qz-back" id="qz-back">← back</button>
+        <span class="qz-count" id="qz-count">1 / 12</span>
+      </div>
+      <div class="qz-bar" role="progressbar" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0" id="qz-bar"><i></i></div>
+      <div class="card qz-card">
+        <span class="qz-eye" id="qz-sec"></span>
+        <h2 class="qz-question" id="qz-text" tabindex="-1"></h2>
+        <div class="qz-opts" id="qz-opts"></div>
+      </div>
+    </div>
+
+    <!-- email -->
+    <div class="qz-screen" id="qz-email" hidden>
+      <div class="qz-bar"><i style="width:100%"></i></div>
+      <form class="card qz-card qz-form" id="qz-form" novalidate>
+        <span class="qz-eye">done</span>
+        <h2 class="qz-question">your result's ready.</h2>
+        <p>pop your first name and email in.</p>
+        <p>i'll email you more on the things your result picks out.</p>
+        <div class="f"><label for="qz-name">first name</label><input id="qz-name" name="firstName" autocomplete="given-name"></div>
+        <div class="f"><label for="qz-mail">email</label><input id="qz-mail" name="email" type="email" autocomplete="email" inputmode="email"></div>
+        <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;padding:0">
+        <button class="btn btn-volt qz-go" type="submit" id="qz-send">show my result <span class="ar" aria-hidden="true">→</span></button>
+        <p class="qz-msg" id="qz-msg" role="status" aria-live="polite"></p>
+        <button type="button" class="qz-skip" id="qz-skip">skip, just show me</button>
+      </form>
+    </div>
+
+    <!-- result -->
+    <div class="qz-screen" id="qz-result" hidden>
+      <div class="card qz-card qz-where">
+        <span class="qz-eye">where you are</span>
+        <h1 class="display" id="r-name"></h1>
+        <p class="qz-lede" id="r-you"></p>
+      </div>
+
+      <div class="qz-things">
+        <span class="qz-eye" id="r-count"></span>
+        <div id="r-things"></div>
+      </div>
+
+      <div class="card t-volt qz-card qz-fix">
+        <span class="qz-eye">the fix</span>
+        <h2 class="display" id="r-product"></h2>
+        <p id="r-cover"></p>
+        <p id="r-book" hidden></p>
+        <p><b id="r-to"></b></p>
+        <p class="qz-price"><span id="r-price"></span> <small id="r-price-note"></small></p>
+        <a class="btn btn-dark qz-go" id="r-btn" href="#" data-track="Quiz CTA Clicked"></a>
+      </div>
+
+      <p class="qz-permission" id="r-allowed"></p>
+      <p class="qz-safety">if you get chest pain, dizziness or breathlessness that doesn't settle when you stop, that's one for a doctor, not a quiz.</p>
+      <button type="button" class="qz-skip" id="qz-again">take it again</button>
+    </div>
+
+  </div>
+</section>
+</main>
+
+
+
+<footer>
+  <div class="wrap foot qz-foot">
+    <span>© <span id="yr">2026</span> Boltin Ben · Sydney</span>
+  </div>
+</footer>
+
+<script src="/checkout.js"></script>
+<script>var y=document.getElementById("yr");if(y)y.textContent=new Date().getFullYear();</script>
+<script>
+// "why does running feel so hard?" (Ben's brief, 26 Nov 2026)
+// Diagnose, don't fix: the result names the problem and why it matters. The
+// how is the paid product, so nothing here gives sessions, paces or a week.
+(function(){
+  // ---- the 12 questions. p = points added to a culprit by that answer.
+  var Q = [
+    { s: "where you're at", t: 'how long can you run right now without stopping?', o: [
+      { l: 'under 10 minutes' }, { l: '15 to 20 minutes' }, { l: '30 minutes or more' } ] },
+    { s: "where you're at", t: 'how many times a week do you run?', o: [
+      { l: '0 to 1', p: { consistency: 2 } }, { l: '2 to 3' }, { l: '4 or more' } ] },
+    { s: 'how you run', t: 'could you say a full sentence out loud on a normal run?', o: [
+      { l: 'no chance', p: { pace: 2 } }, { l: 'in bits', p: { pace: 1 } }, { l: 'easily' } ] },
+    { s: 'how you run', t: 'how do your runs usually compare to each other?', o: [
+      { l: 'all about the same effort', p: { pace: 1, structure: 1 } }, { l: 'some easy, some hard' }, { l: 'no idea', p: { structure: 1 } } ] },
+    { s: 'how you run', t: 'what do you do in the 5 minutes before you start running?', o: [
+      { l: 'nothing, straight out the door', p: { start: 2 } }, { l: 'a bit of walking' }, { l: 'a proper warm-up' } ] },
+    { s: 'how you run', t: 'when does a run feel worst?', o: [
+      { l: 'the first 10 minutes', p: { start: 2 } }, { l: 'the middle', p: { pace: 1 } }, { l: 'the end', p: { pace: 1 } }, { l: 'the whole thing', p: { pace: 2 } } ] },
+    { s: 'how you run', t: 'how do you feel about walking during a run?', o: [
+      { l: 'it means i failed', p: { walk: 2 } }, { l: 'only if i have to', p: { walk: 1 } }, { l: 'i plan walk breaks' } ] },
+    { s: 'how you run', t: 'are you following a plan?', o: [
+      { l: 'no, i just go and see', p: { structure: 2 } }, { l: 'sort of, i make it up', p: { structure: 1 } }, { l: 'yes' } ] },
+    { s: "what's around the run", t: 'when do you usually eat before a run?', o: [
+      { l: 'nothing since the night before', p: { fuel: 2 } }, { l: 'a big meal within the hour', p: { fuel: 2 } }, { l: 'a snack 1 to 2 hours before' }, { l: 'it varies every time', p: { fuel: 1 } } ] },
+    { s: "what's around the run", t: 'how many hours do you sleep on a normal night?', o: [
+      { l: 'under 6', p: { recovery: 2 } }, { l: '6 to 7', p: { recovery: 1 } }, { l: '7 or more' } ] },
+    { s: "what's around the run", t: 'how do your legs feel at the start of most runs?', o: [
+      { l: 'heavy', p: { recovery: 2 } }, { l: 'fine after a few minutes' }, { l: 'fresh' } ] },
+    { s: 'what you want', t: 'what do you want most right now?', o: [
+      { l: 'run without stopping' }, { l: 'run further' }, { l: 'run faster' } ] }
+  ];
+
+  // ---- the 7 culprits: headline, what's happening, why it matters. No fixes.
+  var C = {
+    pace:        { tag: 'pace',        h: "you're running too fast.", a: 'every run is at the same hard effort, so your breathing gives out long before your legs do.', b: "that's why two minutes in feels like the end. it isn't your fitness. it's your speed." },
+    start:       { tag: 'the start',   h: "you're judging the run by its worst ten minutes.", a: "you go from standing still to running, and your body hasn't caught up yet.", b: "the first ten minutes feel rough for nearly everyone. you're deciding you're unfit before the good part turns up." },
+    walk:        { tag: 'walk breaks', h: 'you think walking is failing.', a: 'so you run until you blow up, then the run is over.', b: 'every run becomes a test you fail. and you finish with less running done, not more.' },
+    consistency: { tag: 'consistency', h: 'your weeks are stop-start.', a: 'a run here, nothing for a week, then a big catch-up.', b: 'your body never gets a steady run of weeks to adapt. so every run feels like the first one back.' },
+    structure:   { tag: 'structure',   h: "you're making it up as you go.", a: 'no plan, so every run looks the same. or you do too much too soon.', b: 'the effort goes in, but without the right order not much comes back out.' },
+    fuel:        { tag: 'fuel',        h: "there's nothing in the tank. or far too much.", a: "you're running on empty, or straight after a big meal.", b: 'either one makes an easy run feel hard before you have gone anywhere.', book: true },
+    recovery:    { tag: 'recovery',    h: "you're starting every run tired.", a: 'short sleep and heavy legs mean you never set off fresh.', b: "a tired body makes the same run feel harder. it looks like you're getting worse. you're just not recovered.", book: true }
+  };
+  var ORDER = ['pace', 'start', 'walk', 'structure', 'consistency', 'recovery', 'fuel'];   // ties: this order wins
+  var MAX = { fuel: 2, recovery: 4 };
+
+  // ---- the 4 results. Base Builder wording and price come from /base-builder,
+  // Run Faster from /run-faster. "built to get you to", never "you will".
+  var P = {
+    zero:   { tag: 'from zero', name: 'From zero', you: "right now you can't run for 10 minutes without stopping. holding a conversation mid-run feels wildly optimistic.",
+              product: 'Base Builder Bible, plan 01', short: 'the base builder bible, plan 01', to: 'built to get you to 20 minutes of continuous, comfortable running.',
+              price: 19, note: 'US dollars, one payment', href: '/base-builder', btn: 'see the base builder bible', allowed: "you're allowed to go slow. it still counts." },
+    going:  { tag: 'getting going', name: 'Getting going', you: "you can run for 15 to 20 minutes. but you're inconsistent, it still feels hard, or you're stuck at the same distance.",
+              product: 'Base Builder Bible, plan 02', short: 'the base builder bible, plan 02', to: 'built to get you to four runs a week and a 40-minute long run.',
+              price: 19, note: 'US dollars, one payment', href: '/base-builder', btn: 'see the base builder bible', allowed: "you're allowed to take the easier option. it still counts." },
+    engine: { tag: 'build the engine', name: 'Build the engine', you: "you're already running 30 minutes, a few times a week. you want more out of your easy running.",
+              product: 'Base Builder Bible, plan 03', short: 'the base builder bible, plan 03', to: 'built to get you to over three hours of running a week and a 70-minute long run.',
+              price: 19, note: 'US dollars, one payment', href: '/base-builder', btn: 'see the base builder bible', allowed: "you're allowed to hold back. it still counts." },
+    // BEN TO CONFIRM the entry rule for this one (see plan() below).
+    speed:  { tag: 'ready for speed', name: 'Ready for speed', you: 'you can run 30 minutes, you run most weeks and you can chat while you do it. now you want to get quicker.',
+              product: 'Run Faster in 30 Days', short: 'run faster in 30 days', to: 'built to get you to a faster 5K time trial on day 30 than on day 1, on four runs a week.',
+              price: 29, note: 'Australian dollars, one payment', href: '/run-faster', btn: 'see run faster in 30 days', allowed: "you're allowed to run easy most days. it still counts." }
+  };
+
+  var KEY = 'bb_quiz_v1', state = { a: [], i: 0, email: null };
+  try { var saved = JSON.parse(sessionStorage.getItem(KEY) || 'null'); if (saved && Array.isArray(saved.a)) state = saved; } catch (e) {}
+  function save(){ try { sessionStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  function track(name, props){ try { window.plausible(name, props ? { props: props } : undefined); } catch (e) {} }
+  function $(id){ return document.getElementById(id); }
+  var screens = ['qz-intro', 'qz-q', 'qz-email', 'qz-result'];
+  function show(id){ screens.forEach(function(s){ $(s).hidden = s !== id; }); window.scrollTo(0, 0); }
+
+  // ---- scoring
+  function plan(a){
+    var q1 = a[0], q2 = a[1], q3 = a[2], q12 = a[11];
+    if (q1 === 0) return 'zero';
+    if (q1 === 1) return 'going';
+    // 30 minutes or more. Plan 03 is for 30 minutes, three times a week:
+    if (q2 === 0) return 'going';                               // not running most weeks: the easier plan
+    // ENTRY RULE FOR "READY FOR SPEED" (Ben to confirm): 30 minutes or more,
+    // running 2 or more times a week, can talk easily, and wants to run faster.
+    if (q3 === 2 && q12 === 2) return 'speed';
+    if (q2 === 1 && q12 === 0) return 'going';                  // between two plans, the easier one
+    return 'engine';
+  }
+  function culprits(a, planKey){
+    var score = {};
+    a.forEach(function(ans, qi){ var p = (Q[qi].o[ans] || {}).p; if (p) Object.keys(p).forEach(function(k){ score[k] = (score[k] || 0) + p[k]; }); });
+    var list = ORDER.filter(function(k){ return score[k] > 0; });
+    // from zero: it is almost always pace, so fuel and recovery only show at their maximum
+    if (planKey === 'zero') list = list.filter(function(k){ return !MAX[k] || score[k] >= MAX[k]; });
+    list.sort(function(x, y){ return (score[y] - score[x]) || (ORDER.indexOf(x) - ORDER.indexOf(y)); });
+    return list.slice(0, 3);
+  }
+  function words(n){ return n === 3 ? 'all three are' : n === 2 ? 'both are' : "that's"; }
+  function join(xs){ return xs.length > 1 ? xs.slice(0, -1).join(', ') + ' and ' + xs[xs.length - 1] : xs[0]; }
+
+  // ---- questions
+  function render(){
+    var i = state.i, q = Q[i];
+    $('qz-count').textContent = (i + 1) + ' / ' + Q.length;
+    $('qz-bar').firstElementChild.style.width = (i / Q.length * 100) + '%';
+    $('qz-bar').setAttribute('aria-valuenow', i);
+    $('qz-sec').textContent = q.s; $('qz-text').textContent = q.t;
+    $('qz-back').disabled = false;
+    var box = $('qz-opts'); box.innerHTML = '';
+    q.o.forEach(function(o, oi){
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'qz-opt' + (state.a[i] === oi ? ' on' : ''); b.textContent = o.l;
+      b.addEventListener('click', function(){ answer(oi); });
+      box.appendChild(b);
+    });
+    show('qz-q');
+  }
+  var busy = false;
+  function answer(oi){
+    if (busy) return; busy = true;
+    var i = state.i;
+    state.a[i] = oi; save();
+    $('qz-opts').children[oi].classList.add('on');
+    track('Quiz Answered', { question: ('0' + (i + 1)).slice(-2) + ' ' + Q[i].t, answer: Q[i].o[oi].l });
+    setTimeout(function(){
+      busy = false;
+      if (i + 1 < Q.length) { state.i = i + 1; save(); render(); }
+      else { track('Quiz Completed'); state.i = Q.length; save(); state.email === null ? show('qz-email') : result(); }
+    }, 180);
+  }
+  $('qz-back').addEventListener('click', function(){
+    if (state.i > 0) { state.i--; save(); render(); } else show('qz-intro');
+  });
+  $('qz-start').addEventListener('click', function(){ state = { a: [], i: 0, email: null }; save(); track('Quiz Started'); render(); });
+
+  // ---- email step
+  function current(){ var pk = plan(state.a), cs = culprits(state.a, pk); return { pk: pk, cs: cs }; }
+  $('qz-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var f = new FormData(e.target), email = String(f.get('email') || '').trim(), msg = $('qz-msg'), send = $('qz-send');
+    if (f.get('website')) { state.email = 'skipped'; save(); return result(); }
+    if (!/^\S+@\S+\.\S+$/.test(email)) { msg.textContent = 'that email does not look right. or tap skip.'; return; }
+    var r = current();
+    send.disabled = true; msg.textContent = 'one sec…';
+    fetch('/api/quiz', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ firstName: String(f.get('firstName') || '').trim(), email: email, plan: P[r.pk].tag, culprit: r.cs[0] ? C[r.cs[0]].tag : 'none' }) })
+      .then(function(res){ return res.json().catch(function(){ return {}; }).then(function(b){ return res.ok && b.ok; }); })
+      .catch(function(){ return false; })
+      .then(function(ok){
+        // never hold the result hostage to the email tool
+        track('Quiz Email', { what: ok ? 'captured' : 'failed' });
+        state.email = ok ? 'captured' : 'failed'; save(); send.disabled = false; msg.textContent = ''; result();
+      });
+  });
+  $('qz-skip').addEventListener('click', function(){ track('Quiz Email', { what: 'skipped' }); state.email = 'skipped'; save(); result(); });
+
+  // ---- result
+  function result(){
+    var r = current(), p = P[r.pk], cs = r.cs;
+    $('r-name').textContent = p.name; $('r-you').textContent = p.you;
+    $('r-count').textContent = cs.length === 3 ? 'your 3 things' : cs.length === 2 ? 'your 2 things' : cs.length === 1 ? 'your 1 thing' : 'your things';
+    var box = $('r-things'); box.innerHTML = '';
+    cs.forEach(function(k, n){
+      var c = C[k], d = document.createElement('div'); d.className = 'qz-thing';
+      d.innerHTML = '<span class="qz-thing-no">0' + (n + 1) + '</span><h3></h3><p></p><p></p>';
+      d.children[1].textContent = c.h; d.children[2].textContent = c.a; d.children[3].textContent = c.b;
+      box.appendChild(d);
+    });
+    if (!cs.length) {
+      var d = document.createElement('div'); d.className = 'qz-thing';
+      d.innerHTML = '<span class="qz-thing-no">00</span><h3>nothing jumped out.</h3><p>your answers look pretty sensible.</p><p>so it is probably not one big mistake. it is just a matter of the right next step for where you are.</p>';
+      box.appendChild(d);
+    }
+    var inPlan = cs.filter(function(k){ return !C[k].book; }), inBook = cs.filter(function(k){ return C[k].book; });
+    $('r-product').textContent = p.product;
+    $('r-cover').textContent = !cs.length ? 'the right next step for where you are is ' + p.short + '.'
+      : inPlan.length ? words(inPlan.length) + ' covered in ' + p.short + '.'
+      : 'your next step for where you are is ' + p.short + '.';
+    var book = $('r-book');
+    book.hidden = !inBook.length;
+    if (inBook.length) book.textContent = join(inBook.map(function(k){ return C[k].tag; })) + (inBook.length > 1 ? ' are' : ' is') + ' covered in the ultimate running bible, which comes free with it.';
+    $('r-to').textContent = p.to;
+    $('r-price').textContent = '$' + p.price; $('r-price-note').textContent = p.note;
+    var btn = $('r-btn');
+    btn.href = p.href + '?from=quiz'; btn.setAttribute('data-what', p.href);
+    btn.innerHTML = ''; btn.appendChild(document.createTextNode(p.btn + ' ')); var ar = document.createElement('span'); ar.className = 'ar'; ar.textContent = '→'; btn.appendChild(ar);
+    $('r-allowed').textContent = p.allowed;
+    show('qz-result');
+    track('Quiz Result', { plan: p.tag, culprit: cs[0] ? C[cs[0]].tag : 'none', culprits: cs.map(function(k){ return C[k].tag; }).join(', ') || 'none' });
+    // the Base Builder Bible is priced by country, the same as on its page
+    if (p.href === '/base-builder' && window.fetch) fetch('/api/geo').then(function(x){ return x.json(); }).then(function(g){
+      var t = ((((window.BB_CHECKOUT || {})['base-builder'] || {}).local) || {})[g && g.tier];
+      if (t && t.price) $('r-price').textContent = '$' + t.price;
+    }).catch(function(){});
+  }
+  $('qz-again').addEventListener('click', function(){ state = { a: [], i: 0, email: state.email }; save(); track('Quiz Restarted'); show('qz-intro'); });
+
+  // pick up where they left off (a reload, or coming back from the sales page)
+  if (state.a.length && state.i >= Q.length && state.a.length === Q.length) { state.email === null ? show('qz-email') : result(); }
+  else if (state.a.length && state.i < Q.length) render();
+
+  // for the test script only
+  window.__quiz = { plan: plan, culprits: culprits, Q: Q };
+})();
+</script>
+</body>
+</html>

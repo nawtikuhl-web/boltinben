@@ -41,6 +41,7 @@
 /api/onboarding          /.netlify/functions/onboarding 200
 /api/watch-setup         /.netlify/functions/watch-setup 200
 /api/geo                 /.netlify/functions/geo      200
+/api/quiz                /.netlify/functions/quiz     200
 /coaching                /coaching.html               200
 /plans                   /plans.html                  200
 /zero-to-runner          /zero-to-runner.html         200
@@ -48,6 +49,7 @@
 /5k                      /5k.html                     200
 /10k                     /10k.html                    200
 /21k                     /21k.html                    200
+/quiz                    /quiz.html                   200
 /base-builder/watch      /base-builder-watch.html     200
 /base-builder/thanks     /base-builder-thanks.html    200
 /base-builder            /base-builder.html           200
