@@ -211,7 +211,7 @@
         <select id="w-start" name="start" required><option value="">Pick one</option><option>Start 1: From zero</option><option>Start 2: Getting going</option><option>Start 3: Build the engine</option></select></div>
       <div class="f"><label for="w-watch">Your watch</label>
         <select id="w-watch" name="watch" required><option value="">Pick one</option><option>Garmin</option><option>Apple Watch</option><option>COROS</option><option>Suunto</option><option>Polar</option><option>Wahoo</option><option>Other</option></select></div>
-      <div class="f full"><label for="w-day1">The day you want to start</label><input id="w-day1" name="day1" type="date" required></div>
+      <div class="f full"><label for="w-day1">The Monday you want to start</label><input id="w-day1" name="day1" type="date" step="7" required></div>
       <label class="bb-wf-check full"><input type="checkbox" name="attached" id="w-att"> <span>I’ve added Ben as my coach in TrainingPeaks</span></label>
       <div class="f full"><label for="w-notes">Anything I should know <span style="opacity:.6">(optional)</span></label><textarea id="w-notes" name="notes" style="min-height:90px"></textarea></div>
       <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;padding:0">
@@ -248,6 +248,14 @@
     try { if (sessionStorage.getItem('bb_watch_purchase')) return; sessionStorage.setItem('bb_watch_purchase', '1'); } catch (e) {}
     try { window.plausible && plausible('Watch Purchase', { props: { what: 'Base Builder watch version' } }); } catch (e) {}
   });
+  // Plans start on a Monday: default to the next one (a week out if today
+  // is Monday), and let the picker only step Monday to Monday.
+  (function(){
+    var el = document.getElementById('w-day1'), d = new Date();
+    d.setDate(d.getDate() + ((8 - d.getDay()) % 7 || 7));
+    var iso = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+    el.min = iso; el.value = iso;
+  })();
   var form = document.getElementById('bb-wf'), msg = document.getElementById('w-msg'), send = document.getElementById('w-send');
   function say(t, bad){ msg.textContent = t; msg.className = 'form-msg' + (bad ? ' bad' : ''); }
   form.addEventListener('submit', function(e){
@@ -255,6 +263,7 @@
     var d = {}; new FormData(form).forEach(function(v, k){ d[k] = v; });
     d.attached = document.getElementById('w-att').checked; d.paid = paid;
     var ok = /^\S+@\S+\.\S+$/;
+    if (d.day1 && new Date(d.day1 + 'T12:00:00').getDay() !== 1) { say('Pick a Monday to start on.', true); return; }
     if (!String(d.name).trim() || !ok.test(d.email) || !ok.test(d.tp_email) || !d.start || !d.watch || !d.day1) { say('Fill in every box, then send it again.', true); return; }
     send.disabled = true; say('Sending…');
     fetch('/api/watch-setup', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) })
