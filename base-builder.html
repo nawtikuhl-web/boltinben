@@ -137,6 +137,78 @@
   .bb-faq summary::after{right:20px}
   .bb-faq details>div{padding:0 20px 20px}
 }
+/* visuals pass (25 Nov) */
+.bb .photo{position:relative;overflow:hidden;border-radius:var(--r)}
+.bb .photo>img{width:100%;height:100%;object-fit:cover;display:block}
+.bb-hero-photo{height:min(78vh,720px);min-height:460px;margin-bottom:var(--gap)}
+.bb-hero-photo>img{object-position:50% 46%}
+.bb-hero-photo::after,.bb-over::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 30%,rgba(0,0,0,.82) 100%)}
+.bb-hero-photo h1{position:absolute;left:44px;right:44px;bottom:40px;z-index:1;font-size:clamp(50px,8.4vw,132px);max-width:9em}
+.bb-intro h1{display:none}
+.bb-pull{font-family:var(--display);font-weight:600;font-size:clamp(24px,2.3vw,32px)!important;line-height:1.12;color:var(--fg)!important;margin:22px 0 10px!important}
+.bb-pull-volt{color:var(--volt)!important;font-size:clamp(28px,3vw,42px)!important}
+.bb-loop{list-style:none;padding:0;margin:14px 0 6px;display:flex;flex-wrap:wrap;gap:8px;counter-reset:lp}
+.bb-loop li{counter-increment:lp;background:var(--tile-2);border-radius:10px;padding:10px 14px;font-size:16px;color:var(--fg);display:flex;gap:10px;align-items:baseline}
+.bb-loop li::before{content:counter(lp);font-family:var(--mono);font-size:12.5px;color:var(--volt)}
+.bb-loop li:last-child{background:var(--volt);color:var(--ink);font-weight:600}
+.bb-loop li:last-child::before{content:"↻";color:var(--ink);font-size:15px}
+.bb-band-sec{padding-block:0!important}
+.bb-band{display:grid;grid-template-columns:repeat(6,1fr);gap:var(--gap);padding:0 var(--gap)}
+.bb-band img{width:100%;aspect-ratio:3/4.4;object-fit:cover;border-radius:var(--r)}
+.bb-band img:nth-child(even){margin-top:36px}
+.bb-over{min-height:560px;display:flex;align-items:flex-end}
+.bb-over>img{position:absolute;inset:0}
+.bb-over>div{position:relative;z-index:1;padding:40px}
+.bb-over h2{font-size:clamp(38px,4.4vw,64px);margin-bottom:18px}
+.bb-over p{color:rgba(255,255,255,.86);font-size:18px}
+.bb-over .lede{font-size:21px;color:#fff}
+.bb-nums{counter-reset:n;gap:0!important}
+.bb-nums li{counter-increment:n;padding:16px 0 16px 58px!important;border-bottom:1px solid var(--line);font-size:19px!important}
+.bb-nums li::before{content:counter(n,decimal-leading-zero)!important;background:none!important;width:auto!important;height:auto!important;top:14px!important;font-family:var(--display);font-weight:600;font-size:26px;color:var(--volt)}
+.bb-same{list-style:none;padding:0;margin:16px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bb-same li{background:var(--tile-2);border-radius:12px;padding:16px 14px;font-weight:600;color:var(--fg);font-size:17px;box-shadow:inset 0 2px 0 var(--volt)}
+.bb-nos{list-style:none;padding:0;margin:16px 0;display:flex;flex-wrap:wrap;gap:8px}
+.bb-nos li{border-radius:100px;padding:9px 16px;font-size:15.5px;color:var(--fg);box-shadow:inset 0 0 0 1.5px var(--line)}
+.bb-plan{padding:0!important;overflow:hidden;gap:0!important}
+.bb-plan>*:not(.bb-plan-ph){margin-inline:28px}
+.bb-plan>h3{margin-top:24px}
+.bb-plan>div:not(.bb-plan-ph):not(.bb-min),.bb-plan>p{margin-top:18px}
+.bb-plan-ph{height:230px;border-radius:0!important}
+.bb-plan-ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(30,30,30,1) 100%)}
+.bb-plan-ph .bb-plan-no{position:absolute;left:28px;bottom:6px;z-index:1;font-size:72px}
+.bb-min{margin-top:auto!important;padding:22px 0 26px}
+.bb-plan .bb-plan-foot{margin-top:18px!important}
+.bb-min-bars{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;align-items:end;height:110px;margin-top:26px}
+.bb-min-bars i{position:relative;display:block;background:var(--volt);border-radius:5px 5px 2px 2px;min-height:8px}
+.bb-min-bars i.lt{background:var(--purple)}
+.bb-min-bars b{position:absolute;left:0;right:0;top:-19px;text-align:center;font-family:var(--mono);font-size:11.5px;font-weight:400;color:var(--mute)!important}
+
+.bb-bonus-cover{width:150px;height:auto;border-radius:8px;transform:rotate(3deg);box-shadow:0 18px 40px rgba(0,0,0,.5)}
+.bb-promise-grid{grid-template-columns:.7fr 1.3fr}
+.bb-promise-grid .bb-ph{min-height:340px}
+.bb-promise{grid-template-columns:1fr!important;align-content:center}
+.bb-final{position:relative;overflow:hidden}
+.bb-final>*{position:relative;z-index:1}
+.bb-final-bg{position:absolute!important;inset:0;width:100%;height:100%;object-fit:cover;opacity:.34;z-index:0!important}
+.bb-final-cover{width:150px;height:auto;border-radius:8px;transform:rotate(-3deg);box-shadow:0 20px 50px rgba(0,0,0,.6);margin-bottom:30px}
+.bb-final p{color:rgba(255,255,255,.86)!important}
+@media (max-width:900px){
+  .bb-band{grid-template-columns:repeat(3,1fr)}
+  .bb-bonus{grid-template-columns:1fr!important}
+  .bb-promise-grid{grid-template-columns:1fr}
+  .bb-promise-grid .bb-ph{min-height:0;aspect-ratio:16/10}
+}
+@media (max-width:640px){
+  .bb-hero-photo{height:70vh;min-height:420px}
+  .bb-hero-photo h1{left:22px;right:22px;bottom:24px}
+  .bb-over{min-height:480px}
+  .bb-over>div{padding:24px}
+  .bb-same{grid-template-columns:1fr}
+  .bb-band img:nth-child(even){margin-top:18px}
+  .bb-plan>*:not(.bb-plan-ph){margin-inline:22px}
+  .bb-plan-ph .bb-plan-no{left:22px}
+  .bb-bonus-cover{width:120px}
+}
 </style>
 </head>
 <body>
@@ -160,13 +232,16 @@
 
 <section class="bb-hero">
   <div class="wrap">
+    <div class="photo bb-hero-photo">
+      <img src="/assets/bb-ph-opera.webp" alt="Ben running past the Sydney Opera House at sunrise" fetchpriority="high">
+      <h1 class="display">Get faster without running <em>harder.</em></h1>
+    </div>
     <div class="grid g2 bb-hero-grid">
       <div class="card bb-intro">
-        <h1 class="display">Get faster without running <em>harder.</em></h1>
         <p class="lede">You’ve slowed down like everyone told you to.</p>
         <p>Now you’re shuffling along, walking hills you used to run and wondering how on earth running this slowly is supposed to make you faster.</p>
         <p>Meanwhile, someone walking their Labradoodle is giving you a run for your money.</p>
-        <p>It’s a humbling little sport, isn’t it?</p>
+        <p class="bb-pull">It’s a humbling little sport, isn’t it?</p>
         <p>But imagine running your usual route in eight weeks and realising you’re moving faster, breathing easier and not counting down the minutes until it’s over.</p>
         <p><b>That’s what we’re working towards.</b></p>
       </div>
@@ -202,30 +277,39 @@
       <div class="card coach-card bb-story">
         <h2 class="display">I wasn’t shit at running. I was shit at <em>training.</em></h2>
         <p>My original running plan went something like this:</p>
-        <p>Sign up for an event. Run a little further every time I went out. Hate every second of it. Injure myself. Repeat.</p>
+        <ol class="bb-loop"><li>Sign up for an event.</li><li>Run a little further every time I went out.</li><li>Hate every second of it.</li><li>Injure myself.</li><li>Repeat.</li></ol>
         <p>I thought eventually I’d get fit enough for running to stop feeling horrible.</p>
         <p>The problem was that I was constantly testing my fitness rather than giving my body a chance to build it.</p>
         <p>So I slowed down. Properly slowed down. At first, that meant walking more than my ego was particularly comfortable with.</p>
-        <p>Six to eight months later, my easy pace had gone from 7:00/km to 5:00/km at the same heart rate.</p>
+        <p class="bb-pull">Six to eight months later, my easy pace had gone from 7:00/km to 5:00/km at the same heart rate.</p>
         <p>But the biggest win wasn’t the number on my watch.</p>
         <p>It was that running finally felt good. I could go further, recover better and actually look forward to my next run.</p>
-        <p>I went from someone who ran to someone who loved running.</p>
+        <p class="bb-pull bb-pull-volt">I went from someone who ran to someone who loved running.</p>
         <p><b>That’s what I want for you.</b></p>
       </div>
     </div>
   </div>
 </section>
 
+<section class="bb-band-sec" aria-hidden="true">
+  <div class="bb-band">
+    <img src="/assets/bb-ph-fog.webp" alt="" loading="lazy"><img src="/assets/bb-ph-bridge.webp" alt="" loading="lazy"><img src="/assets/bb-ph-city.webp" alt="" loading="lazy"><img src="/assets/bb-ph-sun.webp" alt="" loading="lazy"><img src="/assets/bb-ph-palms.webp" alt="" loading="lazy"><img src="/assets/bb-ph-trail.webp" alt="" loading="lazy">
+  </div>
+</section>
+
 <section>
   <div class="wrap">
     <div class="grid g2">
-      <div class="card bb-text">
-        <h2 class="display">Your easy pace is worth working <em>on.</em></h2>
-        <p>Everyone seems to be obsessed with their 5K PB, but your easy pace is where you spend most of your time as a runner.</p>
-        <p>When that improves, a whole lot of other things start to improve with it.</p>
+      <div class="photo bb-over">
+        <img src="/assets/bb-ph-tree.webp" alt="Ben running easy through a park at dawn" loading="lazy">
+        <div>
+          <h2 class="display">Your easy pace is worth working <em>on.</em></h2>
+          <p>Everyone seems to be obsessed with their 5K PB, but your easy pace is where you spend most of your time as a runner.</p>
+          <p>When that improves, a whole lot of other things start to improve with it.</p>
+        </div>
       </div>
       <div class="card list-card bb-list">
-        <ul class="ticks">
+        <ul class="ticks bb-nums">
           <li>Running further without constantly needing a break.</li>
           <li>Holding a conversation without sounding like you’re on life support.</li>
           <li>Running your usual pace at a lower heart rate.</li>
@@ -241,10 +325,13 @@
 <section>
   <div class="wrap">
     <div class="grid g2">
-      <div class="card bb-text">
-        <h2 class="display">Stop guessing whether your training is <em>working.</em></h2>
-        <p>The problem with Zone 2 is that you don’t necessarily notice the progress from one run to the next.</p>
-        <p>So I’ve built a test into the plan.</p>
+      <div class="photo bb-over">
+        <img src="/assets/bb-ph-reflect.webp" alt="Ben running beside a lake, reflected in the water" loading="lazy">
+        <div>
+          <h2 class="display">Stop guessing whether your training is <em>working.</em></h2>
+          <p>The problem with Zone 2 is that you don’t necessarily notice the progress from one run to the next.</p>
+          <p>So I’ve built a test into the plan.</p>
+        </div>
       </div>
       <div class="card bb-text bb-test">
         <div class="bb-test-row">
@@ -253,10 +340,10 @@
           <div class="bb-test-wk on"><span class="mono">Week 8</span><b>Test again</b></div>
         </div>
         <p>In Week 1, you’ll establish your baseline. In Week 8, you’ll test again.</p>
-        <p><b>Same route. Same heart rate. Similar conditions.</b></p>
+        <ul class="bb-same"><li>Same route.</li><li>Same heart rate.</li><li>Similar conditions.</li></ul>
         <p>If you’re running faster without working harder, your engine has improved. If you’re holding the same pace at a lower heart rate, that’s a win too.</p>
         <p>If you’re starting from zero, we’ll measure how long you can comfortably run without stopping instead.</p>
-        <p>No chasing PBs. No emptying the tank. No lying on the footpath questioning your life choices.</p>
+        <ul class="bb-nos"><li>No chasing PBs.</li><li>No emptying the tank.</li><li>No lying on the footpath questioning your life choices.</li></ul>
         <p>Just a simple way to measure the fitness you’ve been building.</p>
       </div>
     </div>
@@ -303,23 +390,26 @@
     </div>
     <div class="grid g3">
       <div class="card bb-plan">
-        <span class="bb-plan-no">01.</span>
+        <div class="photo bb-plan-ph"><img src="/assets/bb-ph-zero.webp" alt="Ben looking out over a town from a hilltop" loading="lazy"><span class="bb-plan-no">01.</span></div>
         <h3>From zero</h3>
         <div><span class="mono">Right now</span><p>You can’t run for 10 minutes without stopping or holding a conversation feels wildly optimistic.</p></div>
         <div><span class="mono">Where we’re heading</span><p>20 minutes of continuous, comfortable running.</p></div>
         <p class="bb-plan-foot">Three run-walk sessions a week, gradually building up your running time.</p>
+        <div class="bb-min"><span class="mono">Planned minutes each week</span><div class="bb-min-bars" role="img" aria-label="Planned minutes for weeks 1 to 8: 78, 76, 80, 65, 76, 78, 78, 52"><i class="" style="height:98%"><b>78</b></i><i class="" style="height:95%"><b>76</b></i><i class="" style="height:100%"><b>80</b></i><i class="lt" style="height:81%"><b>65</b></i><i class="" style="height:95%"><b>76</b></i><i class="" style="height:98%"><b>78</b></i><i class="" style="height:98%"><b>78</b></i><i class="lt" style="height:65%"><b>52</b></i></div></div>
       </div>
       <div class="card bb-plan">
-        <span class="bb-plan-no">02.</span>
+        <div class="photo bb-plan-ph"><img src="/assets/bb-ph-going.webp" alt="Ben running along a bridge in pink morning fog" loading="lazy"><span class="bb-plan-no">02.</span></div>
         <h3>Getting going</h3>
         <div><span class="mono">Right now</span><p>You can run for 15–20 minutes, but you’re inconsistent, still finding running hard or struggling to increase your distance.</p></div>
         <div><span class="mono">Where we’re heading</span><p>Four runs a week, a 40-minute long run and a stronger aerobic base.</p></div>
+        <div class="bb-min"><span class="mono">Planned minutes each week</span><div class="bb-min-bars" role="img" aria-label="Planned minutes for weeks 1 to 8: 65, 75, 80, 65, 95, 105, 115, 65"><i class="" style="height:57%"><b>65</b></i><i class="" style="height:65%"><b>75</b></i><i class="" style="height:70%"><b>80</b></i><i class="lt" style="height:57%"><b>65</b></i><i class="" style="height:83%"><b>95</b></i><i class="" style="height:91%"><b>105</b></i><i class="" style="height:100%"><b>115</b></i><i class="lt" style="height:57%"><b>65</b></i></div></div>
       </div>
       <div class="card bb-plan">
-        <span class="bb-plan-no">03.</span>
+        <div class="photo bb-plan-ph"><img src="/assets/bb-ph-engine.webp" alt="Ben running along a city walkway" loading="lazy"><span class="bb-plan-no">03.</span></div>
         <h3>Build the engine</h3>
         <div><span class="mono">Right now</span><p>You’re already running for 30 minutes, three times a week, but want to get more out of your easy running.</p></div>
         <div><span class="mono">Where we’re heading</span><p>Over three hours of weekly running, a 70-minute long run and improved aerobic fitness.</p></div>
+        <div class="bb-min"><span class="mono">Planned minutes each week</span><div class="bb-min-bars" role="img" aria-label="Planned minutes for weeks 1 to 8: 145, 160, 175, 125, 175, 185, 195, 95"><i class="" style="height:74%"><b>145</b></i><i class="" style="height:82%"><b>160</b></i><i class="" style="height:90%"><b>175</b></i><i class="lt" style="height:64%"><b>125</b></i><i class="" style="height:90%"><b>175</b></i><i class="" style="height:95%"><b>185</b></i><i class="" style="height:100%"><b>195</b></i><i class="lt" style="height:49%"><b>95</b></i></div></div>
       </div>
     </div>
     <div class="card t-volt bb-all">
@@ -402,9 +492,12 @@
 <section>
   <div class="wrap">
     <div class="grid g2">
-      <div class="card bb-text">
-        <h2 class="display">You don’t need to be good at running to get good at <em>running.</em></h2>
-        <p class="lede">I made this for everyday runners.</p>
+      <div class="photo bb-over">
+        <img src="/assets/bb-ph-steps.webp" alt="Ben sitting on some steps after a run" loading="lazy">
+        <div>
+          <h2 class="display">You don’t need to be good at running to get good at <em>running.</em></h2>
+          <p class="lede">I made this for everyday runners.</p>
+        </div>
       </div>
       <div class="card list-card bb-list">
         <ul class="ticks">
@@ -424,6 +517,8 @@
 
 <section>
   <div class="wrap">
+    <div class="grid bb-promise-grid">
+    <div class="photo bb-ph"><img src="/assets/bb-ph-park.webp" alt="Ben running across a park at golden hour" loading="lazy"></div>
     <div class="card t-mint bb-promise">
       <div>
         <h2 class="display">Give me eight weeks of your running.</h2>
@@ -434,6 +529,7 @@
         <p>If your final test shows no improvement, email me your running log within 90 days of purchasing and I’ll refund you.</p>
         <p>I want you to give easy running a proper go, rather than another three half-hearted attempts before deciding it doesn’t work.</p>
       </div>
+    </div>
     </div>
   </div>
 </section>
@@ -460,6 +556,8 @@
 <section id="buy">
   <div class="wrap">
     <div class="card bb-final">
+      <img class="bb-final-bg" src="/assets/bb-ph-lamps.webp" alt="" loading="lazy">
+      <img class="bb-final-cover" src="/assets/bb-cover.webp" alt="The Base Builder Bible cover" width="619" height="1100" loading="lazy">
       <h2 class="display">Make easy your new <em>fast.</em></h2>
       <p>Eight weeks from now, you could still be wondering why running feels so hard.</p>
       <p>Or you could be looking back at your first Base Test and seeing just how far you’ve come.</p>
