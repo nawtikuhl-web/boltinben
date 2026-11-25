@@ -7,7 +7,7 @@
 <meta name="description" content="Get faster without running harder. Make easy faster in 8 weeks: three start points, one heart rate, zero heroics. US$19, with The Ultimate Running Bible free.">
 <meta property="og:title" content="The Base Builder Bible · Boltin Ben">
 <meta property="og:description" content="Get faster without running harder. Make easy faster in 8 weeks: three start points, one heart rate, zero heroics. US$19, with The Ultimate Running Bible free.">
-<meta property="og:image" content="https://boltin.io/assets/og.jpg">
+<meta property="og:image" content="https://boltin.io/assets/bb-og.jpg">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#000000">
@@ -21,6 +21,9 @@
 /* Base Builder pages: no all-caps labels (Ben's brief, 24 Nov 2026) */
 .bb .display,.bb .mono,.bb .btn,.bb .chip,.bb .stat-top span,.bb .feat h3,.bb .list-card h3,.bb .proof-quote figcaption,.bb h3{text-transform:none}
 .bb .mono{letter-spacing:.02em;font-size:13.5px}
+.nav .brand{cursor:default}
+.nav-in{justify-content:space-between}
+.bb-foot{justify-content:center}
 .nav-links a,.nav-alt,.nav-cta,.foot nav a{text-transform:none;letter-spacing:.01em}
 .bb .btn{letter-spacing:.01em;font-size:16.5px}
 .bb .display{letter-spacing:-.02em;line-height:1}
@@ -42,7 +45,11 @@
 .bb-bar{height:10px;border-radius:10px;background:var(--tile-2);overflow:hidden;margin-bottom:20px}
 .bb-bar i{display:block;height:100%;width:100%;background:var(--volt);border-radius:10px}
 .bb-pace-cap{font-size:19px}
-.bb-buy{padding:34px;display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+.bb-buy{padding:28px;display:grid;grid-template-columns:150px 1fr;gap:26px;align-items:center}
+.bb-buy-cover{width:150px;height:auto;border-radius:8px;box-shadow:0 18px 40px rgba(0,0,0,.45);transform:rotate(-2deg)}
+.bb-buy-body{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+.bb-pages{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 0 18px;margin-bottom:var(--gap);scrollbar-width:thin}
+.bb-pages img{flex:none;width:210px;height:auto;border-radius:10px;scroll-snap-align:start;box-shadow:0 0 0 1px var(--line)}
 .bb-buy h2{font-size:clamp(36px,3.8vw,56px)}
 .bb-buy p{font-size:17px}
 .bb-buy .btn{margin-top:4px}
@@ -118,6 +125,9 @@
   .bb-bonus,.bb-promise{grid-template-columns:1fr}
 }
 @media (max-width:640px){
+  .bb-buy{grid-template-columns:1fr}
+  .bb-buy-cover{width:130px}
+  .bb-pages img{width:170px}
   .bb-intro,.bb-pace,.bb-buy,.bb-text,.bb-list,.bb-plan,.bb-bonus,.bb-promise,.bb-final{padding:24px}
   .bb-final{padding:36px 22px}
   .bb-phases{grid-template-columns:1fr}
@@ -141,15 +151,8 @@
 
 <header class="nav">
   <div class="wrap nav-in">
-    <a class="brand" href="/" aria-label="Boltin Ben, home"><svg class="mark"><use href="#i-mark"/></svg><svg class="word"><use href="#i-word"/></svg></a>
-    <nav class="nav-links" aria-label="Pages">
-      <a href="/plans">Plans</a>
-      <a href="/community">Community</a>
-      <a href="/coaching">Coaching</a>
-      <a href="/free">Free tools</a>
-    </nav>
-    <a class="nav-alt" href="/">Menu</a>
-    <a class="nav-cta m-hide" href="#buy">Get the Bible <span class="ar" aria-hidden="true">→</span></a>
+    <span class="brand" aria-label="Boltin Ben"><svg class="mark"><use href="#i-mark"/></svg><svg class="word"><use href="#i-word"/></svg></span>
+    <a class="nav-cta" href="#buy">Get the Bible <span class="ar" aria-hidden="true">→</span></a>
   </div>
 </header>
 
@@ -176,11 +179,14 @@
           <p>Six to eight months of building my aerobic engine. It didn’t happen overnight, but it started with the same principles in this book.</p>
         </div>
         <div class="card t-volt bb-buy">
+          <img class="bb-buy-cover" src="/assets/bb-cover.webp" alt="The Base Builder Bible cover" width="619" height="1100">
+          <div class="bb-buy-body">
           <span class="mono">The Base Builder Bible</span>
           <h2 class="display">Make easy faster in 8 weeks.</h2>
           <p>Three start points. One heart rate. Zero heroics.</p>
           <a class="btn btn-dark" href="#" data-checkout data-what="hero">Get the Bible · $19 <span class="ar" aria-hidden="true">→</span></a>
           <p class="bb-small">One payment of US$19. Includes The Ultimate Running Bible (worth $19) for free. Both delivered straight to your inbox.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -275,7 +281,7 @@
           <p>&ldquo;Two months in Ubud that changed how I run.</p>
           <p>In December I ran my first half marathon in 1:58:57. This weekend, I crossed the finish line of my second @maybankmarathon in 1:42:30. 16-minute improvement, ~ 14% faster, and a new pace of 4:50/km compared to 5:38/km. Big thanks to my running coach @boltinben for guiding me with the right structure and mindset.&rdquo;</p>
         </blockquote>
-        <figcaption><a href="https://www.instagram.com/igor.nowhere/" target="_blank" rel="noopener">@igor.nowhere</a> &middot; Maybank Marathon half</figcaption>
+        <figcaption>@igor.nowhere &middot; Maybank Marathon half</figcaption>
       </figure>
     </div>
     <div class="grid proof-stats">
@@ -332,6 +338,15 @@
       <div>
         <h2 class="display">What’s inside the <em>Bible?</em></h2>
       </div>
+    </div>
+    <div class="bb-pages" tabindex="0" aria-label="Pages from the book">
+      <img src="/assets/bb-cover.webp" alt="The cover" width="619" height="1100" loading="lazy">
+      <img src="/assets/bb-p-contents.webp" alt="The contents page" width="619" height="1100" loading="lazy">
+      <img src="/assets/bb-p-first.webp" alt="Read this first, with the same heart rate, faster pace chart" width="619" height="1100" loading="lazy">
+      <img src="/assets/bb-p-start.webp" alt="Start here: pick one of three starting points" width="619" height="1100" loading="lazy">
+      <img src="/assets/bb-p-runs.webp" alt="The runs: run-walk, easy, long, strides and top of Zone 2" width="619" height="1100" loading="lazy">
+      <img src="/assets/bb-p-test.webp" alt="The Base Test, step by step" width="619" height="1100" loading="lazy">
+      <img src="/assets/bb-p-week1.webp" alt="Start 1, week 1: find your easy" width="619" height="1100" loading="lazy">
     </div>
     <div class="grid g3">
       <div class="card feat"><h3>Three complete training plans</h3><p>Every session mapped out, including how long to run, how hard it should feel and why you’re doing it. No pace targets.</p></div>
@@ -461,20 +476,8 @@
 
 
 <footer>
-  <div class="wrap foot">
+  <div class="wrap foot bb-foot">
     <span>© <span id="yr">2026</span> Boltin Ben · Sydney</span>
-    <div class="socials foot-soc">
-          <a class="soc" href="https://www.instagram.com/boltinben/" target="_blank" rel="noopener" aria-label="Boltin Ben on Instagram" data-track="Footer Social" data-what="Instagram"><svg aria-hidden="true"><use href="#i-ig"/></svg></a>
-          <a class="soc" href="https://www.tiktok.com/@boltinben" target="_blank" rel="noopener" aria-label="Boltin Ben on TikTok" data-track="Footer Social" data-what="TikTok"><svg aria-hidden="true"><use href="#i-tt"/></svg></a>
-          <a class="soc" href="https://www.youtube.com/@boltinben/videos" target="_blank" rel="noopener" aria-label="Boltin Ben on YouTube" data-track="Footer Social" data-what="YouTube"><svg aria-hidden="true"><use href="#i-yt"/></svg></a>
-    </div>
-    <nav aria-label="Footer">
-      <a href="/plans">Plans</a>
-      <a href="/community">Community</a>
-      <a href="/coaching">Coaching</a>
-      <a href="/free">Free tools</a>
-      <a href="/brands">Advertise</a>
-    </nav>
   </div>
 </footer>
 
