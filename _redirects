@@ -40,6 +40,7 @@
 /api/apply               /.netlify/functions/apply    200
 /api/onboarding          /.netlify/functions/onboarding 200
 /api/watch-setup         /.netlify/functions/watch-setup 200
+/api/geo                 /.netlify/functions/geo      200
 /coaching                /coaching.html               200
 /plans                   /plans.html                  200
 /zero-to-runner          /zero-to-runner.html         200

@@ -15,6 +15,9 @@ window.BB_CHECKOUT = {
   // pdf = the Stripe link for every buy button. watch = the TrainingPeaks
   // upsell on the thank-you page, watchPrice its label, e.g. 'US$29'.
   // Empty links fall back to an email to Ben.
-  'base-builder': { pdf: 'https://buy.stripe.com/8x214gbpf86uaXs0NFaZi0F', watch: 'https://buy.stripe.com/aFabIU0KBaeC0iO0NFaZi0G', watchPrice: '$29' },
+  // local: the book's price by country tier (netlify/functions/geo.js picks
+  // the tier from the visitor's IP). Tier 1 is pdf, the full US$19.
+  'base-builder': { pdf: 'https://buy.stripe.com/8x214gbpf86uaXs0NFaZi0F',
+    local: { 2: { price: 11, link: 'https://buy.stripe.com/9B66oAgJz5Ym9To9kbaZi0H' }, 3: { price: 8, link: 'https://buy.stripe.com/4gM3co2SJ4UiaXs67ZaZi0I' } }, watch: 'https://buy.stripe.com/aFabIU0KBaeC0iO0NFaZi0G', watchPrice: '$29' },
   'marathon': { pdf: 'https://buy.stripe.com/6oU14ggJz4Ui8Pk7c3aZi0D', plan: '', voice: '' }
 };
