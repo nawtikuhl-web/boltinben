@@ -20,14 +20,18 @@
 <meta name="robots" content="noindex">
 <style>
 /* Base Builder pages: no all-caps labels (Ben's brief, 24 Nov 2026) */
-.bb .display,.bb .mono,.bb .btn,.bb .chip,.bb .stat-top span,.bb .feat h3,.bb .list-card h3,.bb .proof-quote figcaption,.bb h3{text-transform:none}
-.bb .mono{letter-spacing:.02em;font-size:13.5px}
+/* Ben's brand guide (25 Nov): headlines are uppercase Barlow semibold; eyebrows are Barlow medium;
+   mono is for numbers and graphs only. Labels and buttons stay sentence case (his brief for this page). */
+.bb .mono,.bb .btn,.bb .chip,.bb .stat-top span,.bb .proof-quote figcaption{text-transform:none}
+.bb .mono,.bb .stat-top span,.bb .proof-quote figcaption{font-family:var(--body);font-weight:500}
+.bb h3{text-transform:uppercase}
+.bb .mono{letter-spacing:.01em;font-size:15px}
 .nav .brand{cursor:default}
 .nav-in{justify-content:space-between}
 .bb-foot{justify-content:center}
 .nav-links a,.nav-alt,.nav-cta,.foot nav a{text-transform:none;letter-spacing:.01em}
 .bb .btn{letter-spacing:.01em;font-size:16.5px}
-.bb .display{letter-spacing:-.02em;line-height:1}
+.bb .display{letter-spacing:-.012em;line-height:.96}
 .bb p+p{margin-top:12px}
 .bb .card p{color:var(--mute)}
 .bb .card b{color:var(--fg)}
@@ -58,7 +62,7 @@
 .bb-list{padding:40px}
 .bb-list .ticks li{font-size:17.5px;color:var(--fg)}
 .bb-after{margin-top:24px!important;color:var(--fg)!important;font-size:19px}
-.bb-note{font-size:15.5px;border-top:1px solid var(--line);padding-top:16px;margin-top:20px!important}
+.bb-note{font-size:15.5px;margin-top:20px!important}
 .bb-test-row{display:flex;align-items:center;gap:14px;margin-bottom:24px}
 .bb-test-wk{display:flex;flex-direction:column;gap:4px;padding:14px 18px;border-radius:12px;background:var(--tile-2)}
 .bb-test-wk b{font-size:19px}
@@ -71,7 +75,7 @@
 .bb-plan .mono{display:block;margin-bottom:6px}
 .bb-plan p{font-size:16.5px}
 .bb-plan div p{color:var(--fg)}
-.bb-plan-foot{margin-top:auto!important;border-top:1px solid var(--line);padding-top:16px}
+.bb-plan-foot{margin-top:auto!important}
 .bb-all{margin-top:var(--gap);padding:30px 34px;display:flex;justify-content:space-between;align-items:center;gap:20px 40px;flex-wrap:wrap}
 .bb-all h3{font-family:var(--display);font-size:clamp(30px,3vw,42px);font-weight:600;line-height:1;margin-bottom:8px}
 .bb-all-aside{max-width:22em;font-size:18px}
@@ -79,8 +83,8 @@
 .bb-fine{font-size:18px;color:var(--fg)}
 .bb-weeks{list-style:none;margin:0 0 var(--gap);padding:0;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px}
 .bb-weeks li{position:relative;background:var(--tile);border-radius:12px;padding:12px 12px 14px;font-family:var(--display);font-weight:600;font-size:40px;line-height:1;min-height:110px;display:flex;flex-direction:column;justify-content:flex-start;gap:8px}
-.bb-weeks li span{font-family:var(--mono);font-size:12.5px;font-weight:400;color:var(--mute)}
-.bb-weeks li i{position:absolute;left:12px;bottom:12px;font-style:normal;font-family:var(--mono);font-size:12px;font-weight:400}
+.bb-weeks li span{font-family:var(--body);font-size:13.5px;font-weight:500;color:var(--mute)}
+.bb-weeks li i{position:absolute;left:12px;bottom:12px;font-style:normal;font-family:var(--body);font-size:13px;font-weight:500}
 .bb-weeks li.rec{background:transparent;box-shadow:inset 0 0 0 1.5px var(--mint);color:var(--mint)}
 .bb-weeks li.rec{justify-content:flex-start;gap:8px}
 .bb-weeks li.hi{background:var(--volt);color:var(--ink)}
@@ -113,7 +117,7 @@
 .bb-final p{font-size:19px;max-width:34em}
 .bb-final-big{font-family:var(--display);font-weight:600;font-size:clamp(28px,3vw,40px)!important;color:var(--fg)!important;margin:26px 0 22px!important}
 .bb-final .bb-small{margin-top:18px!important}
-.bb-sign{margin-top:34px!important;padding-top:24px;border-top:1px solid var(--line);color:var(--fg)!important}
+.bb-sign{margin-top:34px!important;color:var(--fg)!important}
 .bb-ben{display:inline-flex;align-items:center;gap:6px;font-weight:600;white-space:nowrap}
 .bb-ben svg{width:18px;height:16px;color:var(--volt)}
 @media (max-width:900px){
