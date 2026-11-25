@@ -189,13 +189,13 @@
     <div class="card bb-ty">
       <span class="mono">The watch version</span>
       <h1 class="display">Let’s get it on your <em>watch.</em></h1>
-      <p class="lede">Three quick steps, then I load your plan into TrainingPeaks myself.</p>
+      <p class="lede">Three quick steps, then I share all three plans to your TrainingPeaks account. They’re yours to keep and start whenever you like.</p>
       <ol class="bb-steps">
         <li><span>1</span><p>Make a free TrainingPeaks account. <a href="https://www.trainingpeaks.com/" target="_blank" rel="noopener" data-track="Watch Setup Step" data-what="TrainingPeaks sign-up">Open TrainingPeaks</a></p></li>
-        <li><span>2</span><p>Add me as your coach, so I can put the plan in your calendar. <a href="https://home.trainingpeaks.com/attachtocoach?sharedKey=GVS3PR55IVE2Q" target="_blank" rel="noopener" data-track="Watch Setup Step" data-what="Add Ben as coach">Add Ben as your coach</a></p></li>
-        <li><span>3</span><p>Connect your watch inside TrainingPeaks, then fill in the form below.</p></li>
+        <li><span>2</span><p>Connect your watch inside TrainingPeaks.</p></li>
+        <li><span>3</span><p>Tell me the email on your TrainingPeaks account, in the form below.</p></li>
       </ol>
-      <p class="bb-small">Your plan lands in your TrainingPeaks calendar within 48 hours. Stuck? Email me at <a href="mailto:ben@sparkies.app">ben@sparkies.app</a>.</p>
+      <p class="bb-small">All three plans land in your TrainingPeaks plan library within 48 hours. Pick your starting point and apply it to any start date. Stuck? Email me at <a href="mailto:ben@sparkies.app">ben@sparkies.app</a>.</p>
     </div>
   </div>
 </section>
@@ -207,12 +207,6 @@
       <div class="f"><label for="w-name">Your name</label><input id="w-name" name="name" autocomplete="name" required></div>
       <div class="f"><label for="w-email">Email you paid with</label><input id="w-email" name="email" type="email" autocomplete="email" required></div>
       <div class="f full"><label for="w-tp">Email on your TrainingPeaks account</label><input id="w-tp" name="tp_email" type="email" required></div>
-      <div class="f"><label for="w-start">Your starting point</label>
-        <select id="w-start" name="start" required><option value="">Pick one</option><option>Start 1: From zero</option><option>Start 2: Getting going</option><option>Start 3: Build the engine</option></select></div>
-      <div class="f"><label for="w-watch">Your watch</label>
-        <select id="w-watch" name="watch" required><option value="">Pick one</option><option>Garmin</option><option>Apple Watch</option><option>COROS</option><option>Suunto</option><option>Polar</option><option>Wahoo</option><option>Other</option></select></div>
-      <div class="f full"><label for="w-day1">The Monday you want to start</label><input id="w-day1" name="day1" type="date" step="7" required></div>
-      <label class="bb-wf-check full"><input type="checkbox" name="attached" id="w-att"> <span>I’ve added Ben as my coach in TrainingPeaks</span></label>
       <div class="f full"><label for="w-notes">Anything I should know <span style="opacity:.6">(optional)</span></label><textarea id="w-notes" name="notes" style="min-height:90px"></textarea></div>
       <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;padding:0">
       <div class="form-foot full">
@@ -222,7 +216,7 @@
     </form>
     <div class="card t-volt bb-wf-done" id="bb-wf-done" hidden>
       <h2 class="display">Got it.</h2>
-      <p>I’ll load your plan into TrainingPeaks within 48 hours. Check your inbox for a confirmation.</p>
+      <p>I’ll share all three plans to your TrainingPeaks account within 48 hours. Check your inbox for a confirmation.</p>
     </div>
     <p class="bb-sign bb-sign-ty">See you out there. <span class="bb-ben">Ben <svg aria-hidden="true"><use href="#i-mark"/></svg></span></p>
   </div>
@@ -252,28 +246,19 @@
     try { if (sessionStorage.getItem('bb_watch_purchase')) return; sessionStorage.setItem('bb_watch_purchase', '1'); } catch (e) {}
     try { window.plausible && plausible('Watch Purchase', { props: { what: 'Base Builder watch version' } }); } catch (e) {}
   });
-  // Plans start on a Monday: default to the next one (a week out if today
-  // is Monday), and let the picker only step Monday to Monday.
-  (function(){
-    var el = document.getElementById('w-day1'), d = new Date();
-    d.setDate(d.getDate() + ((8 - d.getDay()) % 7 || 7));
-    var iso = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
-    el.min = iso; el.value = iso;
-  })();
   var form = document.getElementById('bb-wf'), msg = document.getElementById('w-msg'), send = document.getElementById('w-send');
   function say(t, bad){ msg.textContent = t; msg.className = 'form-msg' + (bad ? ' bad' : ''); }
   form.addEventListener('submit', function(e){
     e.preventDefault();
     var d = {}; new FormData(form).forEach(function(v, k){ d[k] = v; });
-    d.attached = document.getElementById('w-att').checked; d.paid = paid || fromEmail;
+    d.paid = paid || fromEmail;
     var ok = /^\S+@\S+\.\S+$/;
-    if (d.day1 && new Date(d.day1 + 'T12:00:00').getDay() !== 1) { say('Pick a Monday to start on.', true); return; }
-    if (!String(d.name).trim() || !ok.test(d.email) || !ok.test(d.tp_email) || !d.start || !d.watch || !d.day1) { say('Fill in every box, then send it again.', true); return; }
+    if (!String(d.name).trim() || !ok.test(d.email) || !ok.test(d.tp_email)) { say('Fill in every box, then send it again.', true); return; }
     send.disabled = true; say('Sending…');
     fetch('/api/watch-setup', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) })
       .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(b){ if (!r.ok || !b.ok) throw new Error(b.error || ''); }); })
       .then(function(){
-        try { window.plausible('Watch Setup Sent', { props: { start: d.start, watch: d.watch } }); } catch (err) {}
+        try { window.plausible('Watch Setup Sent'); } catch (err) {}
         form.hidden = true; document.getElementById('bb-wf-done').hidden = false;
         document.getElementById('bb-wf-done').scrollIntoView({ block: 'center' });
       })
