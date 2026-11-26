@@ -329,8 +329,8 @@
           <span class="mono">Run Faster in 30 Days</span>
           <h2 class="display">Get fit again without getting wrecked.</h2>
           <p>30 days. 17 sessions. 2 time trials.</p>
-          <a class="btn btn-dark" href="https://buy.stripe.com/6oU5kw8d33Qe3v03ZRaZi0w" data-checkout data-what="hero">Get the plan · $29 <span class="ar" aria-hidden="true">→</span></a>
-          <p class="bb-small">One payment of A$29. Includes The Ultimate Running Bible (worth $19) for free. Money back if day 30 is not faster than day 1.</p>
+          <a class="btn btn-dark" href="https://buy.stripe.com/4gM8wI50R0E25D80NFaZi0L" data-checkout data-what="hero">Get the plan · <span data-price>$29</span> <span class="ar" aria-hidden="true">→</span></a>
+          <p class="bb-small">One payment of A<span data-price>$29</span>. <span id="bb-local" hidden></span>Includes The Ultimate Running Bible (worth $19) for free. Money back if day 30 is not faster than day 1.</p>
           </div>
         </div>
       </div>
@@ -492,7 +492,7 @@
       <div class="bb-bonus-body">
         <p>The guide I wish someone had handed me when I started running.</p>
         <p>Because there's only so much you should have to learn through personal suffering and questionable Google searches.</p>
-        <a class="btn btn-volt" href="https://buy.stripe.com/6oU5kw8d33Qe3v03ZRaZi0w" data-checkout data-what="bonus">Get the plan and the Bible · $29 <span class="ar" aria-hidden="true">→</span></a>
+        <a class="btn btn-volt" href="https://buy.stripe.com/4gM8wI50R0E25D80NFaZi0L" data-checkout data-what="bonus">Get the plan and the Bible · <span data-price>$29</span> <span class="ar" aria-hidden="true">→</span></a>
       </div>
     </div>
   </div>
@@ -572,8 +572,8 @@
       <p>Every comeback so far has ended in week three.</p>
       <p>Thirty days is long enough to work and short enough that life does not get a vote.</p>
       <p class="bb-final-big">Your next comeback is the one that does not end in week three.</p>
-      <a class="btn btn-volt" href="https://buy.stripe.com/6oU5kw8d33Qe3v03ZRaZi0w" data-checkout data-what="final">Get Run Faster in 30 Days · $29 <span class="ar" aria-hidden="true">→</span></a>
-      <p class="bb-small">30 days. 17 sessions. 2 time trials. The playbook, the fridge sheet and The Ultimate Running Bible included. One payment of A$29. Money back if day 30 is not faster than day 1.</p>
+      <a class="btn btn-volt" href="https://buy.stripe.com/4gM8wI50R0E25D80NFaZi0L" data-checkout data-what="final">Get Run Faster in 30 Days · <span data-price>$29</span> <span class="ar" aria-hidden="true">→</span></a>
+      <p class="bb-small">30 days. 17 sessions. 2 time trials. The playbook, the fridge sheet and The Ultimate Running Bible included. One payment of A<span data-price>$29</span>. Money back if day 30 is not faster than day 1.</p>
       <p class="bb-sign">Do the sessions. Then send me your two times. <span class="bb-ben">Ben <svg aria-hidden="true"><use href="#i-mark"/></svg></span></p>
     </div>
   </div>
@@ -600,6 +600,22 @@
     a.setAttribute('data-what', 'Run Faster in 30 Days · ' + a.getAttribute('data-what'));
     if (cfg.pdf) a.href = cfg.pdf;
   });
+  // Local pricing by country, the same tiers as the Base Builder Bible (/api/geo).
+  if (cfg.local && window.fetch) {
+    fetch('/api/geo').then(function(r){ return r.json(); }).then(function(g){
+      var t = cfg.local[g && g.tier];
+      if (!t || !t.link) return;
+      document.querySelectorAll('[data-price]').forEach(function(el){ el.textContent = '$' + t.price; });
+      document.querySelectorAll('a[data-checkout]').forEach(function(a){
+        a.href = t.link; a.setAttribute('data-what', a.getAttribute('data-what') + ' · tier ' + g.tier);
+      });
+      var where = g.country;
+      try { where = new Intl.DisplayNames(['en'], { type: 'region' }).of(g.country) || g.country; } catch (e) {}
+      var note = document.getElementById('bb-local');
+      if (note) { note.textContent = 'Local price for ' + where + ', normally $29. '; note.hidden = false; }
+      try { window.plausible('Local Price Shown', { props: { country: g.country, tier: String(g.tier), what: 'Run Faster in 30 Days' } }); } catch (e) {}
+    }).catch(function(){});
+  }
   document.querySelectorAll('.bb-faq details').forEach(function(d){
     d.addEventListener('toggle', function(){ if (d.open) try { window.plausible('FAQ Opened', { props: { what: d.querySelector('summary').textContent } }); } catch (e) {} });
   });

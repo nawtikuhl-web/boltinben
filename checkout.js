@@ -7,7 +7,15 @@
 //   voice = PDF + Training Plan + Voice Feedback (not shown)
 window.BB_CHECKOUT = {
   'zero-to-runner': { pdf: 'https://buy.stripe.com/14A5kw1OF4Ui8PkaofaZi0v', plan: '', voice: '' },
-  'run-faster': { pdf: 'https://buy.stripe.com/6oU5kw8d33Qe3v03ZRaZi0w', plan: 'https://buy.stripe.com/3cI14gctj4UighMcwnaZi0x', voice: 'https://buy.stripe.com/bJe4gsdxn9ay0iOcwnaZi0y' },
+  // Run Faster in 30 Days at /run-faster (A$29, success URL /run-faster/thanks).
+  // pdf = the full-price link; local = the price by country tier (geo.js);
+  // watch, watchPrice, watchLocal = the TrainingPeaks upsell on the thank-you page.
+  // plan and voice are the old Sparkies editions, kept but not shown.
+  'run-faster': { pdf: 'https://buy.stripe.com/4gM8wI50R0E25D80NFaZi0L',
+    local: { 2: { price: 17, link: 'https://buy.stripe.com/fZuaEQ8d372q4z4cwnaZi0M' }, 3: { price: 12, link: 'https://buy.stripe.com/3cI00cfFvfyWd5AgMDaZi0N' } },
+    watch: 'https://buy.stripe.com/8x26oA3WN4Ui9TocwnaZi0O', watchPrice: '$29',
+    watchLocal: { 2: { price: 17, link: 'https://buy.stripe.com/9B600cctjgD0ghMbsjaZi0P' }, 3: { price: 12, link: 'https://buy.stripe.com/eVqdR2bpfeuS1mS9kbaZi0Q' } },
+    plan: 'https://buy.stripe.com/3cI14gctj4UighMcwnaZi0x', voice: 'https://buy.stripe.com/bJe4gsdxn9ay0iOcwnaZi0y' },
   '5k': { pdf: 'https://buy.stripe.com/9B6dR20KBeuS1mS0NFaZi0B', plan: '', voice: '' },
   '10k': { pdf: 'https://buy.stripe.com/dRmcMYeBraeCaXs8g7aZi0C', plan: '', voice: '' },
   '21k': { pdf: 'https://buy.stripe.com/3cI14g2SJ86u4z40NFaZi0u', plan: '', voice: '' },
