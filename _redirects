@@ -41,6 +41,7 @@
 /api/onboarding          /.netlify/functions/onboarding 200
 /api/watch-setup         /.netlify/functions/watch-setup 200
 /api/geo                 /.netlify/functions/geo      200
+/api/checkout-session    /.netlify/functions/checkout-session 200
 /api/quiz                /.netlify/functions/quiz     200
 /coaching                /coaching.html               200
 /plans                   /plans.html                  200

@@ -38,3 +38,4 @@ exports.handler = async (event) => {
   };
 };
 exports.tierOf = tierOf;
+exports.countryOf = countryOf;
