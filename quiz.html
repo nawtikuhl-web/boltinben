@@ -122,18 +122,17 @@
 #qz-q .qz-card{padding:0;overflow:hidden}
 #qz-q .qz-card>.qz-question,#qz-q .qz-card>.qz-opts{margin-left:28px;margin-right:28px}
 #qz-q .qz-card>.qz-opts{margin-bottom:28px}
-.qz-sec-ph{height:132px;border-radius:0!important;margin-bottom:22px}
-.qz-sec-ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1) 0%,rgba(30,30,30,.55) 60%,rgba(30,30,30,1) 100%)}
+.qz-sec-ph{height:176px;border-radius:0!important;margin-bottom:22px}
+.qz-sec-ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(30,30,30,0) 55%,rgba(30,30,30,1) 100%)}
 .qz-sec-ph>img{transition:opacity .35s ease}
-.qz-sec-chip{position:absolute;left:28px;bottom:10px;z-index:1;display:inline-flex;align-items:center;gap:8px;background:var(--acc);color:#000;border-radius:100px;padding:7px 14px 7px 10px;font-family:var(--body);font-weight:600;font-size:15px;transition:background .4s ease}
-.qz-sec-chip svg{width:18px;height:18px;flex:none}
+.qz-sec-chip{position:absolute;left:28px;bottom:8px;z-index:1;display:inline-flex;align-items:center;background:var(--acc);color:#000;border-radius:100px;padding:7px 15px;font-family:var(--body);font-weight:600;font-size:15px;transition:background .4s ease}
+@media (min-width:641px){.qz-sec-ph{height:250px}}
 /* the result: each thing in its own colour, with its own icon */
 .qz-thing{--acc:var(--volt)}
 .qz-thing:nth-child(2){--acc:var(--purple)}
 .qz-thing:nth-child(3){--acc:var(--mint)}
 .qz-thing-no{color:var(--acc)!important;grid-row:span 4!important}
-.qz-thing-tag{display:inline-flex;align-items:center;gap:7px;justify-self:start;background:var(--acc);color:#000;border-radius:100px;padding:5px 12px 5px 9px;font-family:var(--body);font-weight:600;font-size:14px}
-.qz-thing-tag svg{width:16px;height:16px;flex:none}
+.qz-thing-tag{display:inline-flex;align-items:center;justify-self:start;background:var(--acc);color:#000;border-radius:100px;padding:5px 13px;font-family:var(--body);font-weight:600;font-size:14px}
 @media (max-width:640px){
   #qz-q .qz-card>.qz-question,#qz-q .qz-card>.qz-opts{margin-left:22px;margin-right:22px}
   #qz-q .qz-card>.qz-opts{margin-bottom:24px}
@@ -187,7 +186,7 @@
       </div>
       <div class="qz-bar" role="progressbar" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0" id="qz-bar"><i></i></div>
       <div class="card qz-card">
-        <div class="photo qz-sec-ph"><img id="qz-sec-img" alt=""><span class="qz-sec-chip"><span id="qz-sec-ic"></span><span id="qz-sec"></span></span></div>
+        <div class="photo qz-sec-ph"><img id="qz-sec-img" alt=""><span class="qz-sec-chip" id="qz-sec"></span></div>
         <h2 class="qz-question" id="qz-text" tabindex="-1"></h2>
         <div class="qz-opts" id="qz-opts"></div>
       </div>
@@ -438,20 +437,18 @@
   function join(xs){ return xs.length > 1 ? xs.slice(0, -1).join(', ') + ' and ' + xs[xs.length - 1] : xs[0]; }
 
 
-  // ---- the four sections: a colour (in the CSS), a photo and an icon each
-  function svg(d){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>'; }
+  // ---- the four sections: a colour (in the CSS) and a photo each
   var SECS = [
-    { name: "where you're at",       img: 'bb-ph-zero.webp',  pos: '50% 37%', ic: '<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.500 11z"/><circle cx="12" cy="10" r="2.400"/>' },
-    { name: 'how you run',           img: 'bb-ph-city.webp',  pos: '50% 22%', ic: '<circle cx="14.500" cy="4.500" r="1.800"/><path d="M6 20l3.500-4.500 1-4.500 3-2 2.500 3.500h3M10.500 11l-3 1-1.500 3M13 15.500l2.500 1.500v3.500"/>' },
-    { name: "what's around the run", img: 'bb-ph-steps.webp', pos: '50% 34%', ic: '<path d="M20 14.500A8 8 0 0 1 9.500 4a8 8 0 1 0 10.500 10.500z"/>' },
-    { name: 'what you want',         img: 'bb-ph-sun.webp',   pos: '50% 40%', ic: '<path d="M5 21V4M5 4.500h11l-2 3.500 2 3.500H5"/>' }
+    { name: "where you're at",       img: 'bb-ph-zero.webp',  pos: '50% 32%' },
+    { name: 'how you run',           img: 'bb-ph-city.webp',  pos: '50% 20%' },
+    { name: "what's around the run", img: 'bb-ph-steps.webp', pos: '50% 36%' },
+    { name: 'what you want',         img: 'bb-ph-sun.webp',   pos: '50% 46%' }
   ];
   var secShown = -1;
   SECS.forEach(function(x){ var pre = new Image(); pre.src = '/assets/' + x.img; });   // no flash when the section changes
   function paintSection(name){
     var n = 0; SECS.forEach(function(x, k){ if (x.name === name) n = k; });
     $('qz-q').setAttribute('data-sec', n);
-    $('qz-sec-ic').innerHTML = svg(SECS[n].ic);
     if (n === secShown) return;
     secShown = n;
     var im = $('qz-sec-img'); im.style.opacity = 0;
@@ -459,16 +456,6 @@
     im.src = '/assets/' + SECS[n].img; im.style.objectPosition = SECS[n].pos;
     if (im.complete) im.style.opacity = 1;
   }
-  // an icon for each of the seven things
-  var CIC = {
-    pace: '<path d="M4 15a8 8 0 0 1 16 0"/><path d="M12 15l4-5"/><circle cx="12" cy="15" r="1.200"/>',
-    start: '<circle cx="12" cy="13.500" r="7"/><path d="M12 13.500V10M9.500 3h5M12 3v3.500"/>',
-    walk: '<circle cx="13" cy="4.500" r="1.800"/><path d="M9 21l2-6-1.500-3.500 1-4 3 1.500 2 3M11.500 15l3 2 .5 4M8 11l1.500-3"/>',
-    consistency: '<rect x="3.500" y="5" width="17" height="15" rx="2.500"/><path d="M3.500 10h17M8 3v4M16 3v4M8 14h2M14 14h2"/>',
-    structure: '<path d="M9.500 6.500h11M9.500 12h11M9.500 17.500h11M3.500 6.500h2M3.500 12h2M3.500 17.500h2"/>',
-    fuel: '<path d="M12 3c3 3.500 5.500 6.500 5.500 10a5.500 5.500 0 0 1-11 0C6.500 9.500 9 6.500 12 3z"/>',
-    recovery: '<path d="M20 14.500A8 8 0 0 1 9.500 4a8 8 0 1 0 10.500 10.500z"/>'
-  };
 
   // ---- questions
   function render(){
@@ -542,13 +529,13 @@
     var box = $('r-things'); box.innerHTML = '';
     cs.forEach(function(k, n){
       var c = C[k], d = document.createElement('div'); d.className = 'qz-thing';
-      d.innerHTML = '<span class="qz-thing-no">0' + (n + 1) + '</span><span class="qz-thing-tag">' + svg(CIC[k]) + '<span></span></span><h3></h3><p></p><p></p>';
-      d.children[1].lastChild.textContent = c.tag; d.children[2].textContent = c.h; d.children[3].textContent = c.a; d.children[4].textContent = c.b;
+      d.innerHTML = '<span class="qz-thing-no">0' + (n + 1) + '</span><span class="qz-thing-tag"></span><h3></h3><p></p><p></p>';
+      d.children[1].textContent = c.tag; d.children[2].textContent = c.h; d.children[3].textContent = c.a; d.children[4].textContent = c.b;
       box.appendChild(d);
     });
     if (!cs.length) {
       var d = document.createElement('div'); d.className = 'qz-thing';
-      d.innerHTML = '<span class="qz-thing-no">00</span><span class="qz-thing-tag"><span>all clear</span></span><h3>nothing jumped out.</h3><p>your answers look pretty sensible.</p><p>so it is probably not one big mistake. it is just a matter of the right next step for where you are.</p>';
+      d.innerHTML = '<span class="qz-thing-no">00</span><span class="qz-thing-tag">all clear</span><h3>nothing jumped out.</h3><p>your answers look pretty sensible.</p><p>so it is probably not one big mistake. it is just a matter of the right next step for where you are.</p>';
       box.appendChild(d);
     }
     var inPlan = cs.filter(function(k){ return !C[k].book; }), inBook = cs.filter(function(k){ return C[k].book; });
