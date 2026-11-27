@@ -39,30 +39,40 @@ exports.handler = async (event) => {
   const product = PRODUCTS[input.product];
   if (!product) return reply(400, { ok: false, error: 'unknown product' });
   const key = process.env.STRIPE_SECRET_KEY, pk = process.env.STRIPE_PUBLISHABLE_KEY;
-  if (!key || !pk) { console.error('[checkout] missing', !key ? 'STRIPE_SECRET_KEY' : 'STRIPE_PUBLISHABLE_KEY'); return reply(503, { ok: false, error: 'not configured' }); }
+  if (!key || !pk) { console.error('[checkout] missing', !key ? 'STRIPE_SECRET_KEY' : 'STRIPE_PUBLISHABLE_KEY'); return reply(503, { ok: false, error: !key ? 'no secret key' : 'no publishable key' }); }
 
   const tier = geo.tierOf(geo.countryOf(event.headers));
   const meta = Object.assign({}, product.metadata, { tier: String(tier), site: 'boltin', checkout: 'embedded' });
   const form = new URLSearchParams();
-  form.set('ui_mode', 'embedded');
   form.set('mode', 'payment');
   form.set('line_items[0][price]', product.prices[tier] || product.prices[1]);
   form.set('line_items[0][quantity]', '1');
   form.set('return_url', SITE + product.back + '?session_id={CHECKOUT_SESSION_ID}');
   Object.keys(meta).forEach(k => { form.set('metadata[' + k + ']', meta[k]); form.set('payment_intent_data[metadata][' + k + ']', meta[k]); });
 
-  try {
+  // Stripe renamed this value: newer API versions call it "embedded_page",
+  // older ones "embedded". The account's default version decides which is
+  // accepted, so try the new name and fall back to the old one.
+  async function create(uiMode) {
+    form.set('ui_mode', uiMode);
     const res = await fetch('https://api.stripe.com/v1/checkout/sessions', {
       method: 'POST',
       headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/x-www-form-urlencoded' },
       body: form.toString()
     });
     const data = await res.json().catch(() => ({}));
-    if (!res.ok || !data.client_secret) {
-      console.error('[checkout] Stripe said', res.status, data && data.error && (data.error.code || data.error.message));
-      return reply(502, { ok: false, error: 'stripe refused' });
+    return { res, data };
+  }
+  try {
+    let r = await create('embedded_page');
+    if (!r.res.ok && r.data && r.data.error && r.data.error.param === 'ui_mode') r = await create('embedded');
+    if (!r.res.ok || !r.data.client_secret) {
+      const err = (r.data && r.data.error) || {};
+      console.error('[checkout] Stripe said', r.res.status, err.type, err.code, err.param, err.message);
+      // the reason goes back to the page (and into Plausible) so a silent fallback can be diagnosed
+      return reply(502, { ok: false, error: ('stripe ' + r.res.status + ' ' + (err.code || err.type || '') + ' ' + (err.param || '')).trim().slice(0, 60) });
     }
-    return reply(200, { ok: true, clientSecret: data.client_secret, pk: pk, tier: tier });
+    return reply(200, { ok: true, clientSecret: r.data.client_secret, pk: pk, tier: tier });
   } catch (e) {
     console.error('[checkout]', e && e.message);
     return reply(502, { ok: false, error: 'stripe unreachable' });
