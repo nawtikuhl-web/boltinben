@@ -246,6 +246,12 @@
     if (!paid) return;
     try { if (sessionStorage.getItem('rf_watch_purchase')) return; sessionStorage.setItem('rf_watch_purchase', '1'); } catch (e) {}
     try { window.plausible && plausible('Watch Purchase', { props: { what: 'Run Faster watch version' } }); } catch (e) {}
+    var cfg = (window.BB_CHECKOUT || {})['run-faster'] || {};
+    // Meta pixel: the purchase, at this visitor's country price
+    (function(){
+      var done = function(tier){ var t = (cfg.watchLocal || {})[tier]; try { window.bbPx && bbPx('Purchase', { value: (t && t.price) || 29, currency: 'AUD', content_name: 'Run Faster watch version', content_type: 'product' }); } catch (e) {} };
+      if (window.fetch) fetch('/api/geo').then(function(r){ return r.json(); }).then(function(g){ done(g && g.tier); }).catch(function(){ done(0); }); else done(0);
+    })();
   });
   var form = document.getElementById('bb-wf'), msg = document.getElementById('w-msg'), send = document.getElementById('w-send');
   function say(t, bad){ msg.textContent = t; msg.className = 'form-msg' + (bad ? ' bad' : ''); }

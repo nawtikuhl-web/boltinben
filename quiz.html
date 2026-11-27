@@ -340,6 +340,7 @@
       .then(function(ok){
         // never hold the result hostage to the email tool
         track('Quiz Email', { what: ok ? 'captured' : 'failed' });
+        if (ok) try { window.bbPx && bbPx('Lead', { content_name: 'Quiz: ' + P[r.pk].tag }); } catch (e) {}
         state.email = ok ? 'captured' : 'failed'; save(); send.disabled = false; msg.textContent = ''; result();
       });
   });

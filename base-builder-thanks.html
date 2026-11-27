@@ -248,6 +248,11 @@
       sessionStorage.setItem('bb_purchase', '1');
     } catch (e) {}
     try { window.plausible && plausible('Purchase', { props: { what: 'Base Builder Bible' } }); } catch (e) {}
+    // Meta pixel: the purchase, at this visitor's country price
+    (function(){
+      var done = function(tier){ var t = (cfg.local || {})[tier]; try { window.bbPx && bbPx('Purchase', { value: (t && t.price) || 19, currency: 'USD', content_name: 'The Base Builder Bible', content_type: 'product' }); } catch (e) {} };
+      if (window.fetch) fetch('/api/geo').then(function(r){ return r.json(); }).then(function(g){ done(g && g.tier); }).catch(function(){ done(0); }); else done(0);
+    })();
   });
 })();
 </script>

@@ -248,6 +248,11 @@
       sessionStorage.setItem('rf_purchase', '1');
     } catch (e) {}
     try { window.plausible && plausible('Purchase', { props: { what: 'Run Faster in 30 Days' } }); } catch (e) {}
+    // Meta pixel: the purchase, at this visitor's country price
+    (function(){
+      var done = function(tier){ var t = (cfg.local || {})[tier]; try { window.bbPx && bbPx('Purchase', { value: (t && t.price) || 29, currency: 'AUD', content_name: 'Run Faster in 30 Days', content_type: 'product' }); } catch (e) {} };
+      if (window.fetch) fetch('/api/geo').then(function(r){ return r.json(); }).then(function(g){ done(g && g.tier); }).catch(function(){ done(0); }); else done(0);
+    })();
   });
 })();
 </script>

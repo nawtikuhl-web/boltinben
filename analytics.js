@@ -13,5 +13,17 @@
     var el = e.target.closest && e.target.closest('[data-track]');
     if (!el) return;
     try { window.plausible(el.getAttribute('data-track'), { props: { what: el.getAttribute('data-what') || '', page: location.pathname } }); } catch (err) {}
+    // the same click, in Meta's words: a buy button or the watch upsell starts a checkout
+    var name = el.getAttribute('data-track');
+    if (name === 'Add to Cart' || name === 'Upsell Clicked') bbPx('InitiateCheckout', { content_name: el.getAttribute('data-what') || '' });
   });
+
+  // Meta pixel (pixel.js): consent-aware, and it sends PageView itself.
+  // bbPx queues an event until the pixel has loaded.
+  function bbPx(name, params){ try { (window.bbPixelQ = window.bbPixelQ || []).push([name, params]); } catch (err) {} }
+  window.bbPx = bbPx;
+  var px = document.createElement('script'); px.async = true; px.src = '/pixel.js'; document.head.appendChild(px);
+  var SALES = { '/base-builder': 'The Base Builder Bible', '/run-faster': 'Run Faster in 30 Days' };
+  var here = location.pathname.replace(/\.html$/, '').replace(/\/$/, '');
+  if (SALES[here]) bbPx('ViewContent', { content_name: SALES[here], content_type: 'product' });
 })();
