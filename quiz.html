@@ -79,6 +79,39 @@
   .qz-card{padding:24px 22px}
   .qz-thing{padding:22px}
 }
+/* the fun layer (27 Nov): motion, a burst on every answer, sounds, and a
+   "working it out" screen before the result. All of it stands down for
+   people who have reduced motion switched on. */
+.qz-sound{background:var(--tile-2);border:0;color:var(--fg);font:inherit;font-size:14.5px;font-weight:500;border-radius:8px;padding:9px 13px;cursor:pointer}
+.qz-sound.off{color:var(--mute)}
+.qz-in{animation:qz-in .38s cubic-bezier(.2,.8,.2,1) both}
+.qz-opt{animation:qz-opt .36s cubic-bezier(.2,.8,.2,1) both;will-change:transform}
+.qz-opt:active{transform:scale(.97)}
+.qz-opt.on{animation:qz-pick .42s cubic-bezier(.2,1.6,.4,1) both}
+.qz-opt.dim{opacity:.35;transition:opacity .2s ease}
+.qz-count.bump{animation:qz-bump .4s ease}
+.qz-bit{position:fixed;left:0;top:0;z-index:300;pointer-events:none;will-change:transform,opacity}
+@keyframes qz-in{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes qz-opt{from{opacity:0;transform:translateX(26px)}to{opacity:1;transform:none}}
+@keyframes qz-pick{0%{transform:scale(1)}40%{transform:scale(1.045)}100%{transform:scale(1)}}
+@keyframes qz-bump{0%{transform:scale(1)}40%{transform:scale(1.35);color:var(--volt)}100%{transform:scale(1)}}
+/* working it out */
+.qz-think{display:flex;flex-direction:column;align-items:center;text-align:center;padding:44px 26px!important}
+.qz-pot{position:relative;width:176px;height:176px;border-radius:50%;background:var(--tile-2);overflow:hidden;margin-bottom:28px}
+.qz-pot-fill{position:absolute;left:0;right:0;bottom:0;height:0;background:var(--volt);transition:height .5s ease}
+.qz-pot-fill::before{content:"";position:absolute;left:-25%;right:-25%;top:-9px;height:18px;border-radius:50%;background:var(--volt);animation:qz-slosh 1.1s ease-in-out infinite alternate}
+.qz-pot b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--mono);font-size:34px;font-weight:500;color:#fff;mix-blend-mode:difference}
+.qz-pot span{position:absolute;bottom:-14px;border-radius:50%;background:var(--purple);opacity:.9;animation:qz-rise linear infinite}
+.qz-think-line{font-family:var(--display);font-weight:600;font-size:26px!important;line-height:1.15;color:var(--fg)!important;min-height:2.4em;margin:0!important}
+.qz-think-line.swap{animation:qz-in .3s ease both}
+@keyframes qz-rise{0%{transform:translateY(0) scale(.6);opacity:0}15%{opacity:.9}100%{transform:translateY(-200px) scale(1.1);opacity:0}}
+@keyframes qz-slosh{from{transform:translateX(-6%) rotate(-2deg)}to{transform:translateX(6%) rotate(2deg)}}
+/* the result arrives a piece at a time */
+.qz-pop{animation:qz-pop .5s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes qz-pop{from{opacity:0;transform:translateY(22px) scale(.96)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  .qz-in,.qz-opt,.qz-opt.on,.qz-pop,.qz-count.bump,.qz-think-line.swap,.qz-pot span,.qz-pot-fill::before{animation:none!important}
+}
 </style>
 </head>
 <body>
@@ -148,6 +181,14 @@
         <p class="qz-msg" id="qz-msg" role="status" aria-live="polite"></p>
         <button type="button" class="qz-skip" id="qz-skip">skip, just show me</button>
       </form>
+    </div>
+
+    <!-- working it out -->
+    <div class="qz-screen" id="qz-think" hidden>
+      <div class="card qz-card qz-think" aria-live="polite">
+        <div class="qz-pot" aria-hidden="true"><div class="qz-pot-fill" id="qz-pot-fill"></div><b id="qz-pot-n">0%</b></div>
+        <p class="qz-think-line" id="qz-think-line">reading your answers…</p>
+      </div>
     </div>
 
     <!-- result -->
@@ -261,8 +302,88 @@
   function save(){ try { sessionStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
   function track(name, props){ try { window.plausible(name, props ? { props: props } : undefined); } catch (e) {} }
   function $(id){ return document.getElementById(id); }
-  var screens = ['qz-intro', 'qz-q', 'qz-email', 'qz-result'];
+  var screens = ['qz-intro', 'qz-q', 'qz-email', 'qz-think', 'qz-result'];
   function show(id){ screens.forEach(function(s){ $(s).hidden = s !== id; }); window.scrollTo(0, 0); }
+
+
+  // ---- the fun layer: sound, bursts and the working-it-out screen
+  var calm = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var soundOn = true; try { soundOn = localStorage.getItem('bb_quiz_sound') !== 'off'; } catch (e) {}
+  var AC = null;
+  function audio(){
+    if (!soundOn) return null;
+    try { if (!AC) { var A = window.AudioContext || window.webkitAudioContext; if (A) AC = new A(); } if (AC && AC.state === 'suspended') AC.resume(); } catch (e) { AC = null; }
+    return AC;
+  }
+  // one short note. from/to in Hz lets a note slide, which is what makes a bubble sound like one.
+  function note(from, to, dur, type, vol, delay){
+    var a = audio(); if (!a) return;
+    try {
+      var t = a.currentTime + (delay || 0), o = a.createOscillator(), g = a.createGain();
+      o.type = type || 'sine'; o.frequency.setValueAtTime(from, t); if (to && to !== from) o.frequency.exponentialRampToValueAtTime(to, t + dur);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol || 0.12, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + dur + 0.03);
+    } catch (e) {}
+  }
+  var SCALE = [392, 440, 494, 523, 587, 659, 740, 784, 880, 988, 1047, 1175];   // each answer steps up a note
+  function sTap(i){ note(SCALE[i % SCALE.length], 0, 0.11, 'triangle', 0.16); note(SCALE[i % SCALE.length] * 2, 0, 0.09, 'sine', 0.06, 0.05); }
+  function sBack(){ note(330, 220, 0.12, 'triangle', 0.1); }
+  function sBubble(){ var f = 260 + Math.random() * 320; note(f, f * 2.1, 0.11, 'sine', 0.07); }
+  function sPop(n){ note(520 + n * 110, 0, 0.14, 'triangle', 0.13); }
+  function sDone(){ [523, 659, 784, 1047].forEach(function(f, n){ note(f, 0, 0.28, 'triangle', 0.13, n * 0.09); }); note(1568, 0, 0.5, 'sine', 0.06, 0.36); }
+  function buzz(ms){ try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) {} }
+
+  // a burst of little brand-coloured pieces from a point on the screen
+  var BITS = ['#F5E215', '#F5E215', '#A78BFB', '#8BFBB4', '#ffffff'];
+  function burst(x, y, n, power){
+    if (calm || !document.body.animate) return;
+    for (var k = 0; k < n; k++) {
+      var b = document.createElement('i'), size = 6 + Math.random() * 8, ang = Math.random() * Math.PI * 2, dist = (power || 90) * (0.45 + Math.random() * 0.75);
+      b.className = 'qz-bit';
+      b.style.cssText = 'width:' + size + 'px;height:' + size + 'px;background:' + BITS[k % BITS.length] + ';border-radius:' + (k % 3 ? '2px' : '50%');
+      document.body.appendChild(b);
+      var dx = Math.cos(ang) * dist, dy = Math.sin(ang) * dist - 30;
+      b.animate([
+        { transform: 'translate(' + x + 'px,' + y + 'px) scale(1) rotate(0deg)', opacity: 1 },
+        { transform: 'translate(' + (x + dx) + 'px,' + (y + dy + 60) + 'px) scale(.3) rotate(' + (Math.random() * 540 - 270) + 'deg)', opacity: 0 }
+      ], { duration: 620 + Math.random() * 380, easing: 'cubic-bezier(.15,.7,.3,1)', fill: 'forwards' }).onfinish = (function(el){ return function(){ el.remove(); }; })(b);
+    }
+  }
+  function centre(el){ var r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }
+
+  // the sound switch sits in the header, and remembers what you chose
+  (function(){
+    var nav = document.querySelector('.nav-in'); if (!nav) return;
+    var b = document.createElement('button'); b.type = 'button'; b.id = 'qz-sound';
+    function paint(){ b.className = 'qz-sound' + (soundOn ? '' : ' off'); b.textContent = soundOn ? 'sound on' : 'sound off'; b.setAttribute('aria-pressed', soundOn ? 'true' : 'false'); }
+    b.addEventListener('click', function(){ soundOn = !soundOn; try { localStorage.setItem('bb_quiz_sound', soundOn ? 'on' : 'off'); } catch (e) {} paint(); if (soundOn) sTap(3); track('Quiz Sound', { what: soundOn ? 'on' : 'off' }); });
+    paint(); nav.appendChild(b);
+  })();
+
+  // working it out: the pot fills, bubbles rise, the lines tick over, then the result lands
+  var THINK = ['reading your answers…', 'checking how fast you go out…', 'looking at your first ten minutes…', 'weighing up your week…', 'found them.'];
+  function think(done){
+    if (calm) return done();
+    var pot = document.querySelector('.qz-pot'), fill = $('qz-pot-fill'), num = $('qz-pot-n'), line = $('qz-think-line');
+    Array.prototype.slice.call(pot.querySelectorAll('span')).forEach(function(x){ x.remove(); });
+    for (var k = 0; k < 9; k++) { var sp = document.createElement('span'), sz = 8 + Math.random() * 14; sp.style.cssText = 'left:' + (8 + Math.random() * 78) + '%;width:' + sz + 'px;height:' + sz + 'px;animation-duration:' + (1.1 + Math.random() * 1.3) + 's;animation-delay:' + (Math.random() * 1.4) + 's'; pot.appendChild(sp); }
+    fill.style.height = '0%'; num.textContent = '0%'; line.textContent = THINK[0];
+    show('qz-think');
+    var total = 3400, t0 = Date.now(), step = 0;
+    var bub = setInterval(function(){ if (Math.random() < 0.8) sBubble(); }, 170);
+    var tick = setInterval(function(){
+      var k = Math.min(1, (Date.now() - t0) / total), pct = Math.round(k * 100);
+      fill.style.height = pct + '%'; num.textContent = pct + '%';
+      var want = Math.min(THINK.length - 1, Math.floor(k * THINK.length));
+      if (want !== step) { step = want; line.textContent = THINK[step]; line.classList.remove('swap'); void line.offsetWidth; line.classList.add('swap'); buzz(8); }
+      if (k >= 1) {
+        clearInterval(tick); clearInterval(bub);
+        sDone(); buzz([20, 40, 30]);
+        var c = centre(pot); burst(c[0], c[1], 46, 190);
+        setTimeout(done, 650);
+      }
+    }, 60);
+  }
 
   // ---- scoring
   function plan(a){
@@ -301,35 +422,42 @@
     q.o.forEach(function(o, oi){
       var b = document.createElement('button');
       b.type = 'button'; b.className = 'qz-opt' + (state.a[i] === oi ? ' on' : ''); b.textContent = o.l;
-      b.addEventListener('click', function(){ answer(oi); });
+      b.style.animationDelay = (0.06 + oi * 0.06) + 's';
+      b.addEventListener('click', function(e){ answer(oi, e); });
       box.appendChild(b);
     });
+    var card = $('qz-text').parentNode; card.classList.remove('qz-in'); void card.offsetWidth; card.classList.add('qz-in');
+    var cnt = $('qz-count'); cnt.classList.remove('bump'); void cnt.offsetWidth; cnt.classList.add('bump');
     show('qz-q');
   }
   var busy = false;
-  function answer(oi){
+  function answer(oi, e){
     if (busy) return; busy = true;
     var i = state.i;
     state.a[i] = oi; save();
-    $('qz-opts').children[oi].classList.add('on');
+    var opts = $('qz-opts').children, hit = opts[oi];
+    for (var z = 0; z < opts.length; z++) { opts[z].style.animationDelay = '0s'; opts[z].classList.toggle('on', z === oi); opts[z].classList.toggle('dim', z !== oi); }
+    var at = (e && e.clientX) ? [e.clientX, e.clientY] : centre(hit);
+    burst(at[0], at[1], 26, 150); sTap(i); buzz(12);
     track('Quiz Answered', { question: ('0' + (i + 1)).slice(-2) + ' ' + Q[i].t, answer: Q[i].o[oi].l });
     setTimeout(function(){
       busy = false;
       if (i + 1 < Q.length) { state.i = i + 1; save(); render(); }
-      else { track('Quiz Completed'); state.i = Q.length; save(); state.email === null ? show('qz-email') : result(); }
-    }, 180);
+      else { track('Quiz Completed'); state.i = Q.length; save(); state.email === null ? show('qz-email') : think(function(){ result(true); }); }
+    }, 460);
   }
   $('qz-back').addEventListener('click', function(){
+    sBack();
     if (state.i > 0) { state.i--; save(); render(); } else show('qz-intro');
   });
-  $('qz-start').addEventListener('click', function(){ state = { a: [], i: 0, email: null }; save(); track('Quiz Started'); render(); });
+  $('qz-start').addEventListener('click', function(){ state = { a: [], i: 0, email: null }; save(); track('Quiz Started'); sTap(0); var c0 = centre($('qz-start')); burst(c0[0], c0[1], 14, 90); render(); });
 
   // ---- email step
   function current(){ var pk = plan(state.a), cs = culprits(state.a, pk); return { pk: pk, cs: cs }; }
   $('qz-form').addEventListener('submit', function(e){
     e.preventDefault();
     var f = new FormData(e.target), email = String(f.get('email') || '').trim(), msg = $('qz-msg'), send = $('qz-send');
-    if (f.get('website')) { state.email = 'skipped'; save(); return result(); }
+    if (f.get('website')) { state.email = 'skipped'; save(); return think(function(){ result(true); }); }
     if (!/^\S+@\S+\.\S+$/.test(email)) { msg.textContent = 'that email does not look right. or tap skip.'; return; }
     var r = current();
     send.disabled = true; msg.textContent = 'one sec…';
@@ -341,13 +469,13 @@
         // never hold the result hostage to the email tool
         track('Quiz Email', { what: ok ? 'captured' : 'failed' });
         if (ok) try { window.bbPx && bbPx('Lead', { content_name: 'Quiz: ' + P[r.pk].tag }); } catch (e) {}
-        state.email = ok ? 'captured' : 'failed'; save(); send.disabled = false; msg.textContent = ''; result();
+        state.email = ok ? 'captured' : 'failed'; save(); send.disabled = false; msg.textContent = ''; think(function(){ result(true); });
       });
   });
-  $('qz-skip').addEventListener('click', function(){ track('Quiz Email', { what: 'skipped' }); state.email = 'skipped'; save(); result(); });
+  $('qz-skip').addEventListener('click', function(){ track('Quiz Email', { what: 'skipped' }); state.email = 'skipped'; save(); think(function(){ result(true); }); });
 
   // ---- result
-  function result(){
+  function result(fresh){
     var r = current(), p = P[r.pk], cs = r.cs;
     $('r-name').textContent = p.name; $('r-you').textContent = p.you;
     $('r-count').textContent = cs.length === 3 ? 'your 3 things' : cs.length === 2 ? 'your 2 things' : cs.length === 1 ? 'your 1 thing' : 'your things';
@@ -378,6 +506,14 @@
     btn.innerHTML = ''; btn.appendChild(document.createTextNode(p.btn + ' ')); var ar = document.createElement('span'); ar.className = 'ar'; ar.textContent = '→'; btn.appendChild(ar);
     $('r-allowed').textContent = p.allowed;
     show('qz-result');
+    // just worked out: the pieces land one after another, each with a pop
+    var parts = [document.querySelector('.qz-where')].concat(Array.prototype.slice.call(box.children), [document.querySelector('.qz-fix'), $('r-allowed')]);
+    parts.forEach(function(el, n){
+      el.classList.remove('qz-pop'); el.style.animationDelay = '';
+      if (!fresh || calm) return;
+      void el.offsetWidth; el.style.animationDelay = (n * 0.32) + 's'; el.classList.add('qz-pop');
+      setTimeout(function(){ sPop(n); }, n * 320 + 60);
+    });
     track('Quiz Result', { plan: p.tag, culprit: cs[0] ? C[cs[0]].tag : 'none', culprits: cs.map(function(k){ return C[k].tag; }).join(', ') || 'none' });
     // the Base Builder Bible is priced by country, the same as on its page
     if (p.href === '/base-builder' && window.fetch) fetch('/api/geo').then(function(x){ return x.json(); }).then(function(g){
