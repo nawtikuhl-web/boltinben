@@ -278,6 +278,17 @@
   .rf-vs-row>*:first-child{text-decoration:line-through;text-decoration-color:rgba(255,255,255,.25)}
   .rf-vs-row>*:first-child b{text-decoration:line-through;text-decoration-color:rgba(255,255,255,.35)}
 }
+/* the buy bar: fixed to the bottom of a phone screen once the first buy box
+   has scrolled away, gone again at the final buy section (27 Nov: two thirds
+   of buy taps were coming from the last button on the page) */
+.bb-bar-buy{position:fixed;left:0;right:0;bottom:0;z-index:60;display:none;align-items:center;gap:14px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(12,12,12,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transform:translateY(110%);transition:transform .25s ease}
+.bb-bar-buy.on{transform:none}
+.bb-bar-buy div{flex:1;min-width:0;line-height:1.2}
+.bb-bar-buy b{display:block;font-size:15.5px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bb-bar-buy small{font-size:13px;color:var(--mute)}
+.bb-bar-buy .btn{flex:none;width:auto!important;padding:13px 18px;font-size:16px;white-space:nowrap!important;text-transform:none;letter-spacing:.01em}
+@media (max-width:900px){.bb-bar-buy{display:flex}.bb footer,.bb~footer{padding-bottom:84px}}
+@media (prefers-reduced-motion:reduce){.bb-bar-buy{transition:none}}
 </style>
 </head>
 <body>
@@ -581,6 +592,11 @@
 
 </main>
 
+<div class="bb-bar-buy" id="bb-bar-buy" aria-hidden="true">
+  <div><b>Run Faster in 30 Days</b><small>Ultimate Running Bible free</small></div>
+  <a class="btn btn-volt" href="https://buy.stripe.com/4gM8wI50R0E25D80NFaZi0L" data-checkout data-what="bar" tabindex="-1">Get it · <span data-price>$29</span> <span class="ar" aria-hidden="true">→</span></a>
+</div>
+
 
 
 <footer>
@@ -616,6 +632,15 @@
       try { window.plausible('Local Price Shown', { props: { country: g.country, tier: String(g.tier), what: 'Run Faster in 30 Days' } }); } catch (e) {}
     }).catch(function(){});
   }
+  // The buy bar shows between the first buy box and the final buy section.
+  (function(){
+    var bar = document.getElementById('bb-bar-buy'), first = document.querySelector('.bb-buy'), last = document.getElementById('buy');
+    if (!bar || !first || !last || !('IntersectionObserver' in window)) return;
+    var pastFirst = false, atLast = false;
+    function set(){ var on = pastFirst && !atLast; bar.classList.toggle('on', on); bar.setAttribute('aria-hidden', on ? 'false' : 'true'); bar.querySelector('a').tabIndex = on ? 0 : -1; }
+    new IntersectionObserver(function(es){ var e = es[0]; pastFirst = !e.isIntersecting && e.boundingClientRect.top < 0; set(); }).observe(first);
+    new IntersectionObserver(function(es){ atLast = es[0].isIntersecting; set(); }, { threshold: 0.15 }).observe(last);
+  })();
   document.querySelectorAll('.bb-faq details').forEach(function(d){
     d.addEventListener('toggle', function(){ if (d.open) try { window.plausible('FAQ Opened', { props: { what: d.querySelector('summary').textContent } }); } catch (e) {} });
   });
