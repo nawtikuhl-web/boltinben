@@ -3,7 +3,9 @@
 // 1. Emails Ben every answer through Resend, with the applicant as reply-to.
 // 2. Adds them to a Sender group so Ben can email everyone who applied when
 //    spots open (only when that group is configured).
-// The application counts as received if either step works.
+// 3. Saves a one-line copy on the applicant in Sender (field "Coaching
+//    application"), so an application never depends on one inbox.
+// The application counts as received if any step works.
 //
 // Environment variables:
 //   RESEND_API_KEY          as for the contact forms
@@ -50,6 +52,32 @@ async function emailBen(a) {
   return { ok: false, reason: 'Resend said ' + res.status + ' ' + detail };
 }
 
+// A second copy that does not depend on Ben's inbox (28 Nov 2026: an
+// application was accepted by Resend and never showed up in the mailbox).
+// The applicant is saved in Sender with a "Coaching application" field holding
+// a one-line summary, so every application can be found under the "Coaching
+// applicants" segment whatever happens to the email.
+const SENDER_API = 'https://api.sender.net/v2';
+async function sender(method, path, body) {
+  const res = await fetch(SENDER_API + path, {
+    method,
+    headers: { Authorization: 'Bearer ' + process.env.SENDER_API_TOKEN, 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: body ? JSON.stringify(body) : undefined
+  });
+  return { ok: res.ok, status: res.status };
+}
+async function saveApplicant(a) {
+  if (!process.env.SENDER_API_TOKEN) return { ok: false, reason: 'SENDER_API_TOKEN is not set' };
+  const when = new Date().toLocaleString('en-AU', { timeZone: 'Australia/Sydney', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' });
+  const summary = [when, 'goal: ' + (a.goal || '-'), 'race: ' + (a.race || '-'), 'now: ' + (a.weekly || '-'), 'start: ' + (a.start || '-'), '$149: ' + (a.price || '-'), a.instagram ? 'ig: ' + a.instagram : '', a.extra ? 'note: ' + a.extra : '']
+    .filter(Boolean).join(' | ').slice(0, 250);
+  const fields = { '{$coaching_application}': summary };
+  const created = await sender('POST', '/subscribers', { email: a.email, firstname: a.firstName || undefined, fields, trigger_automation: false });
+  const updated = await sender('PATCH', '/subscribers/' + encodeURIComponent(a.email), { fields });
+  if (created.ok || updated.ok) return { ok: true };
+  return { ok: false, reason: 'Sender said ' + created.status + ' / ' + updated.status };
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return reply(405, { ok: false, error: 'Use POST.' });
   let input = {};
@@ -69,8 +97,11 @@ exports.handler = async (event) => {
   if (process.env.SENDER_GROUP_COACHING) {
     try { listed = await subscribe(a.email, a.firstName, 'coaching'); } catch (e) { listed = { ok: false, reason: e && e.message }; }
   }
+  let saved = { ok: false, reason: 'not tried' };
+  try { saved = await saveApplicant(a); } catch (e) { saved = { ok: false, reason: e && e.message }; }
+  if (!saved.ok) console.error('[apply] backup copy:', saved.reason);
   if (!mailed.ok) console.error('[apply] email:', mailed.reason);
   if (!listed.ok && process.env.SENDER_GROUP_COACHING) console.error('[apply] sender:', listed.reason);
-  if (mailed.ok || listed.ok) return reply(200, { ok: true });
+  if (mailed.ok || listed.ok || saved.ok) return reply(200, { ok: true });
   return reply(502, { ok: false, error: 'Something went wrong on our side. Try again in a minute.' });
 };
