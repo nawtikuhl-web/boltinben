@@ -27,8 +27,10 @@
 .qz-wrap{max-width:680px}
 .qz .photo{position:relative;overflow:hidden;border-radius:var(--r)}
 .qz .photo>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 70%}
-.qz-hero{min-height:min(40vh,330px);display:flex;align-items:flex-end;margin-bottom:var(--gap)}
-.qz-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 25%,rgba(0,0,0,.86) 100%)}
+.qz-hero{min-height:380px;display:flex;align-items:flex-end;margin-bottom:var(--gap)}
+.qz .qz-hero>img{object-position:50% 20%}
+@media (min-width:700px){.qz-hero{min-height:560px}.qz .qz-hero>img{object-position:50% 8%}}
+.qz-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(0,0,0,.9) 100%)}
 .qz-hero>div{position:relative;z-index:1;padding:28px}
 .qz-hero h1{font-size:clamp(44px,9vw,76px);color:var(--volt)}
 .qz-hero h1 em{color:#fff}
@@ -163,7 +165,7 @@
     <!-- intro -->
     <div class="qz-screen" id="qz-intro">
       <div class="photo qz-hero">
-        <img src="/assets/bb-ph-tree.webp" alt="Ben running easy through a park at dawn" fetchpriority="high">
+        <img src="/assets/ben-quiz-hero.webp" alt="Ben, arms crossed, in a cap and sunglasses after a run" fetchpriority="high">
         <div>
           <span class="qz-eye">free 2-minute quiz</span>
           <h1 class="display">Why does running feel so <em>hard?</em></h1>
